@@ -32,14 +32,19 @@ class TimerConfig {
   }
 }
 
-/// Bir duraklama kaydı: ne zaman durakladın ve kaç saniye sürdü
+/// Bir duraklama kaydı:
+/// - timeLabel: ekranda yazdırmak için (saat olarak)
+/// - durationSeconds: kaç saniye durdu
+/// - atSecond: oturumun kaçıncı saniyesinde (focus süresine göre) başladı
 class PauseEntry {
   final String timeLabel;      // "Paused at: 12:13:08" gibi
   final int durationSeconds;   // kaç saniye durakladı
+  final int atSecond;          // session start'tan itibaren kaçıncı saniyede pause'a basıldı
 
   const PauseEntry({
     required this.timeLabel,
     required this.durationSeconds,
+    required this.atSecond,
   });
 }
 

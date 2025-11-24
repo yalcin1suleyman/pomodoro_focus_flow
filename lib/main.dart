@@ -58,6 +58,30 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
   bool _isRunning = false;
   Timer? _ticker;
 
+  void _startTickerIfNeeded() {
+    if (_ticker != null) return;
+
+    _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
+      _onTick();
+    });
+  }
+
+  void _onTick() {
+    if (!mounted) return;
+
+    if (!_isRunning) {
+      setState(() {});
+      return;
+    }
+
+    if (_remainingSeconds <= 0) {
+      _onSessionCompleted();
+      return;
+    }
+
+    setState(() => _remainingSeconds--);
+  }
+
 
   // ---------- Session Metrikleri ----------
   DateTime? _sessionStart;
@@ -161,16 +185,20 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
   @override
   void dispose() {
     _ticker?.cancel();
+    _ticker = null;
     super.dispose();
   }
+
 
   // ---------------------------------------------------------
   //                     TIMER LOGIC
   // ---------------------------------------------------------
 
   void _resetForMode(PomodoroMode newMode) {
-    final seconds = config.getSecondsForMode(newMode);
     _ticker?.cancel();
+    _ticker = null;
+
+    final seconds = config.getSecondsForMode(newMode);
 
     setState(() {
       _mode = newMode;
@@ -185,26 +213,33 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     });
   }
 
+
   void _startTimer() {
     if (_isRunning) return;
 
     setState(() => _isRunning = true);
 
+    // Oturum ilk kez başlıyorsa
     _sessionStart ??= DateTime.now();
 
+    // Eğer daha önce duraklatılmışsa → pause süresini hesapla
     if (_currentPauseStart != null) {
-      final now = DateTime.now();
-      final d = now.difference(_currentPauseStart!);
+      final now = DateTime.now();              // 🔥 HATA VEREN KISIM EKLENDİ
+      final d = now.difference(_currentPauseStart!);  // 🔥 HATA VEREN KISIM EKLENDİ
       _savedPaused += d;
+
+      final elapsedBeforePause = _totalSeconds - _remainingSeconds;
 
       _pauses.add(PauseEntry(
         timeLabel: "Paused at: ${_formatClockTime(_currentPauseStart!)}",
         durationSeconds: d.inSeconds,
+        atSecond: elapsedBeforePause,
       ));
 
       _currentPauseStart = null;
     }
 
+    // Timer başlatılıyor
     _ticker?.cancel();
     _ticker = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_remainingSeconds <= 0) {
@@ -212,19 +247,24 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
         _onSessionCompleted();
         return;
       }
-      setState(() => _remainingSeconds--);
+
+      setState(() {
+        _remainingSeconds--;
+      });
     });
   }
+
+
 
   void _pauseTimer() {
     if (!_isRunning) return;
 
-    _ticker?.cancel();
     setState(() {
       _isRunning = false;
       _currentPauseStart ??= DateTime.now();
     });
   }
+
 
   void _resetTimer() => _resetForMode(_mode);
 
@@ -249,6 +289,8 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
       _isRunning = false;
       _ticker?.cancel();
       _history.add(session);
+      _ticker?.cancel();
+      _ticker = null;
     });
 
     _showFinishedDialog(session);
@@ -363,11 +405,15 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
                               pauses: _pauses,
                               sessionProgress: _progress,
                               isRunning: _isRunning,
-                              mottoText: _motto,                 // 👈 üstteki motto
-                              onEditMotto: _editMotto,           // 👈 kalem ikonuna basınca
-                              onShuffleMotto: _shuffleMotto,     // 👈 refresh ikonuna basınca
-                              accentColor: _theme.accent,        // 👈 alttaki bar rengi
+                              mottoText: _motto,
+                              onEditMotto: _editMotto,
+                              onShuffleMotto: _shuffleMotto,
+                              accentColor: _theme.accent,
+                              warningColor: _theme.warning,
+                              totalSeconds: _totalSeconds,
                             ),
+
+
 
                           ],
                         ),
