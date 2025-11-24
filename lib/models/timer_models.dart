@@ -58,6 +58,9 @@ class FocusSession {
   final int wastedSeconds;  // toplam duraklama süresi
   final List<PauseEntry> pauses;
 
+  // 🔥 Yeni: odak skoru (0–100)
+  final int focusScore;
+
   FocusSession({
     required this.mode,
     required this.startTime,
@@ -66,5 +69,11 @@ class FocusSession {
     required this.focusSeconds,
     required this.wastedSeconds,
     required this.pauses,
+    required this.focusScore,
   });
+
+  // İleride lazım olur diye küçük bir yardımcı:
+  double get efficiency =>
+      totalSeconds == 0 ? 0 : focusSeconds / totalSeconds;
 }
+
