@@ -2,9 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
+import 'features/settings/settings_sheet.dart';
+
 import 'models/theme_models.dart';
 import 'models/timer_models.dart';
 import 'features/home/widgets/home_stats_section.dart';
+
 
 void main() {
   runApp(const FocusFlowApp());
@@ -43,13 +46,18 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     longBreakMinutes: 15,
   );
 
+  AppLanguage _language = AppLanguage.tr;
+
   PomodoroMode _mode = PomodoroMode.focus;
+
+
 
   late int _totalSeconds;
   late int _remainingSeconds;
 
   bool _isRunning = false;
   Timer? _ticker;
+
 
   // ---------- Session Metrikleri ----------
   DateTime? _sessionStart;
@@ -59,6 +67,90 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
 
   // ---------- History ----------
   final List<FocusSession> _history = [];
+
+
+  // ---------- Motto ----------
+  final List<String> _mottoPool = const [
+    '"Well begun is half done."',
+    '"Focus on the process, not the outcome."',
+    '"Small steps every day."',
+    '"Stay consistent, not perfect."',
+    '"Deep work beats busy work."',
+  ];
+
+  String _motto = '"Well begun is half done."';
+
+  void _shuffleMotto() {
+    setState(() {
+      final others = _mottoPool.where((m) => m != _motto).toList();
+      others.shuffle();
+      if (others.isNotEmpty) {
+        _motto = others.first;
+      }
+    });
+  }
+
+  Future<void> _editMotto() async {
+    final controller =
+    TextEditingController(text: _motto.replaceAll('"', ''));
+
+    final result = await showDialog<String>(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text("Yeni motto"),
+          content: TextField(
+            controller: controller,
+            maxLines: 2,
+            decoration: const InputDecoration(
+              hintText: "Bugünün mottosunu yaz",
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("İptal"),
+            ),
+            TextButton(
+              onPressed: () =>
+                  Navigator.pop(context, controller.text.trim()),
+              child: const Text("Kaydet"),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (result != null && result.isNotEmpty) {
+      setState(() {
+        _motto = '"$result"';
+      });
+    }
+  }
+
+
+  void _openSettingsSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        return SettingsSheet(
+          theme: _theme,
+          config: config,
+          language: _language,
+          onApply: (themeType, newConfig, lang) {
+            setState(() {
+              _theme = FocusThemes.all.firstWhere((t) => t.type == themeType);
+              config = newConfig;
+              _language = lang;
+              _resetForMode(_mode); // süreler değiştiyse timer’ı güncelle
+            });
+          },
+        );
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -271,7 +363,12 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
                               pauses: _pauses,
                               sessionProgress: _progress,
                               isRunning: _isRunning,
+                              mottoText: _motto,                 // 👈 üstteki motto
+                              onEditMotto: _editMotto,           // 👈 kalem ikonuna basınca
+                              onShuffleMotto: _shuffleMotto,     // 👈 refresh ikonuna basınca
+                              accentColor: _theme.accent,        // 👈 alttaki bar rengi
                             ),
+
                           ],
                         ),
                       ),
@@ -317,7 +414,8 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
           const Spacer(),
           _topIcon(Icons.history, onTap: _openHistory),
           const SizedBox(width: 8),
-          _topIcon(Icons.settings),
+          _topIcon(Icons.settings, onTap: _openSettingsSheet),
+
         ],
       ),
     );

@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
-import '../../../models/timer_models.dart';
+import '../../../models/timer_models.dart'; // PauseEntry buradan geliyor
 
 class HomeStatsSection extends StatelessWidget {
   final double efficiency;          // 0–100
   final Duration wastedTime;        // toplam duraklama süresi
   final List<PauseEntry> pauses;    // oturum boyunca duraklamalar
   final double sessionProgress;     // 0.0–1.0 arası
-  final bool isRunning;             // bar yazısı için
+  final bool isRunning;             // alt bar yazısı için
+
+  // Yeni alanlar (motto & alt bar rengi)
+  final String mottoText;
+  final VoidCallback onEditMotto;
+  final VoidCallback onShuffleMotto;
+  final Color accentColor;
 
   const HomeStatsSection({
     super.key,
@@ -15,6 +21,10 @@ class HomeStatsSection extends StatelessWidget {
     required this.pauses,
     required this.sessionProgress,
     required this.isRunning,
+    required this.mottoText,
+    required this.onEditMotto,
+    required this.onShuffleMotto,
+    required this.accentColor,
   });
 
   @override
@@ -38,17 +48,17 @@ class HomeStatsSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: _cardDecoration(),
-      child: const Row(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.format_quote_rounded,
+          const Icon(Icons.format_quote_rounded,
               color: Colors.white70, size: 24),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   "MOTTO OF THE DAY",
                   style: TextStyle(
                     color: Colors.white70,
@@ -57,10 +67,10 @@ class HomeStatsSection extends StatelessWidget {
                     letterSpacing: 1,
                   ),
                 ),
-                SizedBox(height: 6),
+                const SizedBox(height: 6),
                 Text(
-                  "\"Well begun is half done.\"",
-                  style: TextStyle(
+                  mottoText,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                     fontStyle: FontStyle.italic,
@@ -70,10 +80,18 @@ class HomeStatsSection extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(width: 8),
-          Icon(Icons.edit_outlined, color: Colors.white54, size: 18),
-          SizedBox(width: 8),
-          Icon(Icons.refresh_rounded, color: Colors.white54, size: 18),
+          const SizedBox(width: 8),
+          IconButton(
+            onPressed: onEditMotto,
+            icon: const Icon(Icons.edit_outlined,
+                color: Colors.white54, size: 18),
+          ),
+          const SizedBox(width: 4),
+          IconButton(
+            onPressed: onShuffleMotto,
+            icon: const Icon(Icons.refresh_rounded,
+                color: Colors.white54, size: 18),
+          ),
         ],
       ),
     );
@@ -270,15 +288,17 @@ class HomeStatsSection extends StatelessWidget {
       ),
       child: Stack(
         children: [
+          // Dolan kısım
           FractionallySizedBox(
             widthFactor: factor == 0 ? 0.02 : factor,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(999),
-                color: Colors.blueAccent.withOpacity(0.8),
+                color: accentColor.withOpacity(0.9),
               ),
             ),
           ),
+          // Yazı
           Center(
             child: Text(
               isRunning ? "Session in progress" : "Ready to start",
@@ -293,6 +313,7 @@ class HomeStatsSection extends StatelessWidget {
     );
   }
 
+  // ───────────────────── Ortak kart dekorasyonu ─────────────────────
   BoxDecoration _cardDecoration() {
     return BoxDecoration(
       color: Colors.white10,

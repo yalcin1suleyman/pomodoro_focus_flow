@@ -32,12 +32,12 @@ class TimerConfig {
   }
 }
 
-/// Zaman çizelgesinde göstereceğimiz tek bir duraklama kaydı
+/// Bir duraklama kaydı: ne zaman durakladın ve kaç saniye sürdü
 class PauseEntry {
-  final String timeLabel; // "Paused at: 10:23:15" gibi
-  final int durationSeconds;
+  final String timeLabel;      // "Paused at: 12:13:08" gibi
+  final int durationSeconds;   // kaç saniye durakladı
 
-  PauseEntry({
+  const PauseEntry({
     required this.timeLabel,
     required this.durationSeconds,
   });
