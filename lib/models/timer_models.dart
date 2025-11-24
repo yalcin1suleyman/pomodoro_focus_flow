@@ -31,3 +31,40 @@ class TimerConfig {
     }
   }
 }
+
+/// Bir duraklama kaydı:
+/// - timeLabel: ekranda yazdırmak için (saat olarak)
+/// - durationSeconds: kaç saniye durdu
+/// - atSecond: oturumun kaçıncı saniyesinde (focus süresine göre) başladı
+class PauseEntry {
+  final String timeLabel;      // "Paused at: 12:13:08" gibi
+  final int durationSeconds;   // kaç saniye durakladı
+  final int atSecond;          // session start'tan itibaren kaçıncı saniyede pause'a basıldı
+
+  const PauseEntry({
+    required this.timeLabel,
+    required this.durationSeconds,
+    required this.atSecond,
+  });
+}
+
+/// Tamamlanmış bir oturum kaydı (History için)
+class FocusSession {
+  final PomodoroMode mode;
+  final DateTime startTime;
+  final DateTime endTime;
+  final int totalSeconds;   // duvar saati süresi (focus + pause)
+  final int focusSeconds;   // gerçek odak süresi
+  final int wastedSeconds;  // toplam duraklama süresi
+  final List<PauseEntry> pauses;
+
+  FocusSession({
+    required this.mode,
+    required this.startTime,
+    required this.endTime,
+    required this.totalSeconds,
+    required this.focusSeconds,
+    required this.wastedSeconds,
+    required this.pauses,
+  });
+}

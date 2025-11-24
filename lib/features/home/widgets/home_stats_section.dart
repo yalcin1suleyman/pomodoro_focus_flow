@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
-
-/// Zaman çizelgesinde göstereceğimiz tek bir duraklama kaydı
-class PauseEntry {
-  final String timeLabel; // "Paused at: 0m 10s" gibi
-  final int durationSeconds;
-
-  PauseEntry({
-    required this.timeLabel,
-    required this.durationSeconds,
-  });
-}
+import '../../../models/timer_models.dart'; // PauseEntry için
 
 class HomeStatsSection extends StatelessWidget {
   final double efficiency;          // 0–100
   final Duration wastedTime;        // toplam duraklama süresi
   final List<PauseEntry> pauses;    // oturum boyunca duraklamalar
-  final double sessionProgress;     // 0.0–1.0 arası
+  final double sessionProgress;     // 0.0–1.0 (nominal odak süresi ilerleyişi)
   final bool isRunning;             // bar yazısı için
+
+  final String mottoText;
+  final VoidCallback onEditMotto;
+  final VoidCallback onShuffleMotto;
+
+  final Color accentColor;          // tema ana rengi
+  final Color warningColor;         // pause rengi
+  final int totalSeconds;           // seçili modun toplam süresi (saniye)
 
   const HomeStatsSection({
     super.key,
@@ -25,6 +23,12 @@ class HomeStatsSection extends StatelessWidget {
     required this.pauses,
     required this.sessionProgress,
     required this.isRunning,
+    required this.mottoText,
+    required this.onEditMotto,
+    required this.onShuffleMotto,
+    required this.accentColor,
+    required this.warningColor,
+    required this.totalSeconds,
   });
 
   @override
@@ -38,7 +42,7 @@ class HomeStatsSection extends StatelessWidget {
         const SizedBox(height: 16),
         _buildTimelineCard(),
         const SizedBox(height: 16),
-        _buildBottomProgressBar(),
+        _buildBottomTimelineBar(), // 🔥 segmentli bar
       ],
     );
   }
@@ -48,17 +52,20 @@ class HomeStatsSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: _cardDecoration(),
-      child: const Row(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.format_quote_rounded,
-              color: Colors.white70, size: 24),
-          SizedBox(width: 8),
+          const Icon(
+            Icons.format_quote_rounded,
+            color: Colors.white70,
+            size: 24,
+          ),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   "MOTTO OF THE DAY",
                   style: TextStyle(
                     color: Colors.white70,
@@ -67,10 +74,10 @@ class HomeStatsSection extends StatelessWidget {
                     letterSpacing: 1,
                   ),
                 ),
-                SizedBox(height: 6),
+                const SizedBox(height: 6),
                 Text(
-                  "\"Well begun is half done.\"",
-                  style: TextStyle(
+                  mottoText,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                     fontStyle: FontStyle.italic,
@@ -80,10 +87,30 @@ class HomeStatsSection extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(width: 8),
-          Icon(Icons.edit_outlined, color: Colors.white54, size: 18),
-          SizedBox(width: 8),
-          Icon(Icons.refresh_rounded, color: Colors.white54, size: 18),
+          const SizedBox(width: 8),
+          // Edit
+          IconButton(
+            onPressed: onEditMotto,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            icon: const Icon(
+              Icons.edit_outlined,
+              color: Colors.white54,
+              size: 18,
+            ),
+          ),
+          const SizedBox(width: 4),
+          // Shuffle
+          IconButton(
+            onPressed: onShuffleMotto,
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            icon: const Icon(
+              Icons.refresh_rounded,
+              color: Colors.white54,
+              size: 18,
+            ),
+          ),
         ],
       ),
     );
@@ -124,7 +151,7 @@ class HomeStatsSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 const Text(
-                  "Based on Wall Clock Time",
+                  "Based on wall clock time",
                   style: TextStyle(
                     color: Colors.white54,
                     fontSize: 11,
@@ -167,7 +194,7 @@ class HomeStatsSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 const Text(
-                  "Total Paused Duration",
+                  "Total paused duration",
                   style: TextStyle(
                     color: Colors.white54,
                     fontSize: 11,
@@ -268,36 +295,129 @@ class HomeStatsSection extends StatelessWidget {
     );
   }
 
-  // ───────────────────── 4) Bottom Progress Bar ─────────────────────
-  Widget _buildBottomProgressBar() {
-    final factor = sessionProgress.clamp(0.0, 1.0);
+  // ───────────────────── 4) Alt Timeline Bar (Focus + Pause Segmentleri) ─────────────────────
+  Widget _buildBottomTimelineBar() {
+    final int total = totalSeconds <= 0 ? 1 : totalSeconds;
+
+    // Nominal focus süresi (timer'ın ilerleyişi)
+    final int elapsedFocus =
+    (sessionProgress.clamp(0.0, 1.0) * total).round();
+
+    // Pause'ları kronolojik sıraya koy
+    final sortedPauses = [...pauses]
+      ..sort((a, b) => a.atSecond.compareTo(b.atSecond));
+
+    final segments = <_TimelineSegment>[];
+    int cursor = 0;
+
+    for (final p in sortedPauses) {
+      // Pause'un başladığı nokta (focus ekseninde)
+      final start = p.atSecond.clamp(0, total);
+      final end = (p.atSecond + p.durationSeconds).clamp(0, total);
+
+      // Öncesi focus segmenti
+      if (start > cursor) {
+        final focusEnd = start.clamp(0, elapsedFocus);
+        if (focusEnd > cursor) {
+          segments.add(_TimelineSegment(
+            length: focusEnd - cursor,
+            color: accentColor,
+          ));
+        }
+        cursor = start;
+      }
+
+      // Pause segmenti
+      final pauseStart = cursor;
+      final pauseEnd = end.clamp(pauseStart, total);
+      if (pauseEnd > pauseStart) {
+        segments.add(_TimelineSegment(
+          length: pauseEnd - pauseStart,
+          color: warningColor,
+        ));
+        cursor = pauseEnd;
+      }
+
+      if (cursor >= total) break;
+    }
+
+    // Son pause'dan sonra kalan focus (elapsedFocus'a kadar)
+    if (elapsedFocus > cursor) {
+      final focusEnd = elapsedFocus.clamp(cursor, total);
+      if (focusEnd > cursor) {
+        segments.add(_TimelineSegment(
+          length: focusEnd - cursor,
+          color: accentColor,
+        ));
+        cursor = focusEnd;
+      }
+    }
+
+    // Kalan (henüz başlanmamış) kısım
+    if (cursor < total) {
+      segments.add(_TimelineSegment(
+        length: total - cursor,
+        color: Colors.white12,
+      ));
+    }
+
+    final hasAny = segments.isNotEmpty;
 
     return Container(
-      height: 36,
+      height: 48,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(999),
-        color: Colors.white12,
+        color: Colors.white10,
+        border: Border.all(color: Colors.white24),
       ),
-      child: Stack(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      child: Row(
         children: [
-          // Dolan kısım
-          FractionallySizedBox(
-            widthFactor: factor == 0 ? 0.02 : factor,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(999),
-                color: Colors.blueAccent.withOpacity(0.8),
-              ),
+          // Sol: başlık + bar
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Session balance",
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(999),
+                  child: hasAny
+                      ? Row(
+                    children: [
+                      for (final seg in segments)
+                        Expanded(
+                          flex: seg.length,
+                          child: Container(
+                            height: 6,
+                            color: seg.color,
+                          ),
+                        ),
+                    ],
+                  )
+                      : Container(
+                    height: 6,
+                    color: Colors.white12,
+                  ),
+                ),
+              ],
             ),
           ),
-          // Yazı
-          Center(
-            child: Text(
-              isRunning ? "Session in progress" : "Ready to start",
-              style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 12,
-              ),
+          const SizedBox(width: 10),
+          // Sağ: durum yazısı
+          Text(
+            isRunning ? "Session in progress" : "Ready to start",
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 11,
             ),
           ),
         ],
@@ -313,4 +433,14 @@ class HomeStatsSection extends StatelessWidget {
       border: Border.all(color: Colors.white12),
     );
   }
+}
+
+class _TimelineSegment {
+  final int length;
+  final Color color;
+
+  _TimelineSegment({
+    required this.length,
+    required this.color,
+  });
 }
