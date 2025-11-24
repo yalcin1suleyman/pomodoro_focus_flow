@@ -41,7 +41,7 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
 
   // ---------- Pomodoro Ayarları ----------
   TimerConfig config = const TimerConfig(
-    focusMinutes: 46,
+    focusMinutes: 25,
     shortBreakMinutes: 5,
     longBreakMinutes: 15,
   );
@@ -224,8 +224,8 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
 
     // Eğer daha önce duraklatılmışsa → pause süresini hesapla
     if (_currentPauseStart != null) {
-      final now = DateTime.now();              // 🔥 HATA VEREN KISIM EKLENDİ
-      final d = now.difference(_currentPauseStart!);  // 🔥 HATA VEREN KISIM EKLENDİ
+      final now = DateTime.now();
+      final d = now.difference(_currentPauseStart!);
       _savedPaused += d;
 
       final elapsedBeforePause = _totalSeconds - _remainingSeconds;
@@ -240,18 +240,9 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     }
 
     // Timer başlatılıyor
-    _ticker?.cancel();
-    _ticker = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_remainingSeconds <= 0) {
-        timer.cancel();
-        _onSessionCompleted();
-        return;
-      }
+    _startTickerIfNeeded();  // sadece bunu çağır
 
-      setState(() {
-        _remainingSeconds--;
-      });
-    });
+
   }
 
 
@@ -275,6 +266,16 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     final paused = _totalPauseDuration;
     final focus = total - paused;
 
+    // 🔢 Odak skoru (0–100) hesapla
+    final wallEfficiency =
+    total.inSeconds == 0 ? 100.0 : (focus.inSeconds / total.inSeconds * 100);
+    final pauseCount = _pauses.length;
+
+    // her duraklama ve toplam duraklama süresi için küçük ceza
+    final pausePenalty =
+    (pauseCount * 5 + paused.inSeconds / 30).clamp(0, 40); // max 40 ceza
+    final score = (wallEfficiency - pausePenalty).clamp(0, 100).round();
+
     final session = FocusSession(
       mode: _mode,
       startTime: start,
@@ -283,42 +284,332 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
       focusSeconds: focus.inSeconds,
       wastedSeconds: paused.inSeconds,
       pauses: List.unmodifiable(_pauses),
+      focusScore: score, //new
     );
 
     setState(() {
       _isRunning = false;
       _ticker?.cancel();
       _history.add(session);
-      _ticker?.cancel();
       _ticker = null;
     });
 
-    _showFinishedDialog(session);
+    // Eski basit dialog yerine gelişmiş analiz ekranını aç
+    _showSessionAnalysis(session);
   }
 
-  void _showFinishedDialog(FocusSession s) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("Oturum tamamlandı"),
-        content: Text(
-            "Focus: ${(s.focusSeconds ~/ 60)}m\nWasted: ${(s.wastedSeconds ~/ 60)}m"),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _resetTimer();
-            },
-            child: const Text("Tamam"),
-          )
-        ],
-      ),
-    );
-  }
 
   void _openHistory() {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => HistoryPage(history: _history)),
+    );
+  }
+
+  void _showSessionAnalysis(FocusSession s) {
+    final durationMin = (s.totalSeconds / 60).round();
+    final wastedMin = (s.wastedSeconds / 60).round();
+    final stops = s.pauses.length;
+
+    final summaryText = _buildSessionSummary(s);
+    final tips = _buildImprovementTips(s);
+
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (_) {
+        return Dialog(
+          backgroundColor: const Color(0xFF020617),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.insights_rounded,
+                        color: Colors.purpleAccent,
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        "Oturum Analizi",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _resetTimer();
+                        },
+                        icon: const Icon(Icons.close, color: Colors.white70),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Skor kutusu
+                  Center(
+                    child: Column(
+                      children: [
+                        const Text(
+                          "ODAK SKORU",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.white70,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: _theme.card,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Text(
+                            "${s.focusScore}",
+                            style: TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                              color: _theme.accent,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Küçük istatistikler
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _miniStat(
+                        label: "Oturum",
+                        value: "${durationMin}m",
+                        icon: Icons.timer_rounded,
+                      ),
+                      _miniStat(
+                        label: "Duraklama",
+                        value: "${wastedMin}m",
+                        icon: Icons.hourglass_bottom_rounded,
+                      ),
+                      _miniStat(
+                        label: "Kesinti",
+                        value: "$stops",
+                        icon: Icons.pause_circle_outline,
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  const Text(
+                    "Özet",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    summaryText,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Colors.white70,
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  const Text(
+                    "Gelişim İpuçları",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+
+                  for (int i = 0; i < tips.length; i++)
+                    _tipItem(i + 1, tips[i]),
+
+                  const SizedBox(height: 20),
+
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _theme.accent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _resetTimer();
+                      },
+                      child: const Text(
+                        "Kapat",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _miniStat({
+    required String label,
+    required String value,
+    required IconData icon,
+  }) {
+    return Expanded(
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+        decoration: BoxDecoration(
+          color: _theme.card,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, size: 18, color: Colors.white70),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 11,
+                color: Colors.white60,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  String _buildSessionSummary(FocusSession s) {
+    final minutes = (s.totalSeconds / 60).clamp(1, 999);
+    final pauseCount = s.pauses.length;
+    final wasted = s.wastedSeconds;
+
+    final wastedMin = wasted ~/ 60;
+    final wastedSec = wasted % 60;
+
+    final buffer = StringBuffer();
+
+    if (s.mode == PomodoroMode.focus) {
+      buffer.write(
+          "$minutes dakikalık bir odak oturumunu tamamladın. ");
+
+      if (pauseCount == 0) {
+        buffer.write(
+            "Oturum boyunca hiç kesinti yaşamaman çok iyi bir odaklandığını gösteriyor. ");
+      } else {
+        buffer.write(
+            "$pauseCount kez durakladın ve toplam ");
+        if (wastedMin > 0) {
+          buffer.write("$wastedMin dakika ");
+        }
+        buffer.write("$wastedSec saniye kaybettin. ");
+      }
+    } else {
+      buffer.write(
+          "$minutes dakikalık bir mola oturumu tamamladın. Mola sürelerini de bilinçli kullanman genel verimini artırır. ");
+    }
+
+    if (s.focusScore >= 80) {
+      buffer.write("Genel olarak oldukça iyi bir performans sergiledin, bu tempoyu korumaya çalış!");
+    } else if (s.focusScore >= 50) {
+      buffer.write("Bazı kesintiler olmuş ama yine de oturumu tamamlaman güzel bir adım. Bir sonraki sefer kesintileri biraz daha azaltmaya çalışabilirsin.");
+    } else {
+      buffer.write("Bu oturum biraz zor geçmiş olabilir. Önemli olan pes etmemek ve küçük iyileştirmelerle ilerlemek.");
+    }
+
+    return buffer.toString();
+  }
+
+  List<String> _buildImprovementTips(FocusSession s) {
+    final tips = <String>[];
+
+    final pauseCount = s.pauses.length;
+    final wasted = s.wastedSeconds;
+
+    if (pauseCount > 0) {
+      tips.add(
+          "Oturuma başlamadan önce telefon bildirimlerini kapatmak veya rahatsız etme modunu açmak kesintileri azaltmana yardımcı olabilir.");
+    }
+
+    if (wasted > 60) {
+      tips.add(
+          "Mola ihtiyacını tamamen bastırmak yerine, odak ve mola bloklarını net şekilde ayırmayı dene. Örneğin 40 dakika odak + 10 dakika bilinçli mola.");
+    }
+
+    if (s.mode == PomodoroMode.focus && s.focusScore < 80) {
+      tips.add(
+          "Oturumun ilk 5–10 dakikasını özellikle korumaya çalış. En çok dikkat dağılması genellikle oturumun başında yaşanır.");
+    }
+
+    if (tips.isEmpty) {
+      tips.add(
+          "Mevcut alışkanlıklarını korumaya devam et. İlerleyen dönemde daha uzun odak blokları deneyerek kendini zorlayabilirsin.");
+    }
+
+    return tips;
+  }
+
+  Widget _tipItem(int index, String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "$index.",
+            style: const TextStyle(
+              fontSize: 13,
+              color: Colors.amberAccent,
+            ),
+          ),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              text,
+              style: const TextStyle(
+                fontSize: 13,
+                color: Colors.white70,
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -363,8 +654,17 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
   }
 
   String _formatClockTime(DateTime t) {
-    return "${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}:${t.second.toString().padLeft(2, '0')}";
+    // 24 saatlik (0–23) saati 12 saatliğe çevir
+    int hour12 = t.hour % 12;
+    if (hour12 == 0) hour12 = 12;
+
+    final h = hour12.toString().padLeft(2, '0');
+    final m = t.minute.toString().padLeft(2, '0');
+    final s = t.second.toString().padLeft(2, '0');
+    return "$h:$m:$s";
+
   }
+
 
   // ---------------------------------------------------------
   //                     BUILD METHOD
@@ -411,7 +711,11 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
                               accentColor: _theme.accent,
                               warningColor: _theme.warning,
                               totalSeconds: _totalSeconds,
+
+                              showStats: _mode == PomodoroMode.focus,
+                              showBreakMessage: _mode != PomodoroMode.focus,
                             ),
+
 
 
 

@@ -8,6 +8,10 @@ class HomeStatsSection extends StatelessWidget {
   final double sessionProgress;     // 0.0–1.0 (nominal odak süresi ilerleyişi)
   final bool isRunning;             // bar yazısı için
 
+  final bool showStats;        // Focus modunda true
+  final bool showBreakMessage; // Break modunda true
+
+
   final String mottoText;
   final VoidCallback onEditMotto;
   final VoidCallback onShuffleMotto;
@@ -29,23 +33,51 @@ class HomeStatsSection extends StatelessWidget {
     required this.accentColor,
     required this.warningColor,
     required this.totalSeconds,
+    this.showStats = true,
+    this.showBreakMessage = false,
   });
+
 
   @override
   Widget build(BuildContext context) {
+    final items = <Widget>[
+      _buildMottoCard(),
+    ];
+
+    if (showStats) {
+      items.add(const SizedBox(height: 16));
+      items.add(_buildEfficiencyRow());
+
+      items.add(const SizedBox(height: 16));
+      items.add(_buildTimelineCard());
+
+      items.add(const SizedBox(height: 16));
+      items.add(_buildBottomTimelineBar());
+    }
+
+    if (showBreakMessage) {
+      items.add(const SizedBox(height: 12));
+      items.add(
+        Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Text(
+            "Enjoy your break ☕",
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 13,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        ),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildMottoCard(),
-        const SizedBox(height: 16),
-        _buildEfficiencyRow(),
-        const SizedBox(height: 16),
-        _buildTimelineCard(),
-        const SizedBox(height: 16),
-        _buildBottomTimelineBar(), // 🔥 segmentli bar
-      ],
+      children: items,
     );
   }
+
 
   // ───────────────────────── 1) Motto Card ─────────────────────────
   Widget _buildMottoCard() {
@@ -364,7 +396,7 @@ class HomeStatsSection extends StatelessWidget {
     final hasAny = segments.isNotEmpty;
 
     return Container(
-      height: 48,
+      height: 60,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(999),
         color: Colors.white10,
@@ -383,7 +415,7 @@ class HomeStatsSection extends StatelessWidget {
                   "Session balance",
                   style: TextStyle(
                     color: Colors.white70,
-                    fontSize: 11,
+                    fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -397,7 +429,7 @@ class HomeStatsSection extends StatelessWidget {
                         Expanded(
                           flex: seg.length,
                           child: Container(
-                            height: 6,
+                            height: 12,
                             color: seg.color,
                           ),
                         ),
@@ -417,7 +449,7 @@ class HomeStatsSection extends StatelessWidget {
             isRunning ? "Session in progress" : "Ready to start",
             style: const TextStyle(
               color: Colors.white70,
-              fontSize: 11,
+              fontSize: 12,
             ),
           ),
         ],
