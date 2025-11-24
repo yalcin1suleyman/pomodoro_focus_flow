@@ -1,15 +1,5 @@
 import 'package:flutter/material.dart';
-
-/// Zaman çizelgesinde göstereceğimiz tek bir duraklama kaydı
-class PauseEntry {
-  final String timeLabel; // "Paused at: 0m 10s" gibi
-  final int durationSeconds;
-
-  PauseEntry({
-    required this.timeLabel,
-    required this.durationSeconds,
-  });
-}
+import '../../../models/timer_models.dart';
 
 class HomeStatsSection extends StatelessWidget {
   final double efficiency;          // 0–100
@@ -280,7 +270,6 @@ class HomeStatsSection extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Dolan kısım
           FractionallySizedBox(
             widthFactor: factor == 0 ? 0.02 : factor,
             child: Container(
@@ -290,7 +279,6 @@ class HomeStatsSection extends StatelessWidget {
               ),
             ),
           ),
-          // Yazı
           Center(
             child: Text(
               isRunning ? "Session in progress" : "Ready to start",
@@ -305,7 +293,6 @@ class HomeStatsSection extends StatelessWidget {
     );
   }
 
-  // ───────────────────── Ortak kart dekorasyonu ─────────────────────
   BoxDecoration _cardDecoration() {
     return BoxDecoration(
       color: Colors.white10,

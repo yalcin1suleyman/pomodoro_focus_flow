@@ -31,3 +31,35 @@ class TimerConfig {
     }
   }
 }
+
+/// Zaman çizelgesinde göstereceğimiz tek bir duraklama kaydı
+class PauseEntry {
+  final String timeLabel; // "Paused at: 10:23:15" gibi
+  final int durationSeconds;
+
+  PauseEntry({
+    required this.timeLabel,
+    required this.durationSeconds,
+  });
+}
+
+/// Tamamlanmış bir oturum kaydı (History için)
+class FocusSession {
+  final PomodoroMode mode;
+  final DateTime startTime;
+  final DateTime endTime;
+  final int totalSeconds;   // duvar saati süresi (focus + pause)
+  final int focusSeconds;   // gerçek odak süresi
+  final int wastedSeconds;  // toplam duraklama süresi
+  final List<PauseEntry> pauses;
+
+  FocusSession({
+    required this.mode,
+    required this.startTime,
+    required this.endTime,
+    required this.totalSeconds,
+    required this.focusSeconds,
+    required this.wastedSeconds,
+    required this.pauses,
+  });
+}
