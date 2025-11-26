@@ -8,7 +8,7 @@ Odaklanma sürecini daha verimli ve ölçülebilir hale getirmek için tasarlanm
 
 ## 🌟 Uygulama Özellikleri
 
-### 🔥 Akıllı Pomodoro Zamanlayıcı
+###  Akıllı Pomodoro Zamanlayıcı
 - Focus • Short Break • Long Break modları  
 - Ayarlardan süreleri dilediğin gibi değiştirme  
 - Modern ve minimal arayüz
@@ -26,7 +26,7 @@ Odaklanma sürecini daha verimli ve ölçülebilir hale getirmek için tasarlanm
 - Rastgele motivasyon sözleri  
 - İstersen kendi mottonu ekleyebilirsin  
 
-### 🎨 Tema ve Atmosfer Seçenekleri
+### Tema ve Atmosfer Seçenekleri
 - Cosmic, Sakura, Ocean, Forest temaları  
 - Uygulamanın görünümünü tamamen değiştiren renk şemaları  
 
@@ -51,7 +51,7 @@ It helps you track how efficiently you work, how much time you lose in pauses, a
 
 ---
 
-## 🌟 What does FocusFlow offer?
+##  What does FocusFlow offer?
 
 - **Smart Pomodoro Timer**  
   - Focus, Short Break, Long Break modes  
@@ -81,5 +81,6 @@ It helps you track how efficiently you work, how much time you lose in pauses, a
 ---
 👤 Geliştirici
 Süleyman Yalçın
+https://github.com/yalcin1suleyman
 
 
