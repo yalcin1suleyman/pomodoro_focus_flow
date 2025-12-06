@@ -1,13 +1,11 @@
-// lib/models/timer_models.dart
-
-/// Pomodoro modları: Odak, Kısa Mola, Uzun Mola
+// Pomodoro modları: Odak, Kısa Mola, Uzun Mola
 enum PomodoroMode {
   focus,
   shortBreak,
   longBreak,
 }
 
-/// Zamanlayıcı ayarları (dakika cinsinden)
+// Zamanlayıcı ayarları (dakika cinsinden)
 class TimerConfig {
   final int focusMinutes;
   final int shortBreakMinutes;
@@ -37,9 +35,9 @@ class TimerConfig {
 /// - durationSeconds: kaç saniye durdu
 /// - atSecond: oturumun kaçıncı saniyesinde (focus süresine göre) başladı
 class PauseEntry {
-  final String timeLabel;      // "Paused at: 12:13:08" gibi
-  final int durationSeconds;   // kaç saniye durakladı
-  final int atSecond;          // session start'tan itibaren kaçıncı saniyede pause'a basıldı
+  final String timeLabel; // "Paused at: 12:13:08" gibi
+  final int durationSeconds; // kaç saniye durakladı
+  final int atSecond; // session start'tan itibaren kaçıncı saniyede pause'a basıldı
 
   const PauseEntry({
     required this.timeLabel,
@@ -53,9 +51,9 @@ class FocusSession {
   final PomodoroMode mode;
   final DateTime startTime;
   final DateTime endTime;
-  final int totalSeconds;   // duvar saati süresi (focus + pause)
-  final int focusSeconds;   // gerçek odak süresi
-  final int wastedSeconds;  // toplam duraklama süresi
+  final int totalSeconds; // duvar saati süresi (focus + pause)
+  final int focusSeconds; // gerçek odak süresi
+  final int wastedSeconds; // toplam duraklama süresi
   final List<PauseEntry> pauses;
 
   // 🔥 Yeni: odak skoru (0–100)
@@ -73,7 +71,5 @@ class FocusSession {
   });
 
   // İleride lazım olur diye küçük bir yardımcı:
-  double get efficiency =>
-      totalSeconds == 0 ? 0 : focusSeconds / totalSeconds;
+  double get efficiency => totalSeconds == 0 ? 0 : focusSeconds / totalSeconds;
 }
-

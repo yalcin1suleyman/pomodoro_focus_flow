@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-import '../../../models/timer_models.dart'; // PauseEntry için
+import 'package:pomodoro_focus_flow1/models/timer_models.dart';
 
 class HomeStatsSection extends StatelessWidget {
-  final double efficiency;          // 0–100
-  final Duration wastedTime;        // toplam duraklama süresi
-  final List<PauseEntry> pauses;    // oturum boyunca duraklamalar
-  final double sessionProgress;     // 0.0–1.0 (nominal odak süresi ilerleyişi)
-  final bool isRunning;             // bar yazısı için
+  final double efficiency; // 0–100
+  final Duration wastedTime; // toplam duraklama süresi
+  final List<PauseEntry> pauses; // oturum boyunca duraklamalar
+  final double sessionProgress; // 0.0–1.0 (nominal odak süresi ilerleyişi)
+  final bool isRunning; // bar yazısı için
 
-  final bool showStats;        // Focus modunda true
+  final bool showStats; // Focus modunda true
   final bool showBreakMessage; // Break modunda true
-
 
   final String mottoText;
   final VoidCallback onEditMotto;
   final VoidCallback onShuffleMotto;
 
-  final Color accentColor;          // tema ana rengi
-  final Color warningColor;         // pause rengi
-  final int totalSeconds;           // seçili modun toplam süresi (saniye)
+  final Color accentColor; // tema ana rengi
+  final Color warningColor; // pause rengi
+  final int totalSeconds; // seçili modun toplam süresi (saniye)
 
   const HomeStatsSection({
     super.key,
@@ -36,7 +35,6 @@ class HomeStatsSection extends StatelessWidget {
     this.showStats = true,
     this.showBreakMessage = false,
   });
-
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +56,11 @@ class HomeStatsSection extends StatelessWidget {
     if (showBreakMessage) {
       items.add(const SizedBox(height: 12));
       items.add(
-        Padding(
-          padding: const EdgeInsets.only(left: 8),
+        const Padding(
+          padding: EdgeInsets.only(left: 8),
           child: Text(
             "Enjoy your break ☕",
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white70,
               fontSize: 13,
               fontStyle: FontStyle.italic,
@@ -77,7 +75,6 @@ class HomeStatsSection extends StatelessWidget {
       children: items,
     );
   }
-
 
   // ───────────────────────── 1) Motto Card ─────────────────────────
   Widget _buildMottoCard() {
@@ -120,7 +117,6 @@ class HomeStatsSection extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          // Edit
           IconButton(
             onPressed: onEditMotto,
             padding: EdgeInsets.zero,
@@ -132,7 +128,6 @@ class HomeStatsSection extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 4),
-          // Shuffle
           IconButton(
             onPressed: onShuffleMotto,
             padding: EdgeInsets.zero,
@@ -250,8 +245,7 @@ class HomeStatsSection extends StatelessWidget {
         children: [
           const Row(
             children: [
-              Icon(Icons.refresh_rounded,
-                  size: 18, color: Colors.white70),
+              Icon(Icons.refresh_rounded, size: 18, color: Colors.white70),
               SizedBox(width: 6),
               Text(
                 "Session Timeline",
@@ -299,8 +293,7 @@ class HomeStatsSection extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         p.timeLabel,
@@ -327,7 +320,7 @@ class HomeStatsSection extends StatelessWidget {
     );
   }
 
-  // ───────────────────── 4) Alt Timeline Bar (Focus + Pause Segmentleri) ─────────────────────
+  // ───────────────────── 4) Alt Timeline Bar ─────────────────────
   Widget _buildBottomTimelineBar() {
     final int total = totalSeconds <= 0 ? 1 : totalSeconds;
 
@@ -457,7 +450,7 @@ class HomeStatsSection extends StatelessWidget {
     );
   }
 
-  // ───────────────────── Ortak kart dekorasyonu ─────────────────────
+  // Ortak kart dekorasyonu
   BoxDecoration _cardDecoration() {
     return BoxDecoration(
       color: Colors.white10,

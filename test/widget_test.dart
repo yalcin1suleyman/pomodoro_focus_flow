@@ -1,30 +1,18 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:pomodoro_focus_flow1/main.dart';
+import 'package:pomodoro_focus_flow1/core/app.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('App builds and shows FocusFlow title', (WidgetTester tester) async {
+    // Uygulamayı çalıştır
     await tester.pumpWidget(const FocusFlowApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Ana başlık görünüyor mu?
+    expect(find.text('FocusFlow'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Timer text'i ilk buildte herhangi bir şey gösteriyor mu (örneğin 25:00 vs.)
+    // Burada çok katı olmadan, sadece bir Text widget’i olmasını kontrol edelim:
+    expect(find.byType(Text), findsWidgets);
   });
 }
