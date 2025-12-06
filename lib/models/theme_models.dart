@@ -50,11 +50,11 @@ class FocusThemes {
   static const sakura = FocusTheme(
     name: "Sakura",
     type: FocusThemeType.sakura,
-    bgTop: Color(0xFF4C0519),      // rose / pink tonları
+    bgTop: Color(0xFF4C0519), // rose / pink tonları
     bgBottom: Color(0xFF831843),
     card: Color(0xFF3F0D1E),
     innerCard: Color(0xFF4C0519),
-    accent: Color(0xFFF472B6),     // pembe
+    accent: Color(0xFFF472B6), // pembe
     warning: Color(0xFFF97316),
   );
 
@@ -62,11 +62,11 @@ class FocusThemes {
   static const ocean = FocusTheme(
     name: "Ocean",
     type: FocusThemeType.ocean,
-    bgTop: Color(0xFF022C3A),      // cyan / mavi tonları
+    bgTop: Color(0xFF022C3A), // cyan / mavi tonları
     bgBottom: Color(0xFF0F172A),
     card: Color(0xFF020617),
     innerCard: Color(0xFF022C3A),
-    accent: Color(0xFF22D3EE),     // cyan
+    accent: Color(0xFF22D3EE), // cyan
     warning: Color(0xFFFBBF24),
   );
 
@@ -74,11 +74,11 @@ class FocusThemes {
   static const forest = FocusTheme(
     name: "Forest",
     type: FocusThemeType.forest,
-    bgTop: Color(0xFF022C22),      // emerald / yeşil tonları
+    bgTop: Color(0xFF022C22), // emerald / yeşil tonları
     bgBottom: Color(0xFF012417),
     card: Color(0xFF064E3B),
     innerCard: Color(0xFF022C22),
-    accent: Color(0xFF10B981),     // yeşil
+    accent: Color(0xFF10B981), // yeşil
     warning: Color(0xFFF59E0B),
   );
 
