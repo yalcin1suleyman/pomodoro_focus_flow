@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import '../../../models/task_models.dart';
 
@@ -20,50 +21,64 @@ class TaskListSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       margin: const EdgeInsets.only(top: 20),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: cardColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(22),
         border: Border.all(color: Colors.white10),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Başlık + Add butonu
+          // ───────── Başlık + Add butonu ─────────
           Row(
             children: [
-              const Text(
-                "Tasks",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
+              Text(
+                "TASKS",
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.1,
+                  color: Colors.white.withOpacity(0.94),
                 ),
               ),
               const Spacer(),
               TextButton.icon(
                 onPressed: onAddTask,
-                icon: const Icon(Icons.add, size: 18),
-                label: const Text("Add"),
+                icon: Icon(Icons.add, size: 18, color: accentColor),
+                label: Text(
+                  "Add",
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.6,
+                    color: accentColor,
+                  ),
+                ),
                 style: TextButton.styleFrom(
-                  minimumSize: const Size(0, 0),
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  minimumSize: const Size(0, 0),
+                  foregroundColor: accentColor,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 8),
 
+          // ───────── İçerik ─────────
           if (tasks.isEmpty)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: Text(
                 "No tasks yet. Add your first focus target.",
-                style: TextStyle(
+                style: theme.textTheme.bodySmall?.copyWith(
                   fontSize: 12,
-                  color: Colors.white70,
+                  color: Colors.white.withOpacity(0.65),
+                  height: 1.4,
                 ),
               ),
             )
@@ -99,7 +114,9 @@ class _TaskItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = TextStyle(
+    final theme = Theme.of(context);
+
+    final textStyle = theme.textTheme.bodyMedium?.copyWith(
       fontSize: 13,
       color: task.isDone ? Colors.white54 : Colors.white,
       decoration:
@@ -138,9 +155,10 @@ class _TaskItem extends StatelessWidget {
           if (task.targetPomodoros != null)
             Text(
               "${task.completedPomodoros}/${task.targetPomodoros}",
-              style: const TextStyle(
+              style: theme.textTheme.labelSmall?.copyWith(
                 fontSize: 11,
                 color: Colors.white60,
+                fontWeight: FontWeight.w500,
               ),
             ),
         ],
