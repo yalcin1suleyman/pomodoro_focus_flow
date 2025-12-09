@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../models/theme_models.dart';
 import '../../../models/timer_models.dart';
-import '../../../core/localization/app_language.dart'; //
+import '../../../core/localization/app_language.dart';
 
 // BURADA enum AppLanguage ve tt(...) TANIMI OLMAYACAK
 
@@ -17,6 +17,7 @@ class SettingsResult {
   final bool alarmSound;
   final double alarmVolume;
   final double tickVolume;
+  final bool useSystemNotification; // 🔔 YENİ: Uygulama sesi mi, sistem bildirimi mi?
 
   SettingsResult({
     required this.themeType,
@@ -28,6 +29,7 @@ class SettingsResult {
     required this.alarmSound,
     required this.alarmVolume,
     required this.tickVolume,
+    required this.useSystemNotification,
   });
 }
 
@@ -41,6 +43,13 @@ class SettingsPage extends StatefulWidget {
   final bool tickingSound;
   final bool alarmSound;
 
+  /// true: telefonun sistem bildirimi kullanılacak
+  /// false: uygulama içi ses dosyası (ses1.wav) kullanılacak
+  final bool useSystemNotification;
+
+  /// Uygulama içi alarm sesini önizlemek için (home_page'den fonksiyon geçeceğiz)
+  final VoidCallback? onPreviewAlarm;
+
   const SettingsPage({
     super.key,
     required this.theme,
@@ -50,6 +59,8 @@ class SettingsPage extends StatefulWidget {
     required this.autoStartNextFocus,
     required this.tickingSound,
     required this.alarmSound,
+    required this.useSystemNotification,
+    this.onPreviewAlarm,
   });
 
   @override
@@ -69,7 +80,9 @@ class _SettingsPageState extends State<SettingsPage> {
   late bool _tickingSound;
   late bool _alarmSound;
 
-  // Ses için basit volume ayarları (ileride kullanılabilir)
+  late bool _useSystemNotification; // 🔔 state içinde tutulacak
+
+  // Ses için basit volume ayarları (ileride gerçek sesle bağlanabilir)
   double _alarmVolume = 0.7;
   double _tickVolume = 0.5;
 
@@ -87,6 +100,7 @@ class _SettingsPageState extends State<SettingsPage> {
     _autoStartNextFocus = widget.autoStartNextFocus;
     _tickingSound = widget.tickingSound;
     _alarmSound = widget.alarmSound;
+    _useSystemNotification = widget.useSystemNotification;
   }
 
   @override
@@ -261,6 +275,7 @@ class _SettingsPageState extends State<SettingsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Alarm açık / kapalı
           SwitchListTile.adaptive(
             value: _alarmSound,
             onChanged: (v) => setState(() => _alarmSound = v),
@@ -291,8 +306,87 @@ class _SettingsPageState extends State<SettingsPage> {
               onChanged: (v) => setState(() => _alarmVolume = v),
             ),
             const SizedBox(height: 8),
+
+            // 🔔 Zil tipi seçimi: Uygulama zili / Telefon bildirimi
+            Text(
+              tt(
+                _selectedLang,
+                "Zil türü",
+                "Alarm type",
+              ),
+              style: const TextStyle(
+                fontSize: 12,
+                color: Colors.white70,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 4),
+            RadioListTile<bool>(
+              value: false,
+              groupValue: _useSystemNotification,
+              onChanged: (v) {
+                if (v == null) return;
+                setState(() => _useSystemNotification = v);
+              },
+              dense: true,
+              contentPadding: EdgeInsets.zero,
+              title: Text(
+                tt(
+                  _selectedLang,
+                  "Uygulama içi zil sesi (ses1.wav)",
+                  "In-app alarm sound (ses1.wav)",
+                ),
+                style: const TextStyle(fontSize: 13),
+              ),
+            ),
+            RadioListTile<bool>(
+              value: true,
+              groupValue: _useSystemNotification,
+              onChanged: (v) {
+                if (v == null) return;
+                setState(() => _useSystemNotification = v);
+              },
+              dense: true,
+              contentPadding: EdgeInsets.zero,
+              title: Text(
+                tt(
+                  _selectedLang,
+                  "Telefon bildirimi (sistem sesi)",
+                  "System notification sound",
+                ),
+                style: const TextStyle(fontSize: 13),
+              ),
+            ),
+            const SizedBox(height: 4),
+
+            // 🔊 Uygulama zilini dene butonu (sadece in-app seçiliyse mantıklı)
+            if (!_useSystemNotification && widget.onPreviewAlarm != null)
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: widget.onPreviewAlarm,
+                  icon: const Icon(Icons.volume_up, size: 16),
+                  label: Text(
+                    tt(
+                      _selectedLang,
+                      "Zili dinle",
+                      "Preview alarm",
+                    ),
+                    style: const TextStyle(fontSize: 13),
+                  ),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                  ),
+                ),
+              ),
           ],
+
           const Divider(height: 24),
+
+          // Tıkırtı sesi
           SwitchListTile.adaptive(
             value: _tickingSound,
             onChanged: (v) => setState(() => _tickingSound = v),
@@ -359,9 +453,8 @@ class _SettingsPageState extends State<SettingsPage> {
     return _SettingsSection(
       icon: Icons.palette_outlined,
       title: tt(_selectedLang, "Tema", "Theme"),
-      subtitle: FocusThemes.all
-          .firstWhere((t) => t.type == _selectedTheme)
-          .name,
+      subtitle:
+      FocusThemes.all.firstWhere((t) => t.type == _selectedTheme).name,
       child: Row(
         children: FocusThemes.all.map((t) {
           final selected = t.type == _selectedTheme;
@@ -464,6 +557,7 @@ class _SettingsPageState extends State<SettingsPage> {
       alarmSound: _alarmSound,
       alarmVolume: _alarmVolume,
       tickVolume: _tickVolume,
+      useSystemNotification: _useSystemNotification, // 🔔 önemli
     );
 
     Navigator.pop(context, result);
