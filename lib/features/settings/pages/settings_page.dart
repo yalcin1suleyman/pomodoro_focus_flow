@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../models/theme_models.dart';
 import '../../../models/timer_models.dart';
+import '../../../core/localization/app_language.dart'; //
 
-/// Uygulamada kullanılacak dil
-enum AppLanguage { tr, en }
-
-String tt(AppLanguage lang, String tr, String en) =>
-    lang == AppLanguage.tr ? tr : en;
+// BURADA enum AppLanguage ve tt(...) TANIMI OLMAYACAK
 
 /// Ana ekrana geri dönerken kullanılacak sonuç modeli
 class SettingsResult {

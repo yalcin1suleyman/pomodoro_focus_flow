@@ -1,8 +1,9 @@
-
 import 'package:flutter/material.dart';
 import '../../../models/task_models.dart';
+import '../../../core/localization/app_language.dart';
 
 class TaskListSection extends StatelessWidget {
+  final AppLanguage language;
   final List<FocusTask> tasks;
   final VoidCallback onAddTask;
   final void Function(String taskId)? onToggleDone;
@@ -12,6 +13,7 @@ class TaskListSection extends StatelessWidget {
 
   const TaskListSection({
     super.key,
+    required this.language,
     required this.tasks,
     required this.onAddTask,
     this.onToggleDone,
@@ -24,61 +26,72 @@ class TaskListSection extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      margin: const EdgeInsets.only(top: 20),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: cardColor,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(color: Colors.white10),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ───────── Başlık + Add butonu ─────────
+          // HEADER
           Row(
             children: [
               Text(
-                "TASKS",
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.1,
-                  color: Colors.white.withOpacity(0.94),
+                tt(language, "Görevler", "Tasks"),
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontFamily: 'SpaceGrotesk',
+                  fontSize: 14,
+                  letterSpacing: 2,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const Spacer(),
               TextButton.icon(
                 onPressed: onAddTask,
-                icon: Icon(Icons.add, size: 18, color: accentColor),
+                icon: const Icon(Icons.add, size: 18),
                 label: Text(
-                  "Add",
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.6,
-                    color: accentColor,
-                  ),
+                  tt(language, "Ekle", "Add"),
                 ),
                 style: TextButton.styleFrom(
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  minimumSize: const Size(0, 0),
                   foregroundColor: accentColor,
+                  minimumSize: const Size(0, 0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(999),
+                    side: BorderSide(
+                      color: accentColor.withOpacity(0.6),
+                      width: 1,
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
+          const Divider(height: 1, color: Colors.white12),
+          const SizedBox(height: 10),
 
-          // ───────── İçerik ─────────
           if (tasks.isEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Text(
-                "No tasks yet. Add your first focus target.",
+                tt(
+                  language,
+                  "Henüz görev yok. İlk odak hedefini ekle.",
+                  "No tasks yet. Add your first focus target.",
+                ),
                 style: theme.textTheme.bodySmall?.copyWith(
                   fontSize: 12,
-                  color: Colors.white.withOpacity(0.65),
-                  height: 1.4,
+                  color: Colors.white70,
                 ),
               ),
             )
@@ -124,7 +137,7 @@ class _TaskItem extends StatelessWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
           GestureDetector(
@@ -134,14 +147,14 @@ class _TaskItem extends StatelessWidget {
               height: 22,
               decoration: BoxDecoration(
                 color: task.isDone ? accentColor : Colors.transparent,
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(7),
                 border: Border.all(
                   color: task.isDone ? accentColor : Colors.white38,
-                  width: 1.4,
+                  width: 1.5,
                 ),
               ),
               child: task.isDone
-                  ? const Icon(Icons.check, size: 16, color: Colors.black)
+                  ? const Icon(Icons.check, size: 15, color: Colors.black)
                   : null,
             ),
           ),
@@ -153,12 +166,19 @@ class _TaskItem extends StatelessWidget {
             ),
           ),
           if (task.targetPomodoros != null)
-            Text(
-              "${task.completedPomodoros}/${task.targetPomodoros}",
-              style: theme.textTheme.labelSmall?.copyWith(
-                fontSize: 11,
-                color: Colors.white60,
-                fontWeight: FontWeight.w500,
+            Container(
+              padding:
+              const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: Colors.white10,
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: Text(
+                "${task.completedPomodoros}/${task.targetPomodoros}",
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: Colors.white70,
+                ),
               ),
             ),
         ],
