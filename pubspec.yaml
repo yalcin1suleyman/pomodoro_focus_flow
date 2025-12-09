@@ -40,6 +40,9 @@ dependencies:
   # 📦 Eklediğimiz yeni paketler
   path_provider: ^2.1.4
   share_plus: ^10.0.2
+  audioplayers: ^6.0.0
+
+  #flutter_local_notifications: ^x.x.x
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +74,8 @@ flutter:
       fonts:
         - asset: assets/fonts/SpaceGrotesk-Regular.ttf
         - asset: assets/fonts/SpaceGrotesk-SemiBold.ttf
+  assets:
+    - assets/sounds/ses1.wav
 
   # To add assets to your application, add an assets section, like this:
   # assets:

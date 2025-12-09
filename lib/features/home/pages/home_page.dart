@@ -9,7 +9,10 @@ import '../../../models/task_models.dart';
 import '../../settings/pages/settings_page.dart';
 import '../../stats/pages/stats_page.dart';
 import '../widgets/task_list_section.dart';
-import '../../../core/localization/app_language.dart'; // ✅ DİL HELPER
+import '../../../core/localization/app_language.dart';
+
+import 'package:audioplayers/audioplayers.dart';
+
 
 class FocusFlowHomePage extends StatefulWidget {
   const FocusFlowHomePage({super.key});
@@ -53,6 +56,15 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
   bool _tickingSound = false;
   bool _alarmSound = true;
 
+
+  // Alarm tipi: false = uygulama içi ses, true = sistem bildirimi
+  bool _useSystemNotification = false;
+
+  // Ses player
+  final AudioPlayer _alarmPlayer = AudioPlayer();
+
+
+
   // Alıntılar
   final Map<PomodoroMode, List<String>> _quotesByMode = {
     PomodoroMode.focus: [
@@ -87,6 +99,7 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
   @override
   void dispose() {
     _ticker?.cancel();
+    _alarmPlayer.dispose();
     super.dispose();
   }
 
@@ -205,10 +218,33 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
       _history.add(session);
     });
 
+    // 🔔 Kullanıcının seçimine göre alarm
+    if (_alarmSound) {
+      if (_useSystemNotification) {
+        // TODO: Buraya ileride flutter_local_notifications ile
+        // sistem bildirimi kuracağız.
+        // Şimdilik sadece SnackBar + log bırakıyoruz.
+        debugPrint("System notification would play here.");
+      } else {
+        _playAlarm(); // bizim assets/sounds/ses1.wav çalınacak
+      }
+    }
+
+    // Mesajı bir kez hesaplayalım
     final msg = _mode == PomodoroMode.focus
         ? tt(_language, "Odak oturumu tamamlandı!", "Focus session completed!")
         : tt(_language, "Mola bitti!", "Break finished!");
 
+
+    if (_alarmSound) {
+      if (_useSystemNotification) {
+        _showSystemNotification();   // telefonun kendi bildirim sesi
+      } else {
+        _playAlarm();                // bizim ses1.wav
+      }
+    }
+
+    // Snackbar yine aynı mesajı gösteriyor
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(msg),
@@ -227,6 +263,7 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     }
   }
 
+
   Duration get _totalPauseDuration {
     var d = _savedPaused;
     if (_currentPauseStart != null) {
@@ -240,6 +277,30 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     final done = _totalSeconds - _remainingSeconds;
     return (done / _totalSeconds).clamp(0.0, 1.0);
   }
+
+  //  Alarm çalan fonksiyon (uygulama içi ses)
+  Future<void> _playAlarm() async {
+    try {
+      await _alarmPlayer.stop(); // varsa eski sesi durdur
+      await _alarmPlayer.play(
+        AssetSource('sounds/ses1.wav'), // assets/sounds/ses1.wav
+      );
+    } catch (e) {
+      debugPrint("Alarm play error: $e");
+    }
+  }
+
+  //  Sistem bildirimi gösteren fonksiyon (telefonun kendi bildirimi)
+  Future<void> _showSystemNotification() async {
+    final title = "FocusFlow";
+    final body = _mode == PomodoroMode.focus
+        ? tt(_language, "Odak oturumu tamamlandı!", "Focus session completed!")
+        : tt(_language, "Mola bitti!", "Break finished!");
+
+
+  }
+
+
 
   // ───────────────────── QUOTES ─────────────────────
 
@@ -367,9 +428,12 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
           autoStartNextFocus: _autoStartNextFocus,
           tickingSound: _tickingSound,
           alarmSound: _alarmSound,
+          useSystemNotification: _useSystemNotification,
+          onPreviewAlarm: _playAlarm, // uygulama sesini denemek için
         ),
       ),
     );
+
 
     if (result == null) return;
 
