@@ -74,6 +74,14 @@ flutter:
       fonts:
         - asset: assets/fonts/SpaceGrotesk-Regular.ttf
         - asset: assets/fonts/SpaceGrotesk-SemiBold.ttf
+
+    - family: BarlowCondensed
+      fonts:
+        - asset: assets/fonts/BarlowCondensed-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/BarlowCondensed-Bold.ttf
+          weight: 700
+
   assets:
     - assets/sounds/ses1.wav
 

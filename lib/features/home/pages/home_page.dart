@@ -1,8 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:audioplayers/audioplayers.dart';
 
+// Kendi proje importların (dosya yolların değişirse burayı kontrol et)
 import '../../../models/theme_models.dart';
 import '../../../models/timer_models.dart';
 import '../../../models/task_models.dart';
@@ -10,9 +11,7 @@ import '../../settings/pages/settings_page.dart';
 import '../../stats/pages/stats_page.dart';
 import '../widgets/task_list_section.dart';
 import '../../../core/localization/app_language.dart';
-
-import 'package:audioplayers/audioplayers.dart';
-
+import '../../../core/content/quotes.dart';
 
 class FocusFlowHomePage extends StatefulWidget {
   const FocusFlowHomePage({super.key});
@@ -22,6 +21,8 @@ class FocusFlowHomePage extends StatefulWidget {
 }
 
 class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
+  // ───────────────────── STATE VARIABLES ─────────────────────
+
   // Tema
   FocusTheme _theme = FocusThemes.cosmic;
 
@@ -55,35 +56,12 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
   bool _autoStartNextFocus = false;
   bool _tickingSound = false;
   bool _alarmSound = true;
-
-
-  // Alarm tipi: false = uygulama içi ses, true = sistem bildirimi
   bool _useSystemNotification = false;
 
   // Ses player
   final AudioPlayer _alarmPlayer = AudioPlayer();
 
-
-
-  // Alıntılar
-  final Map<PomodoroMode, List<String>> _quotesByMode = {
-    PomodoroMode.focus: [
-      '"Focus is the gateway to mastery." — Cal Newport',
-      '"Small steps every day."',
-      '"Deep work beats busy work."',
-      '"Well begun is half done." — Aristotle',
-    ],
-    PomodoroMode.shortBreak: [
-      '"Rest is part of the work." — John Lubbock',
-      '"Short break, long progress."',
-      '"Breathe. Relax. Reset."',
-    ],
-    PomodoroMode.longBreak: [
-      '"Sometimes the most productive thing is to relax." — Mark Black',
-      '"Step back to come back stronger."',
-    ],
-  };
-
+  // Alıntı
   String _currentQuote = "";
 
   // Tasks
@@ -218,33 +196,18 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
       _history.add(session);
     });
 
-    // 🔔 Kullanıcının seçimine göre alarm
     if (_alarmSound) {
       if (_useSystemNotification) {
-        // TODO: Buraya ileride flutter_local_notifications ile
-        // sistem bildirimi kuracağız.
-        // Şimdilik sadece SnackBar + log bırakıyoruz.
-        debugPrint("System notification would play here.");
+        _showSystemNotification();
       } else {
-        _playAlarm(); // bizim assets/sounds/ses1.wav çalınacak
+        _playAlarm();
       }
     }
 
-    // Mesajı bir kez hesaplayalım
     final msg = _mode == PomodoroMode.focus
         ? tt(_language, "Odak oturumu tamamlandı!", "Focus session completed!")
         : tt(_language, "Mola bitti!", "Break finished!");
 
-
-    if (_alarmSound) {
-      if (_useSystemNotification) {
-        _showSystemNotification();   // telefonun kendi bildirim sesi
-      } else {
-        _playAlarm();                // bizim ses1.wav
-      }
-    }
-
-    // Snackbar yine aynı mesajı gösteriyor
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(msg),
@@ -263,7 +226,6 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     }
   }
 
-
   Duration get _totalPauseDuration {
     var d = _savedPaused;
     if (_currentPauseStart != null) {
@@ -278,44 +240,41 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     return (done / _totalSeconds).clamp(0.0, 1.0);
   }
 
-  //  Alarm çalan fonksiyon (uygulama içi ses)
   Future<void> _playAlarm() async {
     try {
-      await _alarmPlayer.stop(); // varsa eski sesi durdur
+      await _alarmPlayer.stop();
       await _alarmPlayer.play(
-        AssetSource('sounds/ses1.wav'), // assets/sounds/ses1.wav
+        AssetSource('sounds/ses1.wav'),
       );
     } catch (e) {
       debugPrint("Alarm play error: $e");
     }
   }
 
-  //  Sistem bildirimi gösteren fonksiyon (telefonun kendi bildirimi)
   Future<void> _showSystemNotification() async {
     final title = "FocusFlow";
     final body = _mode == PomodoroMode.focus
         ? tt(_language, "Odak oturumu tamamlandı!", "Focus session completed!")
         : tt(_language, "Mola bitti!", "Break finished!");
-
-
+    debugPrint("System notification: $title - $body");
   }
 
-
-
-  // ───────────────────── QUOTES ─────────────────────
+  // ───────────────────── QUOTES & TASKS LOGIC ─────────────────────
 
   void _pickQuoteForMode(PomodoroMode mode) {
-    final list = _quotesByMode[mode];
-    if (list == null || list.isEmpty) {
+    if (focusQuotes.isEmpty) {
       setState(() {
         _currentQuote = "";
       });
       return;
     }
 
-    list.shuffle();
+    final mutable = [...focusQuotes];
+    mutable.shuffle();
+    final q = mutable.first;
+
     setState(() {
-      _currentQuote = list.first;
+      _currentQuote = q.text(_language);
     });
   }
 
@@ -328,8 +287,6 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     _pickQuoteForMode(mode);
   }
 
-  // ───────────────────── TASKS ─────────────────────
-
   void _openAddTaskDialog() async {
     final titleController = TextEditingController();
     final countController = TextEditingController();
@@ -338,28 +295,21 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: Text(
-            tt(_language, "Yeni görev", "New task"),
-          ),
+          title: Text(tt(_language, "Yeni görev", "New task")),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: titleController,
                 decoration: InputDecoration(
-                  labelText:
-                  tt(_language, "Görev başlığı", "Task title"),
+                  labelText: tt(_language, "Görev başlığı", "Task title"),
                 ),
               ),
               const SizedBox(height: 8),
               TextField(
                 controller: countController,
                 decoration: InputDecoration(
-                  labelText: tt(
-                    _language,
-                    "Hedef pomodoro sayısı (opsiyonel)",
-                    "Target pomodoros (optional)",
-                  ),
+                  labelText: tt(_language, "Hedef pomodoro (opsiyonel)", "Target pomodoros (optional)"),
                 ),
                 keyboardType: TextInputType.number,
               ),
@@ -368,21 +318,16 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, null),
-              child: Text(
-                tt(_language, "İptal", "Cancel"),
-              ),
+              child: Text(tt(_language, "İptal", "Cancel")),
             ),
             TextButton(
               onPressed: () {
                 Navigator.pop<Map<String, dynamic>>(context, {
                   "title": titleController.text.trim(),
-                  "target":
-                  int.tryParse(countController.text.trim()),
+                  "target": int.tryParse(countController.text.trim()),
                 });
               },
-              child: Text(
-                tt(_language, "Ekle", "Add"),
-              ),
+              child: Text(tt(_language, "Ekle", "Add")),
             ),
           ],
         );
@@ -390,7 +335,6 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     );
 
     if (result == null) return;
-
     final title = result["title"] as String;
     if (title.isEmpty) return;
     final target = result["target"] as int?;
@@ -415,7 +359,7 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     });
   }
 
-  // ───────────────────── SETTINGS & STATS ─────────────────────
+  // ───────────────────── SETTINGS & HELPERS ─────────────────────
 
   Future<void> _openSettings() async {
     final result = await Navigator.of(context).push<SettingsResult>(
@@ -429,23 +373,22 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
           tickingSound: _tickingSound,
           alarmSound: _alarmSound,
           useSystemNotification: _useSystemNotification,
-          onPreviewAlarm: _playAlarm, // uygulama sesini denemek için
+          onPreviewAlarm: _playAlarm,
         ),
       ),
     );
 
-
     if (result == null) return;
 
     setState(() {
-      _theme =
-          FocusThemes.all.firstWhere((t) => t.type == result.themeType);
+      _theme = FocusThemes.all.firstWhere((t) => t.type == result.themeType);
       _config = result.config;
       _language = result.language;
       _autoStartBreaks = result.autoStartBreaks;
       _autoStartNextFocus = result.autoStartNextFocus;
       _tickingSound = result.tickingSound;
       _alarmSound = result.alarmSound;
+      _useSystemNotification = result.useSystemNotification;
 
       _resetForMode(_mode);
       _pickQuoteForMode(_mode);
@@ -460,8 +403,6 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     );
   }
 
-  // ───────────────────── UI HELPERS ─────────────────────
-
   String _formatTime(int sec) {
     final m = sec ~/ 60;
     final s = sec % 60;
@@ -471,104 +412,138 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
   String _formatClockTime(DateTime t) {
     int hour12 = t.hour % 12;
     if (hour12 == 0) hour12 = 12;
-
     final h = hour12.toString().padLeft(2, '0');
     final m = t.minute.toString().padLeft(2, '0');
     final s = t.second.toString().padLeft(2, '0');
     return "$h:$m:$s";
   }
 
-  // ───────────────────── BUILD ─────────────────────
+  // ───────────────────── RESPONSIVE UI BUILD ─────────────────────
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
-
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [_theme.bgTop, _theme.bgBottom],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [_theme.bgTop, _theme.bgBottom],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
-          child: Center(
-            child: isLandscape
-                ? _buildLandscapeLayout(size)
-                : ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 430),
-              child: _buildPortraitLayout(size),
-            ),
+        ),
+        child: SafeArea(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final width = constraints.maxWidth;
+              final height = constraints.maxHeight;
+              final isLandscape = width > height;
+              final isTablet = width > 600 && !isLandscape;
+
+              // Radius Hesaplama: Ekranın boyutuna göre dinamik
+              double timerRadius;
+              if (isLandscape) {
+                timerRadius = height * 0.35;
+                if (timerRadius > 180) timerRadius = 180;
+              } else {
+                timerRadius = width * 0.38;
+                if (timerRadius > 200) timerRadius = 200;
+              }
+
+              // Font Hesaplama: Daireye göre orantılı
+              final double timerFontSize = timerRadius / 1.4;
+
+              if (isLandscape) {
+                return _buildLandscapeLayout(
+                    width, height, timerRadius, timerFontSize);
+              } else {
+                return _buildPortraitLayout(
+                    width, height, timerRadius, timerFontSize, isTablet);
+              }
+            },
           ),
         ),
       ),
     );
   }
 
-  // ───────────────────── PORTRAIT LAYOUT ─────────────────────
+  // ───────────────────── LAYOUTS ─────────────────────
 
-  Widget _buildPortraitLayout(Size size) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      child: Column(
-        children: [
-          _buildTopBar(),
-          const SizedBox(height: 16),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildTimerCard(size, isLandscape: false),
-                  const SizedBox(height: 16),
-                  TaskListSection(
-                    language: _language,
-                    tasks: _tasks,
-                    onAddTask: _openAddTaskDialog,
-                    onToggleDone: _toggleTaskDone,
-                    accentColor: _theme.accent,
-                    cardColor: _theme.card.withOpacity(0.96),
-                  ),
-                ],
+  Widget _buildPortraitLayout(double width, double height, double radius,
+      double fontSize, bool isTablet) {
+    return Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: isTablet ? 600 : 500),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          child: Column(
+            children: [
+              _buildTopBar(),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Spacer(flex: 1),
+                    _buildTimerCard(radius, fontSize, isLandscape: false),
+                    const SizedBox(height: 30),
+                    _buildStartResetRow(),
+                    const Spacer(flex: 2),
+                  ],
+                ),
               ),
-            ),
+              Container(
+                constraints: BoxConstraints(maxHeight: height * 0.35),
+                child: TaskListSection(
+                  language: _language,
+                  tasks: _tasks,
+                  onAddTask: _openAddTaskDialog,
+                  onToggleDone: _toggleTaskDone,
+                  accentColor: _theme.accent,
+                  cardColor: _theme.card.withOpacity(0.96),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 
-  // ───────────────────── LANDSCAPE LAYOUT ─────────────────────
-
-  Widget _buildLandscapeLayout(Size size) {
+  Widget _buildLandscapeLayout(
+      double width, double height, double radius, double fontSize) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
       child: Column(
         children: [
           _buildTopBar(),
-          const SizedBox(height: 12),
           Expanded(
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Sol: Timer alanı
+                // SOL: Timer
                 Expanded(
-                  flex: 3,
-                  child: SingleChildScrollView(
-                    child: _buildTimerCard(size, isLandscape: true),
+                  flex: 1,
+                  child: Center(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _buildTimerCard(radius, fontSize, isLandscape: true),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-                const SizedBox(width: 20),
-                // Sağ: Start/Reset + Tasks
+                // SAĞ: Butonlar ve Liste
                 Expanded(
-                  flex: 2,
+                  flex: 1,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      const Spacer(),
                       _buildStartResetRow(),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
                       Expanded(
+                        flex: 4,
                         child: TaskListSection(
                           language: _language,
                           tasks: _tasks,
@@ -589,42 +564,37 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     );
   }
 
-  // ───────────────────── TOP BAR ─────────────────────
+  // ───────────────────── WIDGETS ─────────────────────
 
   Widget _buildTopBar() {
     final theme = Theme.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-      child: SizedBox(
-        height: 40,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Center(
-              child: Text(
-                "FOCUS", // Logo gibi, sabit kalabilir
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontFamily: 'SpaceGrotesk',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 8,
-                ),
-              ),
+    return SizedBox(
+      height: 50,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Text(
+            "FOCUS",
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontFamily: 'SpaceGrotesk',
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 8,
+              color: Colors.white.withOpacity(0.9),
             ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _topIcon(Icons.bar_chart_rounded, onTap: _openStats),
-                  const SizedBox(width: 8),
-                  _topIcon(Icons.settings, onTap: _openSettings),
-                ],
-              ),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _topIcon(Icons.bar_chart_rounded, onTap: _openStats),
+                const SizedBox(width: 12),
+                _topIcon(Icons.settings, onTap: _openSettings),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -644,86 +614,86 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     );
   }
 
-  // ───────────────────── TIMER CARD ─────────────────────
-
-  Widget _buildTimerCard(Size size, {required bool isLandscape}) {
+  Widget _buildTimerCard(double radius, double fontSize,
+      {required bool isLandscape}) {
     final theme = Theme.of(context);
-    final shortestSide = size.shortestSide;
-    final radius = isLandscape ? shortestSide * 0.26 : shortestSide * 0.32;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // ÜST MOD BUTONLARI
-          Row(
+    // Çizgi kalınlığı dinamik
+    final double strokeWidth = (radius * 0.15).clamp(10.0, 25.0);
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          width: radius * 2.2,
+          child: Row(
             children: [
-              _buildModeChip(
-                tt(_language, "Pomodoro", "Pomodoro"),
-                PomodoroMode.focus,
-              ),
+              // ⚠️ DÜZELTİLDİ: Türkçe / İngilizce parametreleri eklendi
+              _buildModeChip(tt(_language, "Odak", "Focus"), PomodoroMode.focus),
               const SizedBox(width: 8),
-              _buildModeChip(
-                tt(_language, "Kısa Mola", "Short Break"),
-                PomodoroMode.shortBreak,
-              ),
+              _buildModeChip(tt(_language, "Kısa Mola", "Short Break"), PomodoroMode.shortBreak),
               const SizedBox(width: 8),
-              _buildModeChip(
-                tt(_language, "Uzun Mola", "Long Break"),
-                PomodoroMode.longBreak,
-              ),
+              _buildModeChip(tt(_language, "Uzun Mola", "Long Break"), PomodoroMode.longBreak),
             ],
           ),
-          const SizedBox(height: 24),
+        ),
+        const SizedBox(height: 24),
 
-          CircularPercentIndicator(
-            radius: radius,
-            lineWidth: 18,
-            percent: _progress,
-            circularStrokeCap: CircularStrokeCap.round,
-            backgroundColor: Colors.white.withOpacity(0.10),
-            progressColor: _theme.accent,
-            center: Text(
-              _formatTime(_remainingSeconds),
-              style: theme.textTheme.headlineLarge?.copyWith(
-                fontFamily: 'SpaceGrotesk',
-                fontSize: isLandscape ? 56 : 64,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 6,
-              ),
+        // 1. DAİRE VE SAYAÇ (İçinde alıntı yok)
+        CircularPercentIndicator(
+          radius: radius,
+          lineWidth: strokeWidth,
+          percent: _progress,
+          circularStrokeCap: CircularStrokeCap.round,
+          backgroundColor: Colors.white.withOpacity(0.10),
+          progressColor: _theme.accent,
+          animation: true,
+          animateFromLastPercent: true,
+          animationDuration: 1000,
+          center: Text(
+            _formatTime(_remainingSeconds),
+            style: theme.textTheme.headlineLarge?.copyWith(
+              fontFamily: 'BarlowCondensed',
+              fontSize: fontSize,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 4,
+              height: 1.0,
+              color: Colors.white,
             ),
           ),
-          const SizedBox(height: 20),
+        ),
 
-          if (_currentQuote.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+        // 2. ALINTI ARTIK BURADA (Dairenin Altında)
+        if (_currentQuote.isNotEmpty) ...[
+          const SizedBox(height: 24),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
               child: Text(
                 _currentQuote,
+                key: ValueKey<String>(_currentQuote),
                 textAlign: TextAlign.center,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: Colors.white70,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  fontFamily: 'SpaceGrotesk',
+                  color: Colors.white.withOpacity(0.8),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300,
                   fontStyle: FontStyle.italic,
                   height: 1.4,
                 ),
               ),
             ),
-
-          if (!isLandscape) ...[
-            const SizedBox(height: 24),
-            _buildStartResetRow(),
-          ],
+          ),
         ],
-      ),
+      ],
     );
   }
 
-  // START / PAUSE + RESET satırı
   Widget _buildStartResetRow() {
     final theme = Theme.of(context);
-
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
           child: GestureDetector(
@@ -747,7 +717,7 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
                     _isRunning
                         ? Icons.pause_rounded
                         : Icons.play_arrow_rounded,
-                    size: 18,
+                    size: 22,
                     color: _isRunning ? Colors.white : _theme.accent,
                   ),
                   const SizedBox(width: 8),
@@ -757,8 +727,8 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
                         : tt(_language, "BAŞLAT", "START"),
                     style: theme.textTheme.labelLarge?.copyWith(
                       fontWeight: FontWeight.w700,
-                      color:
-                      _isRunning ? Colors.white : _theme.accent,
+                      color: _isRunning ? Colors.white : _theme.accent,
+                      fontSize: 16,
                     ),
                   ),
                 ],
@@ -766,12 +736,12 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
             ),
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 16),
         GestureDetector(
           onTap: _resetTimer,
           child: Container(
-            width: 44,
-            height: 44,
+            width: 50,
+            height: 50,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: _theme.innerCard.withOpacity(0.95),
@@ -782,7 +752,7 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
             ),
             child: const Icon(
               Icons.refresh_rounded,
-              size: 20,
+              size: 24,
               color: Colors.white,
             ),
           ),
@@ -793,7 +763,6 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
 
   Widget _buildModeChip(String label, PomodoroMode mode) {
     final selected = _mode == mode;
-
     return Expanded(
       child: GestureDetector(
         onTap: () => _onModeChipPressed(mode),
@@ -801,13 +770,10 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
           duration: const Duration(milliseconds: 160),
           padding: const EdgeInsets.symmetric(vertical: 10),
           decoration: BoxDecoration(
-            color:
-            selected ? Colors.white : Colors.white.withOpacity(0.06),
+            color: selected ? Colors.white : Colors.white.withOpacity(0.06),
             borderRadius: BorderRadius.circular(999),
             border: Border.all(
-              color: selected
-                  ? Colors.white
-                  : Colors.white.withOpacity(0.2),
+              color: selected ? Colors.white : Colors.white.withOpacity(0.2),
               width: 1.4,
             ),
           ),
