@@ -292,77 +292,75 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     _pickQuoteForMode(mode);
   }
 
-  void _openAddTaskDialog() async {
-    final titleController = TextEditingController();
-    final countController = TextEditingController();
+  /// Yeni görev ekleme / düzenleme için sheet
+  void _openTaskSheet({FocusTask? editing}) async {
+    final titleController = TextEditingController(
+      text: editing?.title ?? "",
+    );
+    final targetController = TextEditingController(
+      text: editing?.targetPomodoros?.toString() ?? "",
+    );
 
-    final result = await showDialog<Map<String, dynamic>?>(
+    final result = await showModalBottomSheet<_TaskSheetResult>(
       context: context,
-      barrierDismissible: true,
-      useSafeArea: true, // 👈 önemli
-      builder: (_) {
-        return AlertDialog(
-          insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          title: Text(tt(_language, "Yeni görev", "New task")),
-          content: SingleChildScrollView(            // 👈 içerik kayabilir
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: titleController,
-                  decoration: InputDecoration(
-                    labelText: tt(_language, "Görev başlığı", "Task title"),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: countController,
-                  decoration: InputDecoration(
-                    labelText: tt(
-                      _language,
-                      "Hedef pomodoro (opsiyonel)",
-                      "Target pomodoros (optional)",
-                    ),
-                  ),
-                  keyboardType: TextInputType.number,
-                ),
-              ],
-            ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(ctx).viewInsets.bottom,
+            left: 16,
+            right: 16,
+            top: 8,
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, null),
-              child: Text(tt(_language, "İptal", "Cancel")),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop<Map<String, dynamic>>(context, {
-                  "title": titleController.text.trim(),
-                  "target": int.tryParse(countController.text.trim()),
-                });
-              },
-              child: Text(tt(_language, "Ekle", "Add")),
-            ),
-          ],
+          child: _TaskSheet(
+            language: _language,
+            accent: _theme.accent,
+            isEditing: editing != null,
+            titleController: titleController,
+            targetController: targetController,
+          ),
         );
       },
     );
 
-
     if (result == null) return;
-    final title = result["title"] as String;
-    if (title.isEmpty) return;
-    final target = result["target"] as int?;
 
-    setState(() {
-      _tasks.add(
-        FocusTask(
-          id: DateTime.now().microsecondsSinceEpoch.toString(),
+    // Silme
+    if (result.delete && editing != null) {
+      setState(() {
+        _tasks.removeWhere((t) => t.id == editing.id);
+      });
+      return;
+    }
+
+    final title = titleController.text.trim();
+    if (title.isEmpty) return;
+
+    final target = int.tryParse(targetController.text.trim());
+
+    if (editing == null) {
+      // Yeni görev
+      setState(() {
+        _tasks.add(
+          FocusTask(
+            id: DateTime.now().microsecondsSinceEpoch.toString(),
+            title: title,
+            targetPomodoros: target,
+          ),
+        );
+      });
+    } else {
+      // Var olan görevi güncelle
+      setState(() {
+        final index = _tasks.indexWhere((t) => t.id == editing.id);
+        if (index == -1) return;
+        _tasks[index] = editing.copyWith(
           title: title,
           targetPomodoros: target,
-        ),
-      );
-    });
+        );
+      });
+    }
   }
 
   void _toggleTaskDone(String taskId) {
@@ -524,8 +522,9 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
                       TaskListSection(
                         language: _language,
                         tasks: _tasks,
-                        onAddTask: _openAddTaskDialog,
+                        onAddTask: () => _openTaskSheet(),
                         onToggleDone: _toggleTaskDone,
+                        onEditTask: (task) => _openTaskSheet(editing: task),
                         accentColor: _theme.accent,
                         cardColor: _theme.card.withOpacity(0.96),
                       ),
@@ -587,8 +586,10 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
                           child: TaskListSection(
                             language: _language,
                             tasks: _tasks,
-                            onAddTask: _openAddTaskDialog,
+                            onAddTask: () => _openTaskSheet(),
                             onToggleDone: _toggleTaskDone,
+                            onEditTask: (task) =>
+                                _openTaskSheet(editing: task),
                             accentColor: _theme.accent,
                             cardColor: _theme.card.withOpacity(0.96),
                           ),
@@ -842,6 +843,151 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+// ───────────────────── TASK SHEET HELPERS (CLASS DIŞINDA!) ─────────────────────
+
+class _TaskSheetResult {
+  final bool delete;
+  _TaskSheetResult({this.delete = false});
+}
+
+class _TaskSheet extends StatelessWidget {
+  final AppLanguage language;
+  final Color accent;
+  final bool isEditing;
+
+  final TextEditingController titleController;
+  final TextEditingController targetController;
+
+  const _TaskSheet({
+    required this.language,
+    required this.accent,
+    required this.isEditing,
+    required this.titleController,
+    required this.targetController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF020617),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.white12),
+      ),
+      padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: 12),
+              decoration: BoxDecoration(
+                color: Colors.white24,
+                borderRadius: BorderRadius.circular(999),
+              ),
+            ),
+          ),
+          Text(
+            isEditing
+                ? tt(language, "Görevi düzenle", "Edit task")
+                : tt(language, "Yeni görev", "New task"),
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: titleController,
+            autofocus: true,
+            decoration: InputDecoration(
+              labelText: tt(language, "Görev başlığı", "Task title"),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          TextField(
+            controller: targetController,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: tt(
+                language,
+                "Hedef pomodoro (opsiyonel)",
+                "Target pomodoros (optional)",
+              ),
+              hintText: "8",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              if (isEditing)
+                TextButton.icon(
+                  onPressed: () {
+                    Navigator.pop(
+                      context,
+                      _TaskSheetResult(delete: true),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.delete_outline,
+                    size: 18,
+                    color: Colors.redAccent,
+                  ),
+                  label: Text(
+                    tt(language, "Sil", "Delete"),
+                    style: const TextStyle(color: Colors.redAccent),
+                  ),
+                ),
+              const Spacer(),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(tt(language, "İptal", "Cancel")),
+              ),
+              const SizedBox(width: 4),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: accent,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                    vertical: 10,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.pop(
+                    context,
+                    _TaskSheetResult(delete: false),
+                  );
+                },
+                child: Text(
+                  isEditing
+                      ? tt(language, "Kaydet", "Save")
+                      : tt(language, "Ekle", "Add"),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+        ],
       ),
     );
   }

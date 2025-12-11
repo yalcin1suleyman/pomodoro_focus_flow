@@ -8,6 +8,9 @@ class TaskListSection extends StatelessWidget {
   final VoidCallback onAddTask;
   final void Function(String taskId)? onToggleDone;
 
+  /// Yeni: görev düzenleme callback’i
+  final void Function(FocusTask task)? onEditTask;
+
   final Color accentColor;
   final Color cardColor;
 
@@ -17,6 +20,7 @@ class TaskListSection extends StatelessWidget {
     required this.tasks,
     required this.onAddTask,
     this.onToggleDone,
+    this.onEditTask,
     required this.accentColor,
     required this.cardColor,
   });
@@ -57,7 +61,9 @@ class TaskListSection extends StatelessWidget {
                   padding:
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   textStyle: const TextStyle(
-                      fontSize: 12, fontWeight: FontWeight.w600),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(999),
                     side: BorderSide(
@@ -88,9 +94,11 @@ class TaskListSection extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(
-          tt(language,
-              "Henüz görev yok. İlk odak hedefini ekle.",
-              "No tasks yet. Add your first focus target."),
+          tt(
+            language,
+            "Henüz görev yok. İlk odak hedefini ekle.",
+            "No tasks yet. Add your first focus target.",
+          ),
           style: theme.textTheme.bodySmall?.copyWith(
             fontSize: 12,
             color: Colors.white70,
@@ -113,8 +121,12 @@ class TaskListSection extends StatelessWidget {
           return _TaskItem(
             task: task,
             accentColor: accentColor,
-            onToggle:
-            onToggleDone == null ? null : () => onToggleDone!(task.id),
+            onToggle: onToggleDone == null
+                ? null
+                : () => onToggleDone!(task.id),
+            onEdit: onEditTask == null
+                ? null
+                : () => onEditTask!(task),
           );
         },
       ),
@@ -125,11 +137,13 @@ class TaskListSection extends StatelessWidget {
 class _TaskItem extends StatelessWidget {
   final FocusTask task;
   final VoidCallback? onToggle;
+  final VoidCallback? onEdit;
   final Color accentColor;
 
   const _TaskItem({
     required this.task,
     this.onToggle,
+    this.onEdit,
     required this.accentColor,
   });
 
@@ -141,6 +155,7 @@ class _TaskItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
+          // Checkbox
           GestureDetector(
             onTap: onToggle,
             child: Container(
@@ -161,7 +176,7 @@ class _TaskItem extends StatelessWidget {
           ),
           const SizedBox(width: 10),
 
-          // GÖREV BAŞLIĞI
+          // Başlık
           Expanded(
             child: Text(
               task.title,
@@ -192,6 +207,21 @@ class _TaskItem extends StatelessWidget {
                 ),
               ),
             ),
+
+          // Düzenle ikonu
+          if (onEdit != null) ...[
+            const SizedBox(width: 6),
+            IconButton(
+              onPressed: onEdit,
+              icon: const Icon(
+                Icons.edit_outlined,
+                size: 18,
+                color: Colors.white54,
+              ),
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+            ),
+          ],
         ],
       ),
     );
