@@ -35,7 +35,7 @@ class TaskListSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // HEADER
+          // ───────────────────── HEADER
           Row(
             children: [
               Text(
@@ -51,20 +51,13 @@ class TaskListSection extends StatelessWidget {
               TextButton.icon(
                 onPressed: onAddTask,
                 icon: const Icon(Icons.add, size: 18),
-                label: Text(
-                  tt(language, "Ekle", "Add"),
-                ),
+                label: Text(tt(language, "Ekle", "Add")),
                 style: TextButton.styleFrom(
                   foregroundColor: accentColor,
-                  minimumSize: const Size(0, 0),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 6,
-                  ),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   textStyle: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
+                      fontSize: 12, fontWeight: FontWeight.w600),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(999),
                     side: BorderSide(
@@ -76,39 +69,54 @@ class TaskListSection extends StatelessWidget {
               ),
             ],
           ),
+
           const SizedBox(height: 10),
           const Divider(height: 1, color: Colors.white12),
           const SizedBox(height: 10),
 
-          if (tasks.isEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text(
-                tt(
-                  language,
-                  "Henüz görev yok. İlk odak hedefini ekle.",
-                  "No tasks yet. Add your first focus target.",
-                ),
-                style: theme.textTheme.bodySmall?.copyWith(
-                  fontSize: 12,
-                  color: Colors.white70,
-                ),
-              ),
-            )
-          else
-            Column(
-              children: [
-                for (final t in tasks)
-                  _TaskItem(
-                    task: t,
-                    accentColor: accentColor,
-                    onToggle: onToggleDone == null
-                        ? null
-                        : () => onToggleDone!(t.id),
-                  ),
-              ],
-            ),
+          // ───────────────────── GÖREVLER
+          _buildTaskList(theme),
         ],
+      ),
+    );
+  }
+
+  // LIST BUILDER ― Expanded kullanılmayacak
+  Widget _buildTaskList(ThemeData theme) {
+    // Görev yoksa basit mesaj
+    if (tasks.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Text(
+          tt(language,
+              "Henüz görev yok. İlk odak hedefini ekle.",
+              "No tasks yet. Add your first focus target."),
+          style: theme.textTheme.bodySmall?.copyWith(
+            fontSize: 12,
+            color: Colors.white70,
+          ),
+        ),
+      );
+    }
+
+    // Görev varsa kaydırılabilir bir alan oluştur
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        maxHeight: 250, // tüm cihazlarda güvenli — overflow olmaz
+      ),
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: const BouncingScrollPhysics(),
+        itemCount: tasks.length,
+        itemBuilder: (context, index) {
+          final task = tasks[index];
+          return _TaskItem(
+            task: task,
+            accentColor: accentColor,
+            onToggle:
+            onToggleDone == null ? null : () => onToggleDone!(task.id),
+          );
+        },
       ),
     );
   }
@@ -128,13 +136,6 @@ class _TaskItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
-    final textStyle = theme.textTheme.bodyMedium?.copyWith(
-      fontSize: 13,
-      color: task.isDone ? Colors.white54 : Colors.white,
-      decoration:
-      task.isDone ? TextDecoration.lineThrough : TextDecoration.none,
-    );
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
@@ -159,12 +160,22 @@ class _TaskItem extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
+
+          // GÖREV BAŞLIĞI
           Expanded(
             child: Text(
               task.title,
-              style: textStyle,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontSize: 13,
+                color: task.isDone ? Colors.white54 : Colors.white,
+                decoration: task.isDone
+                    ? TextDecoration.lineThrough
+                    : TextDecoration.none,
+              ),
             ),
           ),
+
+          // Hedef pomodoro sayısı
           if (task.targetPomodoros != null)
             Container(
               padding:
