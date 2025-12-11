@@ -46,7 +46,7 @@ class PauseEntry {
   });
 }
 
-/// Tamamlanmış bir oturum kaydı (History için)
+/// Tamamlanmış bir oturum kaydı (History + Stats için)
 class FocusSession {
   final PomodoroMode mode;
   final DateTime startTime;
@@ -56,8 +56,13 @@ class FocusSession {
   final int wastedSeconds; // toplam duraklama süresi
   final List<PauseEntry> pauses;
 
-  // 🔥 Yeni: odak skoru (0–100)
+  // Odak skoru (0–100)
   final int focusScore;
+
+  // Yeni: oturum hangi görev için tutuldu?
+  // Görevsiz oturumlar için null bırakacağız.
+  final String? taskId;
+  final String? taskTitle;
 
   FocusSession({
     required this.mode,
@@ -68,8 +73,10 @@ class FocusSession {
     required this.wastedSeconds,
     required this.pauses,
     required this.focusScore,
+    this.taskId,
+    this.taskTitle,
   });
 
-  // İleride lazım olur diye küçük bir yardımcı:
-  double get efficiency => totalSeconds == 0 ? 0 : focusSeconds / totalSeconds;
+  double get efficiency =>
+      totalSeconds == 0 ? 0 : focusSeconds / totalSeconds;
 }

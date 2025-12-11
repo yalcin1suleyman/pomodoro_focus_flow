@@ -21,8 +21,11 @@ class FocusFlowHomePage extends StatefulWidget {
 }
 
 class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
-  // ───────────────────── STATE ─────────────────────
+  // ───────────────────── TASK-BOUND SESSION STATE ─────────────────────
+  String? _activeTaskId;        // şu anki oturum hangi göreve bağlı
+  int? _overrideFocusSeconds;   // görevten gelen custom süre (saniye)
 
+  // ───────────────────── STATE ─────────────────────
   FocusTheme _theme = FocusThemes.cosmic;
 
   TimerConfig _config = const TimerConfig(
@@ -78,7 +81,8 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
   void _startTickerIfNeeded() {
     if (_ticker != null) return;
 
-    _ticker = Timer.periodic(const Duration(milliseconds: 10), (_) {
+    // 1 saniyede bir tick
+    _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!mounted) return;
       _onTick();
     });
@@ -101,7 +105,9 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     _ticker?.cancel();
     _ticker = null;
 
-    final seconds = _config.getSecondsForMode(newMode);
+    final seconds = (newMode == PomodoroMode.focus && _overrideFocusSeconds != null)
+        ? _overrideFocusSeconds!
+        : _config.getSecondsForMode(newMode);
 
     setState(() {
       _mode = newMode;
@@ -187,6 +193,28 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
       _ticker?.cancel();
       _ticker = null;
       _history.add(session);
+
+      // Göreve bağlı bir focus oturumu ise: görev ilerlemesini güncelle
+      if (_mode == PomodoroMode.focus && _activeTaskId != null) {
+        final index = _tasks.indexWhere((t) => t.id == _activeTaskId);
+        if (index != -1) {
+          final t = _tasks[index];
+          final target = t.targetPomodoros ?? 0;
+          if (target > 0) {
+            final newCompleted =
+            (t.completedPomodoros + 1).clamp(0, target);
+            final done = newCompleted >= target;
+            _tasks[index] = t.copyWith(
+              completedPomodoros: newCompleted,
+              isDone: done,
+            );
+          }
+        }
+      }
+
+      // Oturum bitince görev bağını temizle
+      _activeTaskId = null;
+      _overrideFocusSeconds = null;
     });
 
     if (_alarmSound) {
@@ -239,6 +267,145 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     if (_totalSeconds == 0) return 0;
     final done = _totalSeconds - _remainingSeconds;
     return (done / _totalSeconds).clamp(0.0, 1.0);
+  }
+
+  // ───────────────────── GÖREV TABANLI BAŞLATMA ─────────────────────
+
+  // Göreve tıklanınca çalışacak ana handler
+  Future<void> _onTaskTap(FocusTask task) async {
+    // Zaten sayaç çalışıyorsa yanlışlıkla tıklamayı engelle
+    if (_isRunning) return;
+
+    // Görev için geçerli bir hedef yoksa normal pomodoro başlat
+    if (task.targetPomodoros == null ||
+        task.targetPomodoros == 0 ||
+        task.totalMinutes <= 0) {
+      final shouldStart = await _showTaskCountdownDialog(task);
+      if (!shouldStart) return;
+
+      setState(() {
+        _activeTaskId = null;
+        _overrideFocusSeconds = null;
+      });
+      _resetForMode(PomodoroMode.focus);
+      _pickQuoteForMode(PomodoroMode.focus);
+      _startTimer();
+      return;
+    }
+
+    // Geçerli hedef + toplam süre varsa: parçaya böl
+    final remainingPomodoros =
+    (task.targetPomodoros! - task.completedPomodoros)
+        .clamp(0, task.targetPomodoros!);
+    if (remainingPomodoros == 0) {
+      // Zaten tamamlanmış
+      return;
+    }
+
+    final chunkMinutes = _computeChunkMinutes(task);
+    final shouldStart =
+    await _showTaskCountdownDialog(task, minutes: chunkMinutes);
+    if (!shouldStart) return;
+
+    setState(() {
+      _activeTaskId = task.id;
+      _overrideFocusSeconds = chunkMinutes * 60;
+    });
+
+    _resetForMode(PomodoroMode.focus);
+    _pickQuoteForMode(PomodoroMode.focus);
+    _startTimer();
+  }
+
+  // Start butonuna basıldığında davranış
+  Future<void> _onStartPressed() async {
+    if (_isRunning) return;
+
+    // Focus dışındaki modlarda veya hiç görev yoksa: direkt, ama yine de geri sayım ile
+    if (_mode != PomodoroMode.focus || _tasks.isEmpty) {
+      final dummy = FocusTask(
+        id: 'none',
+        title: tt(_language, "Görevsiz oturum", "Session without task"),
+        totalMinutes: _config.focusMinutes,
+      );
+      final should = await _showTaskCountdownDialog(
+        dummy,
+        minutes: _config.focusMinutes,
+      );
+      if (!should) return;
+
+      setState(() {
+        _activeTaskId = null;
+        _overrideFocusSeconds = null;
+      });
+      _resetForMode(_mode);
+      _pickQuoteForMode(_mode);
+      _startTimer();
+      return;
+    }
+
+    // Görevler varsa: seçim sheet'i
+    final choice = await showModalBottomSheet<_StartChoice>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return _StartChoiceSheet(
+          language: _language,
+          theme: _theme,
+          tasks: _tasks,
+        );
+      },
+    );
+
+    if (choice == null) return;
+
+    if (choice.withoutTask) {
+      final dummy = FocusTask(
+        id: 'none',
+        title: tt(_language, "Görevsiz oturum", "Session without task"),
+        totalMinutes: _config.focusMinutes,
+      );
+      final should = await _showTaskCountdownDialog(
+        dummy,
+        minutes: _config.focusMinutes,
+      );
+      if (!should) return;
+
+      setState(() {
+        _activeTaskId = null;
+        _overrideFocusSeconds = null;
+      });
+      _resetForMode(PomodoroMode.focus);
+      _pickQuoteForMode(PomodoroMode.focus);
+      _startTimer();
+    } else if (choice.task != null) {
+      await _onTaskTap(choice.task!);
+    }
+  }
+
+  // Görev için her pomodoro'nun süresini dakika olarak hesapla
+  int _computeChunkMinutes(FocusTask task) {
+    final target = task.targetPomodoros ?? 1;
+    if (target <= 0) return _config.focusMinutes;
+    if (task.totalMinutes <= 0) return _config.focusMinutes;
+
+    final perChunk = (task.totalMinutes / target).round();
+    return perChunk > 0 ? perChunk : _config.focusMinutes;
+  }
+
+  // 10 saniyelik geri sayım dialogu, kullanıcı iptal edebilir
+  Future<bool> _showTaskCountdownDialog(FocusTask task, {int? minutes}) async {
+    return await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) {
+        return _CountdownDialog(
+          taskTitle: task.title,
+          minutes: minutes,
+        );
+      },
+    ) ??
+        false;
   }
 
   Future<void> _playAlarm() async {
@@ -300,6 +467,11 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     final targetController = TextEditingController(
       text: editing?.targetPomodoros?.toString() ?? "",
     );
+    final minutesController = TextEditingController(
+      text: (editing?.totalMinutes ?? 0) == 0
+          ? ""
+          : editing!.totalMinutes.toString(),
+    );
 
     final result = await showModalBottomSheet<_TaskSheetResult>(
       context: context,
@@ -319,6 +491,7 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
             isEditing: editing != null,
             titleController: titleController,
             targetController: targetController,
+            minutesController: minutesController,
           ),
         );
       },
@@ -326,7 +499,7 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
 
     if (result == null) return;
 
-    // Silme
+    // silme
     if (result.delete && editing != null) {
       setState(() {
         _tasks.removeWhere((t) => t.id == editing.id);
@@ -338,26 +511,27 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
     if (title.isEmpty) return;
 
     final target = int.tryParse(targetController.text.trim());
+    final minutes = int.tryParse(minutesController.text.trim()) ?? 0;
 
     if (editing == null) {
-      // Yeni görev
       setState(() {
         _tasks.add(
           FocusTask(
             id: DateTime.now().microsecondsSinceEpoch.toString(),
             title: title,
             targetPomodoros: target,
+            totalMinutes: minutes,
           ),
         );
       });
     } else {
-      // Var olan görevi güncelle
       setState(() {
         final index = _tasks.indexWhere((t) => t.id == editing.id);
         if (index == -1) return;
         _tasks[index] = editing.copyWith(
           title: title,
           targetPomodoros: target,
+          totalMinutes: minutes,
         );
       });
     }
@@ -502,40 +676,41 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: isTablet ? 600 : 500),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          child: Column(
-            children: [
-              _buildTopBar(),
-              const SizedBox(height: 8),
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      _buildTimerCard(
-                        radius,
-                        fontSize,
-                        isLandscape: false,
-                        showControlsBelow: true,
-                      ),
-                      const SizedBox(height: 16),
-                      TaskListSection(
-                        language: _language,
-                        tasks: _tasks,
-                        onAddTask: () => _openTaskSheet(),
-                        onToggleDone: _toggleTaskDone,
-                        onEditTask: (task) => _openTaskSheet(editing: task),
-                        accentColor: _theme.accent,
-                        cardColor: _theme.card.withOpacity(0.96),
-                      ),
-                    ],
-                  ),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            child: Column(
+                children: [
+                _buildTopBar(),
+            const SizedBox(height: 8),
+        Expanded(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                _buildTimerCard(
+                  radius,
+                  fontSize,
+                  isLandscape: false,
+                  showControlsBelow: true,
                 ),
-              ),
-            ],
+                const SizedBox(height: 16),
+                TaskListSection(
+                  language: _language,
+                  tasks: _tasks,
+                  onAddTask: () => _openTaskSheet(),
+                  onToggleDone: _toggleTaskDone,
+                  onEditTask: (task) => _openTaskSheet(editing: task),
+                  onTapTask: _onTaskTap,
+                  accentColor: _theme.accent,
+                  cardColor: _theme.card.withOpacity(0.96),
+                ),
+              ],
+            ),
           ),
         ),
+        ],
       ),
+    ),
+    ),
     );
   }
 
@@ -590,6 +765,7 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
                             onToggleDone: _toggleTaskDone,
                             onEditTask: (task) =>
                                 _openTaskSheet(editing: task),
+                            onTapTask: _onTaskTap,
                             accentColor: _theme.accent,
                             cardColor: _theme.card.withOpacity(0.96),
                           ),
@@ -753,7 +929,7 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
       children: [
         Expanded(
           child: GestureDetector(
-            onTap: _isRunning ? _pauseTimer : _startTimer,
+            onTap: _isRunning ? _pauseTimer : _onStartPressed,
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 180),
               padding: const EdgeInsets.symmetric(vertical: 12),
@@ -848,7 +1024,144 @@ class _FocusFlowHomePageState extends State<FocusFlowHomePage> {
   }
 }
 
-// ───────────────────── TASK SHEET HELPERS (CLASS DIŞINDA!) ─────────────────────
+// ───────────────────── START CHOICE MODEL & SHEET ─────────────────────
+
+class _StartChoice {
+  final FocusTask? task;
+  final bool withoutTask;
+
+  const _StartChoice({this.task, this.withoutTask = false});
+}
+
+class _StartChoiceSheet extends StatelessWidget {
+  final AppLanguage language;
+  final FocusTheme theme;
+  final List<FocusTask> tasks;
+
+  const _StartChoiceSheet({
+    required this.language,
+    required this.theme,
+    required this.tasks,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isEmpty = tasks.isEmpty;
+    return SafeArea(
+      top: false,
+      child: Container(
+        margin: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+        decoration: BoxDecoration(
+          color: const Color(0xFF020617),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: Colors.white12),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: 12),
+              decoration: BoxDecoration(
+                color: Colors.white24,
+                borderRadius: BorderRadius.circular(999),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                tt(language, "Oturum başlat", "Start session"),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            if (!isEmpty)
+              Flexible(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: tasks.length,
+                  separatorBuilder: (_, __) => const Divider(
+                    height: 8,
+                    color: Colors.white12,
+                  ),
+                  itemBuilder: (context, index) {
+                    final t = tasks[index];
+                    final progress = (t.targetPomodoros ?? 0) == 0
+                        ? null
+                        : "${t.completedPomodoros}/${t.targetPomodoros}";
+                    return ListTile(
+                      onTap: () =>
+                          Navigator.pop(context, _StartChoice(task: t)),
+                      title: Text(
+                        t.title,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                      subtitle: progress == null
+                          ? null
+                          : Text(
+                        progress,
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: Colors.white70,
+                        ),
+                      ),
+                      trailing: const Icon(
+                        Icons.play_arrow_rounded,
+                        size: 20,
+                      ),
+                    );
+                  },
+                ),
+              )
+            else
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Text(
+                  tt(language,
+                      "Henüz kayıtlı görev yok.", "No saved tasks yet."),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.white70,
+                  ),
+                ),
+              ),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () {
+                  Navigator.pop(
+                    context,
+                    const _StartChoice(withoutTask: true),
+                  );
+                },
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: theme.accent),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                ),
+                child: Text(
+                  tt(language, "Görevsiz devam et", "Continue without task"),
+                  style: TextStyle(color: theme.accent),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ───────────────────── TASK SHEET HELPERS ─────────────────────
 
 class _TaskSheetResult {
   final bool delete;
@@ -862,6 +1175,7 @@ class _TaskSheet extends StatelessWidget {
 
   final TextEditingController titleController;
   final TextEditingController targetController;
+  final TextEditingController minutesController;
 
   const _TaskSheet({
     required this.language,
@@ -869,126 +1183,268 @@ class _TaskSheet extends StatelessWidget {
     required this.isEditing,
     required this.titleController,
     required this.targetController,
+    required this.minutesController,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFF020617),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white12),
-      ),
-      padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Container(
-              width: 40,
-              height: 4,
-              margin: const EdgeInsets.only(bottom: 12),
-              decoration: BoxDecoration(
-                color: Colors.white24,
-                borderRadius: BorderRadius.circular(999),
-              ),
-            ),
-          ),
-          Text(
-            isEditing
-                ? tt(language, "Görevi düzenle", "Edit task")
-                : tt(language, "Yeni görev", "New task"),
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: titleController,
-            autofocus: true,
-            decoration: InputDecoration(
-              labelText: tt(language, "Görev başlığı", "Task title"),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          TextField(
-            controller: targetController,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              labelText: tt(
-                language,
-                "Hedef pomodoro (opsiyonel)",
-                "Target pomodoros (optional)",
-              ),
-              hintText: "8",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Row(
+    return SafeArea(
+      top: false,
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFF020617),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: Colors.white12),
+        ),
+        padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (isEditing)
-                TextButton.icon(
-                  onPressed: () {
-                    Navigator.pop(
-                      context,
-                      _TaskSheetResult(delete: true),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.delete_outline,
-                    size: 18,
-                    color: Colors.redAccent,
-                  ),
-                  label: Text(
-                    tt(language, "Sil", "Delete"),
-                    style: const TextStyle(color: Colors.redAccent),
-                  ),
-                ),
-              const Spacer(),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(tt(language, "İptal", "Cancel")),
-              ),
-              const SizedBox(width: 4),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: accent,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 10,
-                  ),
-                  shape: RoundedRectangleBorder(
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white24,
                     borderRadius: BorderRadius.circular(999),
                   ),
                 ),
-                onPressed: () {
-                  Navigator.pop(
-                    context,
-                    _TaskSheetResult(delete: false),
-                  );
-                },
-                child: Text(
-                  isEditing
-                      ? tt(language, "Kaydet", "Save")
-                      : tt(language, "Ekle", "Add"),
+              ),
+              Text(
+                isEditing
+                    ? tt(language, "Görevi düzenle", "Edit task")
+                    : tt(language, "Yeni görev", "New task"),
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: titleController,
+                autofocus: true,
+                decoration: InputDecoration(
+                  labelText: tt(language, "Görev başlığı", "Task title"),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: targetController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: tt(
+                          language,
+                          "Hedef pomodoro",
+                          "Target pomodoros",
+                        ),
+                        hintText: "8",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      controller: minutesController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: tt(
+                          language,
+                          "Toplam süre (dk)",
+                          "Total minutes",
+                        ),
+                        hintText: "60",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  if (isEditing)
+                    TextButton.icon(
+                      onPressed: () {
+                        Navigator.pop(
+                          context,
+                          _TaskSheetResult(delete: true),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.delete_outline,
+                        size: 18,
+                        color: Colors.redAccent,
+                      ),
+                      label: Text(
+                        tt(language, "Sil", "Delete"),
+                        style: const TextStyle(color: Colors.redAccent),
+                      ),
+                    ),
+                  const Spacer(),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(tt(language, "İptal", "Cancel")),
+                  ),
+                  const SizedBox(width: 4),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: accent,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 10,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(
+                        context,
+                        _TaskSheetResult(delete: false),
+                      );
+                    },
+                    child: Text(
+                      isEditing
+                          ? tt(language, "Kaydet", "Save")
+                          : tt(language, "Ekle", "Add"),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
             ],
           ),
-          const SizedBox(height: 4),
+        ),
+      ),
+    );
+  }
+}
+
+// ───────────────────── COUNTDOWN DIALOG ─────────────────────
+
+class _CountdownDialog extends StatefulWidget {
+  final String taskTitle;
+  final int? minutes;
+
+  const _CountdownDialog({
+    required this.taskTitle,
+    this.minutes,
+  });
+
+  @override
+  State<_CountdownDialog> createState() => _CountdownDialogState();
+}
+
+class _CountdownDialogState extends State<_CountdownDialog> {
+  int _seconds = 10;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 1), (t) {
+      if (!mounted) return;
+      if (_seconds <= 1) {
+        t.cancel();
+        Navigator.of(context).pop(true); // otomatik başlat
+      } else {
+        setState(() {
+          _seconds--;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return AlertDialog(
+      backgroundColor: const Color(0xFF020617),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+      ),
+      title: Text(
+        "Pomodoro başlatılsın mı?",
+        style: theme.textTheme.titleMedium,
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "\"${widget.taskTitle}\"",
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 8),
+          if (widget.minutes != null)
+            Text(
+              "${widget.minutes} dakikalık pomodoro",
+              style: const TextStyle(
+                fontSize: 13,
+                color: Colors.white70,
+              ),
+            ),
+          const SizedBox(height: 16),
+          Center(
+            child: Text(
+              _seconds.toString(),
+              style: const TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            "Geri sayım bitmeden iptal edebilirsin.",
+            style: TextStyle(
+              fontSize: 11,
+              color: Colors.white60,
+            ),
+          ),
         ],
       ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            _timer?.cancel();
+            Navigator.of(context).pop(false);
+          },
+          child: const Text("İptal"),
+        ),
+        TextButton(
+          onPressed: () {
+            _timer?.cancel();
+            Navigator.of(context).pop(true);
+          },
+          child: const Text("Hemen başlat"),
+        ),
+      ],
     );
   }
 }

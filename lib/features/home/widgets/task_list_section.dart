@@ -8,8 +8,11 @@ class TaskListSection extends StatelessWidget {
   final VoidCallback onAddTask;
   final void Function(String taskId)? onToggleDone;
 
-  /// Yeni: görev düzenleme callback’i
+  /// Görev düzenleme callback’i
   final void Function(FocusTask task)? onEditTask;
+
+  /// Göreve tıklayınca pomodoro başlatmak için callback
+  final void Function(FocusTask task)? onTapTask;
 
   final Color accentColor;
   final Color cardColor;
@@ -23,6 +26,7 @@ class TaskListSection extends StatelessWidget {
     this.onEditTask,
     required this.accentColor,
     required this.cardColor,
+    this.onTapTask,
   });
 
   @override
@@ -58,8 +62,10 @@ class TaskListSection extends StatelessWidget {
                 label: Text(tt(language, "Ekle", "Add")),
                 style: TextButton.styleFrom(
                   foregroundColor: accentColor,
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
                   textStyle: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
@@ -127,6 +133,9 @@ class TaskListSection extends StatelessWidget {
             onEdit: onEditTask == null
                 ? null
                 : () => onEditTask!(task),
+            onTap: onTapTask == null
+                ? null
+                : () => onTapTask!(task),
           );
         },
       ),
@@ -138,12 +147,17 @@ class _TaskItem extends StatelessWidget {
   final FocusTask task;
   final VoidCallback? onToggle;
   final VoidCallback? onEdit;
+
+  /// Satıra tıklayınca çalışacak callback (pomodoro başlatma için)
+  final VoidCallback? onTap;
+
   final Color accentColor;
 
   const _TaskItem({
     required this.task,
     this.onToggle,
     this.onEdit,
+    this.onTap,
     required this.accentColor,
   });
 
@@ -151,78 +165,82 @@ class _TaskItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        children: [
-          // Checkbox
-          GestureDetector(
-            onTap: onToggle,
-            child: Container(
-              width: 22,
-              height: 22,
-              decoration: BoxDecoration(
-                color: task.isDone ? accentColor : Colors.transparent,
-                borderRadius: BorderRadius.circular(7),
-                border: Border.all(
-                  color: task.isDone ? accentColor : Colors.white38,
-                  width: 1.5,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6),
+        child: Row(
+          children: [
+            // Checkbox
+            GestureDetector(
+              onTap: onToggle,
+              child: Container(
+                width: 22,
+                height: 22,
+                decoration: BoxDecoration(
+                  color: task.isDone ? accentColor : Colors.transparent,
+                  borderRadius: BorderRadius.circular(7),
+                  border: Border.all(
+                    color: task.isDone ? accentColor : Colors.white38,
+                    width: 1.5,
+                  ),
                 ),
-              ),
-              child: task.isDone
-                  ? const Icon(Icons.check, size: 15, color: Colors.black)
-                  : null,
-            ),
-          ),
-          const SizedBox(width: 10),
-
-          // Başlık
-          Expanded(
-            child: Text(
-              task.title,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                fontSize: 13,
-                color: task.isDone ? Colors.white54 : Colors.white,
-                decoration: task.isDone
-                    ? TextDecoration.lineThrough
-                    : TextDecoration.none,
+                child: task.isDone
+                    ? const Icon(Icons.check, size: 15, color: Colors.black)
+                    : null,
               ),
             ),
-          ),
+            const SizedBox(width: 10),
 
-          // Hedef pomodoro sayısı
-          if (task.targetPomodoros != null)
-            Container(
-              padding:
-              const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-              decoration: BoxDecoration(
-                color: Colors.white10,
-                borderRadius: BorderRadius.circular(999),
-              ),
+            // Başlık
+            Expanded(
               child: Text(
-                "${task.completedPomodoros}/${task.targetPomodoros}",
-                style: const TextStyle(
-                  fontSize: 11,
-                  color: Colors.white70,
+                task.title,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontSize: 13,
+                  color: task.isDone ? Colors.white54 : Colors.white,
+                  decoration: task.isDone
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none,
                 ),
               ),
             ),
 
-          // Düzenle ikonu
-          if (onEdit != null) ...[
-            const SizedBox(width: 6),
-            IconButton(
-              onPressed: onEdit,
-              icon: const Icon(
-                Icons.edit_outlined,
-                size: 18,
-                color: Colors.white54,
+            // Hedef pomodoro sayısı
+            if (task.targetPomodoros != null)
+              Container(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: Colors.white10,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  "${task.completedPomodoros}/${task.targetPomodoros}",
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: Colors.white70,
+                  ),
+                ),
               ),
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
-            ),
+
+            // Düzenle ikonu
+            if (onEdit != null) ...[
+              const SizedBox(width: 6),
+              IconButton(
+                onPressed: onEdit,
+                icon: const Icon(
+                  Icons.edit_outlined,
+                  size: 18,
+                  color: Colors.white54,
+                ),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
