@@ -18,34 +18,7 @@ class _StatsScreenState extends State<StatsScreen> {
   DateTime _selectedDate = DateTime.now();
   
   // Rotating motivational quotes
-  final List<String> _enQuotes = [
-    "Focus is the key to success.",
-    "One pomodoro at a time.",
-    "Small steps, big results.",
-    "Keep pushing forward!",
-    "Your future is created by what you do today.",
-    "Stay consistent, stay focused.",
-    "Deep work matters.",
-  ];
-  
-  final List<String> _trQuotes = [
-    "Odaklanmak başarının anahtarıdır.",
-    "Her seferinde bir pomodoro.",
-    "Küçük adımlar, büyük sonuçlar.",
-    "İlerlemeye devam et!",
-    "Geleceğin, bugün yaptıklarınla şekillenir.",
-    "İstikrarlı ol, odaklan.",
-    "Derin çalışma önemlidir.",
-  ];
 
-  String _getMotivationQuote(SettingsProvider settings) {
-    // Simple rotation based on day of year to vary daily
-    int dayOfYear = int.parse("${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}"); 
-    // Or just pick random? Let's pick based on day so it stays same for the day.
-    // Actually simplicity:
-    final quotes = settings.language == 'tr' ? _trQuotes : _enQuotes;
-    return quotes[DateTime.now().day % quotes.length];
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +115,7 @@ class _StatsScreenState extends State<StatsScreen> {
                 onTap: isSelectedToday ? () => _showGoalDialog(context, settings) : null,
                 child: GlassBox(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -153,89 +126,136 @@ class _StatsScreenState extends State<StatsScreen> {
                               // Title Date
                               Text(
                                 _formatDate(_selectedDate, settings), 
-                                style: Theme.of(context).textTheme.titleMedium
+                                style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.grey),
                               ),
-                              const SizedBox(height: 10),
+                              const SizedBox(height: 8),
                               
-                              if (isSelectedToday)
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: InkWell(
-                                    onTap: () => _showGoalDialog(context, settings),
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context).primaryColor.withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.3)),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(Icons.edit, size: 16, color: Theme.of(context).primaryColor),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            "${settings.translate('dailyGoal')}: ${(settings.dailyGoalMinutes / 60).toStringAsFixed(1)}h",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).primaryColor,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                              // Main Focus Time Display
+                              // Main Focus Time Display - Inline as requested
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    "${(focusedMinutes / 60).toStringAsFixed(1)}h", 
+                                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
-                                ),
-                              
-                              const SizedBox(height: 10),
-                              Text("${(focusedMinutes / 60).toStringAsFixed(1)}h", 
-                                  style: Theme.of(context).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.bold)),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    "/ ${(settings.dailyGoalMinutes / 60).toStringAsFixed(1)}h",
+                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                      color: Colors.grey.withOpacity(0.8),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  if (isSelectedToday)
+                                    Padding( // Use Padding+InkWell for tighter control than IconButton
+                                      padding: const EdgeInsets.only(left: 8, bottom: 4),
+                                      child: InkWell(
+                                        onTap: () => _showGoalDialog(context, settings),
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Icon(
+                                          Icons.edit, 
+                                          size: 20, 
+                                          color: Theme.of(context).colorScheme.primary.withOpacity(0.8)
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
 
-                              Text(isSelectedToday ? settings.translate('inProgress') : settings.translate('completed'), style: TextStyle(color: Colors.grey)),
+                              // Status Label
+                              Text(
+                                isSelectedToday ? settings.translate('dailyGoal') : settings.translate('completed'), 
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               
                               // Notes or Quote
-                              const SizedBox(height: 12),
+                              const SizedBox(height: 16),
                               if (selectedRecord.note != null && selectedRecord.note!.isNotEmpty)
                                 Text(
                                   "\"${selectedRecord.note}\"",
                                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     fontStyle: FontStyle.italic,
-                                    fontSize: 16, // Increased Size
+                                    fontSize: 15,
                                   ),
                                   maxLines: 4,
                                   overflow: TextOverflow.ellipsis,
                                 )
-                              else if (isSelectedToday)
-                                Text(
-                                  _getMotivationQuote(settings),
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    fontStyle: FontStyle.italic,
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: 16, // Increased Size
-                                  ),
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                              else
+                                const SizedBox(height: 0), // No quote here anymore
                             ],
                           ),
                         ),
-                        CircularPercentIndicator(
-                          radius: 60.0,
-                          lineWidth: 12.0,
-                          percent: progressPercent,
-                          center: isSelectedToday 
-                              ? Icon(Icons.check, size: 40, color: Theme.of(context).colorScheme.primary)
-                              : Text("${(progressPercent * 100).toInt()}%", style: const TextStyle(fontWeight: FontWeight.bold)),
-                          progressColor: Theme.of(context).colorScheme.primary, // Consistent color
-                          backgroundColor: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
-                          circularStrokeCap: CircularStrokeCap.round,
+                        // Right Side Diagram
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                             CircularPercentIndicator(
+                              radius: 55.0,
+                              lineWidth: 10.0,
+                              percent: progressPercent,
+                              center: Text(
+                                "${(progressPercent * 100).toInt()}%", 
+                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)
+                              ),
+                              progressColor: Theme.of(context).colorScheme.primary,
+                              backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+                              circularStrokeCap: CircularStrokeCap.round,
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
                 ),
               ),
+              
+              const SizedBox(height: 20),
+              
+              // Tasks List for Selected Day
+              GlassBox(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        settings.translate('tasksWorkedOn'),
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 10),
+                      if (selectedRecord.tasksWorkedOn.isEmpty)
+                        Text(
+                          settings.translate('noTasksRecorded'),
+                          style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
+                        )
+                      else
+                        ...selectedRecord.tasksWorkedOn.map((task) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          child: Row(
+                            children: [
+                              Icon(Icons.check_circle_outline, size: 16, color: Theme.of(context).colorScheme.secondary),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  task,
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )),
+                    ],
+                  ),
+                ),
+              ),
+
               const SizedBox(height: 140),
             ],
           ),
@@ -291,16 +311,16 @@ class _StatsScreenState extends State<StatsScreen> {
                 ? (record.minutesFocused / settings.dailyGoalMinutes) 
                 : 1.0;
              
-             // Min size 28 (fits text), Max size 54 (slightly larger than before)
-             const double minSize = 28.0;
-             const double maxSize = 54.0;
+             // Min size 22 (smaller), Max size 55 (larger) for more contrast
+             const double minSize = 22.0;
+             const double maxSize = 55.0;
              
              // Interpolate
              double progress = goalRatio.clamp(0.0, 1.0);
              circleSize = minSize + (progress * (maxSize - minSize));
              
              // Scale font slightly with size
-             fontSize = 12.0 + (progress * 4.0);
+             fontSize = 11.0 + (progress * 5.0);
           } else if (isSelected) {
             circleSize = 40.0; // Standard selection size when empty
           } else {
@@ -404,7 +424,7 @@ class _StatsScreenState extends State<StatsScreen> {
     );
   }
 
-  }
+
 
   String _formatMonth(DateTime date, SettingsProvider settings) {
     final months = [
@@ -421,3 +441,4 @@ class _StatsScreenState extends State<StatsScreen> {
   String _formatDate(DateTime date, SettingsProvider settings) {
     return "${date.day} ${_formatMonth(date, settings)}";
   }
+}

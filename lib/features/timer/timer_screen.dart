@@ -9,6 +9,32 @@ import '../../core/theme/app_theme.dart';
 class TimerScreen extends StatelessWidget {
   const TimerScreen({super.key});
 
+  // Rotating motivational quotes
+  static const List<String> _enQuotes = [
+    "Focus is the key to success.",
+    "One pomodoro at a time.",
+    "Small steps, big results.",
+    "Keep pushing forward!",
+    "Your future is created by what you do today.",
+    "Stay consistent, stay focused.",
+    "Deep work matters.",
+  ];
+  
+  static const List<String> _trQuotes = [
+    "Odaklanmak başarının anahtarıdır.",
+    "Her seferinde bir pomodoro.",
+    "Küçük adımlar, büyük sonuçlar.",
+    "İlerlemeye devam et!",
+    "Geleceğin, bugün yaptıklarınla şekillenir.",
+    "İstikrarlı ol, odaklan.",
+    "Derin çalışma önemlidir.",
+  ];
+
+  String _getMotivationQuote(SettingsProvider settings) {
+    final quotes = settings.language == 'tr' ? _trQuotes : _enQuotes;
+    return quotes[DateTime.now().day % quotes.length];
+  }
+
   @override
   Widget build(BuildContext context) {
     final timer = Provider.of<TimerService>(context);
@@ -67,6 +93,21 @@ class TimerScreen extends StatelessWidget {
           ),
           const Spacer(),
           _buildControls(context, timer, theme, progressColor),
+          const SizedBox(height: 30),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              _getMotivationQuote(settings),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontStyle: FontStyle.italic,
+                color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
           const Spacer(flex: 2),
           const SizedBox(height: 80), // Bottom padding for nav bar
         ],
@@ -100,6 +141,15 @@ class TimerScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildControls(context, timer, theme, progressColor),
+                const SizedBox(height: 20),
+                Text(
+                  _getMotivationQuote(settings),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontStyle: FontStyle.italic,
+                    color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: 80), // Prevent overlap with bottom nav in landscape
               ],
             ),
