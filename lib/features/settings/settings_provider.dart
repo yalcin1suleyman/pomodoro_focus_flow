@@ -180,6 +180,16 @@ class SettingsProvider extends ChangeNotifier {
     'monthMay': 'May', 'monthJun': 'June', 'monthJul': 'July', 'monthAug': 'August',
     'monthSep': 'September', 'monthOct': 'October', 'monthNov': 'November', 'monthDec': 'December',
     'generalFocus': 'General Focus',
+    'share': 'Share',
+    'shareStatsTitle': 'My Focus Stats',
+    'shareMessage': 'Check out my focus progress!',
+    'statsDaily': 'Daily Stats',
+    'statsMonthly': 'Monthly Stats',
+    'stats6Months': '6 Months Stats',
+    'statsYearly': 'Yearly Stats',
+    'average': 'Daily Average',
+    'sessions': 'Sessions',
+    'heatmapLegend': 'Less  •  More',
   };
 
   static const Map<String, String> _tr = {
@@ -246,5 +256,15 @@ class SettingsProvider extends ChangeNotifier {
     'monthMay': 'Mayıs', 'monthJun': 'Haziran', 'monthJul': 'Temmuz', 'monthAug': 'Ağustos',
     'monthSep': 'Eylül', 'monthOct': 'Ekim', 'monthNov': 'Kasım', 'monthDec': 'Aralık',
     'generalFocus': 'Genel Odak',
+    'share': 'Paylaş',
+    'shareStatsTitle': 'Odak İstatistiklerim',
+    'shareMessage': 'Odak ilerlememe göz at!',
+    'statsDaily': 'Günlük İstatistik',
+    'statsMonthly': 'Aylık İstatistik',
+    'stats6Months': '6 Aylık İstatistik',
+    'statsYearly': 'Yıllık İstatistik',
+    'average': 'Günlük Ortalama',
+    'sessions': 'Oturum',
+    'heatmapLegend': 'Az  •  Çok',
   };
 }

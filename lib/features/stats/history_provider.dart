@@ -72,6 +72,37 @@ class HistoryProvider extends ChangeNotifier {
     );
   }
 
+  int getStatsForPeriod(DateTime start, DateTime end) {
+    // Inclusive start and end
+    final startKey = _dateToKey(start);
+    final endKey = _dateToKey(end);
+    
+    int totalMinutes = 0;
+    
+    for (var record in _history) {
+      if (record.date.compareTo(startKey) >= 0 && record.date.compareTo(endKey) <= 0) {
+        totalMinutes += record.minutesFocused;
+      }
+    }
+    return totalMinutes;
+  }
+
+  Map<DateTime, int> getDailyRecordsForPeriod(DateTime start, DateTime end) {
+    Map<DateTime, int> data = {};
+    final startKey = _dateToKey(start);
+    final endKey = _dateToKey(end);
+
+    for (var record in _history) {
+      if (record.date.compareTo(startKey) >= 0 && record.date.compareTo(endKey) <= 0) {
+        // Parse back to DateTime for easier widget consumption
+        final parts = record.date.split('-');
+        final date = DateTime(int.parse(parts[0]), int.parse(parts[1]), int.parse(parts[2]));
+        data[date] = record.minutesFocused;
+      }
+    }
+    return data;
+  }
+
   Future<void> logSession(int minutes, String taskTitle) async {
     final now = DateTime.now();
     final dateKey = _dateToKey(now);

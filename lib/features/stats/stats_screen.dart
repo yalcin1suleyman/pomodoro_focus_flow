@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:flutter/rendering.dart' as rendering;
+import 'dart:ui' as ui;
+import 'dart:io';
+import 'package:flutter/services.dart';
 import '../../core/widgets/glass_box.dart';
 import '../../core/theme/app_theme.dart';
 import '../settings/settings_provider.dart';
 import 'history_provider.dart';
+import 'widgets/share_stats_card.dart';
 
 class StatsScreen extends StatefulWidget {
   const StatsScreen({super.key});
@@ -43,11 +50,20 @@ class _StatsScreenState extends State<StatsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                settings.translate('stats'),
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    settings.translate('stats'),
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => _showShareDialog(context, settings, selectedRecord, focusedMinutes),
+                    icon: Icon(Icons.share, color: Theme.of(context).colorScheme.primary),
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
 
@@ -132,38 +148,42 @@ class _StatsScreenState extends State<StatsScreen> {
                               
                               // Main Focus Time Display
                               // Main Focus Time Display - Inline as requested
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    "${(focusedMinutes / 60).toStringAsFixed(1)}h", 
-                                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).colorScheme.primary,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    "/ ${(settings.dailyGoalMinutes / 60).toStringAsFixed(1)}h",
-                                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                      color: Colors.grey.withOpacity(0.8),
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  if (isSelectedToday)
-                                    Padding( // Use Padding+InkWell for tighter control than IconButton
-                                      padding: const EdgeInsets.only(left: 8, bottom: 4),
-                                      child: InkWell(
-                                        onTap: () => _showGoalDialog(context, settings),
-                                        borderRadius: BorderRadius.circular(12),
-                                        child: Icon(
-                                          Icons.edit, 
-                                          size: 20, 
-                                          color: Theme.of(context).colorScheme.primary.withOpacity(0.8)
-                                        ),
+                              FittedBox( // Scale down if too wide
+                                fit: BoxFit.scaleDown,
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      "${(focusedMinutes / 60).toStringAsFixed(1)}h", 
+                                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).colorScheme.primary,
                                       ),
                                     ),
-                                ],
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      "/ ${(settings.dailyGoalMinutes / 60).toStringAsFixed(1)}h",
+                                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                        color: Colors.grey.withOpacity(0.8),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    if (isSelectedToday)
+                                      Padding( // Use Padding+InkWell for tighter control than IconButton
+                                        padding: const EdgeInsets.only(left: 8, bottom: 6),
+                                        child: InkWell(
+                                          onTap: () => _showGoalDialog(context, settings),
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: Icon(
+                                            Icons.edit, 
+                                            size: 20, 
+                                            color: Theme.of(context).colorScheme.primary.withOpacity(0.8)
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ),
 
                               // Status Label
@@ -440,5 +460,162 @@ class _StatsScreenState extends State<StatsScreen> {
 
   String _formatDate(DateTime date, SettingsProvider settings) {
     return "${date.day} ${_formatMonth(date, settings)}";
+  }
+
+  void _showShareDialog(BuildContext context, SettingsProvider settings, DailyRecord record, int focusedMinutes) {
+    final GlobalKey boundaryKey = GlobalKey();
+    final history = Provider.of<HistoryProvider>(context, listen: false);
+    
+    // Initial State
+    String selectedRange = 'daily'; // 'daily', 'monthly', '6months', 'yearly'
+    
+    showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setState) {
+          // Calculate Stats based on Range
+          int displayMinutes = 0;
+          int displayGoal = 0;
+          String displayTitle = "";
+          String displayDateLabel = "";
+          ShareMode displayMode = ShareMode.daily;
+          Map<DateTime, int>? periodData;
+          
+          final now = DateTime.now();
+          
+          if (selectedRange == 'daily') {
+            displayMinutes = focusedMinutes;
+            displayGoal = settings.dailyGoalMinutes; // Daily Goal relevant here
+            displayTitle = settings.translate('statsDaily');
+            displayDateLabel = _formatDate(_selectedDate, settings);
+            displayMode = ShareMode.daily;
+          } else if (selectedRange == 'monthly') {
+            final start = DateTime(now.year, now.month, 1);
+            final end = DateTime(now.year, now.month + 1, 0);
+            displayMinutes = history.getStatsForPeriod(start, end);
+            periodData = history.getDailyRecordsForPeriod(start, end);
+            displayTitle = settings.translate('statsMonthly');
+            displayDateLabel = _formatMonth(now, settings);
+            displayMode = ShareMode.monthly;
+          } else if (selectedRange == '6months') {
+             final start = DateTime(now.year, now.month - 5, 1);
+             final end = DateTime(now.year, now.month + 1, 0);
+             displayMinutes = history.getStatsForPeriod(start, end);
+             periodData = history.getDailyRecordsForPeriod(start, end);
+             displayTitle = settings.translate('stats6Months');
+             displayDateLabel = "${_formatMonth(start, settings)} - ${_formatMonth(end, settings)}";
+             displayMode = ShareMode.heatmap;
+          } else if (selectedRange == 'yearly') {
+             final start = DateTime(now.year, 1, 1);
+             final end = DateTime(now.year, 12, 31);
+             displayMinutes = history.getStatsForPeriod(start, end);
+             periodData = history.getDailyRecordsForPeriod(start, end);
+             displayTitle = settings.translate('statsYearly');
+             displayDateLabel = "${now.year}";
+             displayMode = ShareMode.heatmap;
+          }
+
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: const EdgeInsets.all(10),
+            child: SingleChildScrollView( // Added scroll view for safety
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                   // Controls
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: selectedRange,
+                        dropdownColor: Theme.of(context).cardColor,
+                        style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontWeight: FontWeight.bold),
+                        onChanged: (val) {
+                          if (val != null) setState(() => selectedRange = val);
+                        },
+                        items: [
+                          DropdownMenuItem(value: 'daily', child: Text(settings.translate('statsDaily'))),
+                          DropdownMenuItem(value: 'monthly', child: Text(settings.translate('statsMonthly'))),
+                          DropdownMenuItem(value: '6months', child: Text(settings.translate('stats6Months'))),
+                          DropdownMenuItem(value: 'yearly', child: Text(settings.translate('statsYearly'))),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  Stack(
+                    children: [
+                      RepaintBoundary(
+                        key: boundaryKey,
+                        child: ShareStatsCard(
+                          focusedMinutes: displayMinutes,
+                          goalMinutes: displayGoal,
+                          dateLabel: displayDateLabel,
+                          title: displayTitle,
+                          settings: settings,
+                          mode: displayMode,
+                          periodData: periodData,
+                        ),
+                      ),
+                       Positioned(
+                        top: 0, 
+                        right: 0,
+                        child: IconButton(
+                          icon: const Icon(Icons.close, color: Colors.white),
+                          onPressed: () => Navigator.of(ctx).pop(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton.icon(
+                    onPressed: () async {
+                      // 1. Capture Image
+                      try {
+                        final boundary = boundaryKey.currentContext?.findRenderObject() as rendering.RenderRepaintBoundary?;
+                        if (boundary == null) return;
+
+                        final image = await boundary.toImage(pixelRatio: 3.0);
+                        final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+                        final pngBytes = byteData?.buffer.asUint8List();
+
+                        if (pngBytes != null) {
+                          // 2. Save to Temp File
+                          final directory = await getTemporaryDirectory();
+                          final path = '${directory.path}/focus_stats_share.png';
+                          final file = File(path);
+                          await file.writeAsBytes(pngBytes);
+
+                          // 3. Share
+                          final xFile = XFile(path);
+                          if (context.mounted) {
+                            Navigator.pop(ctx); // Close dialog first
+                            await Share.shareXFiles([xFile], text: settings.translate('shareMessage'));
+                          }
+                        }
+                      } catch (e) {
+                        debugPrint("Error sharing: $e");
+                      }
+                    },
+                    icon: const Icon(Icons.share),
+                    label: Text(settings.translate('share')),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        }
+      ),
+    );
   }
 }
