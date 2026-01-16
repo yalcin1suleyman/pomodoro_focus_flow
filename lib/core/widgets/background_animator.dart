@@ -70,7 +70,9 @@ class _BackgroundAnimatorState extends State<BackgroundAnimator> with SingleTick
 
     return Consumer<SettingsProvider>(
       builder: (context, settings, _) {
-        if (settings.currentTheme == AppThemeType.defaultTheme) {
+        if (settings.currentTheme == AppThemeType.defaultTheme ||
+            settings.currentTheme == AppThemeType.superBlack ||
+            settings.currentTheme == AppThemeType.cleanWhite) {
           return widget.child;
         }
 
@@ -163,26 +165,91 @@ class _ParticlePainter extends CustomPainter {
       canvas.rotate(particle.angle);
 
       if (theme == AppThemeType.sakura) {
-        // Draw Petal (Oval shape)
-        canvas.drawOval(
-           Rect.fromCenter(center: Offset.zero, width: particle.size, height: particle.size * 0.6),
-           paint,
-        );
+        // Draw Petal (Custom Path)
+        final path = Path();
+        path.moveTo(0, 0);
+        // Create a teardrop/petal shape
+        path.quadraticBezierTo(particle.size , -particle.size, 0, -particle.size * 1.5);
+        path.quadraticBezierTo(-particle.size, -particle.size, 0, 0);
+        path.close();
+        canvas.drawPath(path, paint);
       } else if (theme == AppThemeType.space) {
-        // Draw Star (Circle for simplicity, or small diamond)
+        // Draw Star (5-pointed)
         paint.color = Colors.white.withOpacity((Random().nextDouble() * 0.5 + 0.2) * (isActive ? 1.0 : 0.5));
-        canvas.drawCircle(Offset.zero, particle.size * 0.1, paint);
+        
+        final path = Path();
+        final double outerRadius = particle.size * 0.4;
+        final double innerRadius = outerRadius * 0.4;
+        
+        for (int i = 0; i < 10; i++) {
+           double radius = (i % 2 == 0) ? outerRadius : innerRadius;
+           double angle = (i * pi / 5) - (pi / 2); // Start from top
+           double x = radius * cos(angle);
+           double y = radius * sin(angle);
+           if (i == 0) {
+             path.moveTo(x, y);
+           } else {
+             path.lineTo(x, y);
+           }
+        }
+        path.close();
+        
+        canvas.drawPath(path, paint);
       } else if (theme == AppThemeType.ocean) {
         // Draw Bubble
         paint.style = PaintingStyle.stroke;
         paint.strokeWidth = 1.5;
         canvas.drawCircle(Offset.zero, particle.size * 0.4, paint);
+      } else if (theme == AppThemeType.luxury) {
+        // Draw Silver Sparkle (Concave Diamond)
+        paint.color = const Color(0xFFE0E0E0).withOpacity(isActive ? 0.9 : 0.5); // Silver
+        
+        final path = Path();
+        final double w = particle.size * 0.25;
+        final double h = particle.size * 0.6;
+        
+        path.moveTo(0, -h); // Top
+        path.quadraticBezierTo(0, 0, w, 0); // Curve to Right
+        path.quadraticBezierTo(0, 0, 0, h); // Curve to Bottom
+        path.quadraticBezierTo(0, 0, -w, 0); // Curve to Left
+        path.quadraticBezierTo(0, 0, 0, -h); // Curve to Top
+        path.close();
+        
+        canvas.drawPath(path, paint);
+      } else if (theme == AppThemeType.sunset) {
+        // Draw Soft Sun (Glowing Circle, no sharp rays)
+        paint.color = const Color(0xFFFFAB91).withOpacity(isActive ? 0.6 : 0.3); // Soft Peach/Coral
+        // Draw main soft circle
+        canvas.drawCircle(Offset.zero, particle.size * 0.4, paint);
+        
+        // Draw outer glow (faint)
+        paint.color = const Color(0xFFFFAB91).withOpacity(isActive ? 0.2 : 0.1);
+        canvas.drawCircle(Offset.zero, particle.size * 0.6, paint);
+
+      } else if (theme == AppThemeType.nightLight) {
+        // Draw Fireflies (Tiny glowing dots)
+        paint.color = const Color(0xFFFFF176).withOpacity(isActive ? 0.8 : 0.4);
+        
+        // Random slight flicker via size
+        double flicker = (Random().nextDouble() * 0.5 + 0.5);
+        canvas.drawCircle(Offset.zero, particle.size * 0.2 * flicker, paint);
+        
+        // Glow
+        paint.color = const Color(0xFFFFF176).withOpacity(0.2);
+        canvas.drawCircle(Offset.zero, particle.size * 0.6, paint);
+
       } else {
-         // Forest / Leaf
-        canvas.drawRect(
-           Rect.fromCenter(center: Offset.zero, width: particle.size * 0.5, height: particle.size * 0.5),
-           paint,
-        );
+         // Forest / Leaf (Custom Path)
+        final path = Path();
+        final double s = particle.size * 0.5;
+        path.moveTo(0, -s);
+        // Curve to bottom
+        path.quadraticBezierTo(s, 0, 0, s);
+        // Curve back to top
+        path.quadraticBezierTo(-s, 0, 0, -s);
+        path.close();
+        
+        canvas.drawPath(path, paint);
       }
 
       canvas.restore();
@@ -199,6 +266,12 @@ class _ParticlePainter extends CustomPainter {
         return const Color(0xFFD8F3DC);
       case AppThemeType.space:
         return Colors.white;
+      case AppThemeType.luxury:
+        return const Color(0xFFE0E0E0); // Silver
+      case AppThemeType.sunset:
+        return const Color(0xFFFFAB91);
+      case AppThemeType.nightLight:
+        return const Color(0xFFFFF176);
       default:
         return Colors.grey;
     }

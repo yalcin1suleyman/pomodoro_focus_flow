@@ -146,6 +146,11 @@ class SettingsProvider extends ChangeNotifier {
     'themeOcean': 'Ocean',
     'themeForest': 'Forest',
     'themeSpace': 'Space',
+    'themeBlack': 'True Black',
+    'themeWhite': 'Pure White',
+    'themeLuxury': 'Silver Luxury',
+    'themeSunset': 'Sunset',
+    'themeNight': 'Night Light',
     // New Keys
     'cancel': 'Cancel',
     'save': 'Save',
@@ -207,6 +212,11 @@ class SettingsProvider extends ChangeNotifier {
     'themeOcean': 'Okyanus',
     'themeForest': 'Orman',
     'themeSpace': 'Uzay',
+    'themeBlack': 'Tam Siyah',
+    'themeWhite': 'Saf Beyaz',
+    'themeLuxury': 'Gümüş Lüks',
+    'themeSunset': 'Gün Batımı',
+    'themeNight': 'Gece Işığı',
     // New Keys
     'cancel': 'İptal',
     'save': 'Kaydet',

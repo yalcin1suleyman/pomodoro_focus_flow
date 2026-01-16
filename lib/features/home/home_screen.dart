@@ -74,17 +74,25 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Stack(
           children: [
             // Base Gradient (Bottom Layer)
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Theme.of(context).colorScheme.background.withOpacity(0.9),
-                    Theme.of(context).primaryColor.withOpacity(0.1),
-                  ],
-                ),
-              ),
+            // Base Background (Gradient or Solid)
+            Builder(
+              builder: (context) {
+                final isFlat = settings.currentTheme == AppThemeType.superBlack || 
+                               settings.currentTheme == AppThemeType.cleanWhite;
+                return Container(
+                  decoration: BoxDecoration(
+                    color: isFlat ? Theme.of(context).scaffoldBackgroundColor : null,
+                    gradient: isFlat ? null : LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Theme.of(context).colorScheme.background.withOpacity(0.9),
+                        Theme.of(context).primaryColor.withOpacity(0.1),
+                      ],
+                    ),
+                  ),
+                );
+              }
             ),
 
             
