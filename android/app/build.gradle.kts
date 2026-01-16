@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "com.yalcinstudio.pomodoro_focus_flow1"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.1.12297006"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
