@@ -147,7 +147,7 @@ class SettingsScreen extends StatelessWidget {
         decoration: BoxDecoration(
           color: color.withOpacity(0.2),
           borderRadius: BorderRadius.circular(15),
-          border: isSelected ? Border.all(color: AppColors.accent, width: 2) : null,
+          border: isSelected ? Border.all(color: color, width: 2) : null,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -155,7 +155,7 @@ class SettingsScreen extends StatelessWidget {
             CircleAvatar(backgroundColor: color, radius: 15),
             const SizedBox(height: 10),
             Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-            if(isSelected) const Icon(Icons.check_circle, color: AppColors.accent, size: 16)
+            if(isSelected) Icon(Icons.check_circle, color: color, size: 16)
           ],
         ),
       ),
@@ -192,7 +192,7 @@ class SettingsScreen extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: AppColors.accent, width: 1.5),
+                borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 1.5),
               ),
               suffixText: settings.translate("minutes").substring(0, 2), // "mi" or "da" (assuming 'min'/'dk' roughly)
               suffixStyle: TextStyle(fontSize: 12, color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.5)),
@@ -213,16 +213,17 @@ class SettingsScreen extends StatelessWidget {
 
   Widget _buildSoundOption(BuildContext context, SettingsProvider settings, String title, IconData icon) {
     final isSelected = settings.selectedSound == title;
+    final primaryColor = Theme.of(context).colorScheme.primary;
     return ListTile(
-      leading: Icon(icon, color: isSelected ? AppColors.accent : Colors.grey),
+      leading: Icon(icon, color: isSelected ? primaryColor : Colors.grey),
       title: Text(
         title,
         style: TextStyle(
-          color: isSelected ? AppColors.accent : null,
+          color: isSelected ? primaryColor : null,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
         ),
       ),
-      trailing: isSelected ? const Icon(Icons.check_circle, color: AppColors.accent) : null,
+      trailing: isSelected ? Icon(Icons.check_circle, color: primaryColor) : null,
       onTap: () => settings.setSound(title),
     );
   }

@@ -41,28 +41,29 @@ class _HomeScreenState extends State<HomeScreen> {
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
     final historyProvider = Provider.of<HistoryProvider>(context, listen: false);
 
-    // Sync Settings to Timer
-    timerService.updateSettings(
-      settings.pomodoroMinutes, 
-      settings.shortBreakMinutes, 
-      settings.longBreakMinutes
-    );
-
     timerService.onPomodoroComplete = (taskId) {
-      taskProvider.incrementPomodoro(taskId);
-      
-      // Check if task is completed
-      try {
-        final task = taskProvider.tasks.firstWhere((t) => t.id == taskId);
+      if (taskId != null) {
+        taskProvider.incrementPomodoro(taskId);
         
-        // LOG HISTORY
-        historyProvider.logSession(settings.pomodoroMinutes, task.title);
+        // Check if task is completed
+        try {
+          final task = taskProvider.tasks.firstWhere((t) => t.id == taskId);
+          
+          // LOG HISTORY
+          historyProvider.logSession(settings.pomodoroMinutes, task.title);
 
-        if (task.isCompleted) {
-          timerService.setActiveTask(null, null); // Clear active task from timer
+          if (task.isCompleted) {
+            timerService.setActiveTask(null, null); // Clear active task from timer
+          }
+        } catch (e) {
+          // Task might have been deleted
         }
-      } catch (e) {
-        // Task might have been deleted
+      } else {
+        // Log generic session for plain Pomodoro
+        historyProvider.logSession(
+          settings.pomodoroMinutes, 
+          settings.translate('generalFocus')
+        );
       }
     };
 
@@ -85,6 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+
             
             // Current Screen Content
             // We use IndexedStack to preserve state or just switch? 
@@ -94,24 +96,47 @@ class _HomeScreenState extends State<HomeScreen> {
               child: _screens[_currentIndex],
             ),
 
+            // Gradient Fade for Bottom Nav
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: 100, // Height of the fade area
+              child: IgnorePointer(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Theme.of(context).scaffoldBackgroundColor.withOpacity(0.0),
+                        Theme.of(context).scaffoldBackgroundColor.withOpacity(0.8),
+                        Theme.of(context).scaffoldBackgroundColor,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
             // Custom Floating Bottom Navigation
             Positioned(
               left: 20,
               right: 20,
               bottom: MediaQuery.of(context).padding.bottom + 10, // Dynamic bottom padding
                 child: GlassBox(
-                blur: 20,
-                opacity: 0.15,
-                height: 70,
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5), // Reduced vertical padding
-                borderRadius: BorderRadius.circular(35),
+                blur: 10, // Back to soft blur
+                opacity: 0.1, // Back to transparent/sleek look
+                height: 65, 
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                borderRadius: BorderRadius.circular(20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildNavItem(0, CupertinoIcons.timer, "Focus"),
-                    _buildNavItem(1, CupertinoIcons.check_mark_circled, "Tasks"),
-                    _buildNavItem(2, CupertinoIcons.graph_square, "Stats"),
-                    _buildNavItem(3, CupertinoIcons.settings, "Settings"),
+                    _buildNavItem(0, CupertinoIcons.timer, settings.translate('navFocus')),
+                    _buildNavItem(1, CupertinoIcons.check_mark_circled, settings.translate('navTasks')),
+                    _buildNavItem(2, CupertinoIcons.graph_square, settings.translate('navStats')),
+                    _buildNavItem(3, CupertinoIcons.settings, settings.translate('navSettings')),
                   ],
                 ),
               ),

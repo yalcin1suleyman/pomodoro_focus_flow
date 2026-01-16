@@ -13,7 +13,17 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => SettingsProvider()),
         ChangeNotifierProvider(create: (_) => TaskProvider()),
-        ChangeNotifierProvider(create: (_) => TimerService()),
+        ChangeNotifierProxyProvider<SettingsProvider, TimerService>(
+          create: (_) => TimerService(),
+          update: (_, settings, timer) {
+            timer?.updateSettings(
+              settings.pomodoroMinutes, 
+              settings.shortBreakMinutes, 
+              settings.longBreakMinutes
+            );
+            return timer!;
+          },
+        ),
         ChangeNotifierProvider(create: (_) => HistoryProvider()),
       ],
       child: const FocusFlowApp(),

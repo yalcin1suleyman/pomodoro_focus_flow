@@ -66,7 +66,7 @@ class _StatsScreenState extends State<StatsScreen> {
                             },
                           ),
                           Text(
-                            _formatMonth(_focusedMonth), 
+                            _formatMonth(_focusedMonth, settings), 
                             style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)
                           ),
                           IconButton(
@@ -89,15 +89,15 @@ class _StatsScreenState extends State<StatsScreen> {
                           .toList(),
                     ),
                     const SizedBox(height: 10),
-                    // Calendar Grid
+                            // Calendar Grid
                     _buildCalendarGrid(context, historyProvider),
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _buildLegendItem(Colors.green, settings.translate('completed')), // Activity present
+                        _buildLegendItem(Theme.of(context).colorScheme.secondary, settings.translate('completed')), // Activity present
                         const SizedBox(width: 15),
-                        _buildLegendItem(Colors.grey.withOpacity(0.3), "Empty"), 
+                        _buildLegendItem(Colors.grey.withOpacity(0.3), settings.translate('empty')), 
                       ],
                     )
                   ],
@@ -119,7 +119,7 @@ class _StatsScreenState extends State<StatsScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Today", style: Theme.of(context).textTheme.titleMedium),
+                              Text(settings.translate('today'), style: Theme.of(context).textTheme.titleMedium),
                               const SizedBox(height: 10),
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -145,7 +145,8 @@ class _StatsScreenState extends State<StatsScreen> {
                               const SizedBox(height: 10),
                               Text("${(focusedMinutes / 60).toStringAsFixed(1)}h", 
                                   style: Theme.of(context).textTheme.displayMedium?.copyWith(fontWeight: FontWeight.bold)),
-                              Text("In Progress", style: TextStyle(color: Colors.grey)),
+
+                              Text(settings.translate('inProgress'), style: TextStyle(color: Colors.grey)),
                             ],
                           ),
                         ),
@@ -153,9 +154,9 @@ class _StatsScreenState extends State<StatsScreen> {
                           radius: 60.0,
                           lineWidth: 12.0,
                           percent: progressPercent,
-                          center: Icon(Icons.check, size: 40, color: progressPercent >= 1.0 ? Colors.green : AppColors.accent),
-                          progressColor: progressPercent >= 1.0 ? Colors.green : AppColors.accent,
-                          backgroundColor: AppColors.accent.withOpacity(0.1),
+                          center: Icon(Icons.check, size: 40, color: _getProgressColor(context, progressPercent)),
+                          progressColor: _getProgressColor(context, progressPercent),
+                          backgroundColor: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
                           circularStrokeCap: CircularStrokeCap.round,
                         ),
                       ],
@@ -163,12 +164,30 @@ class _StatsScreenState extends State<StatsScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 80),
+              const SizedBox(height: 140),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Color _getProgressColor(BuildContext context, double ratio) {
+    if (ratio >= 1.0) {
+      // Reached & Exceeded: Green Tones (Light Green to Deep Green)
+      // Cap intensity at 2.0 (double goal) for maximum darkness
+      double intensity = (ratio - 1.0).clamp(0.0, 1.0); 
+      return Color.lerp(Colors.green.shade500, Colors.green.shade900, intensity)!;
+    } else if (ratio >= 0.5) {
+      // Close (50% - 99%): Yellow/Amber Tones
+      // Using Amber because Yellow is often too light to see clearly
+      double intensity = (ratio - 0.5) / 0.5;
+      return Color.lerp(Colors.amber.shade300, Colors.amber.shade900, intensity)!; 
+    } else {
+      // Far (0% - 49%): Red Tones
+      double intensity = ratio / 0.5;
+      return Color.lerp(Colors.red.shade300, Colors.red.shade900, intensity.clamp(0.2, 1.0))!;
+    }
   }
 
   Widget _buildCalendarGrid(BuildContext context, HistoryProvider history) {
@@ -179,6 +198,8 @@ class _StatsScreenState extends State<StatsScreen> {
     
     // Offset for grid (Monday start)
     final offset = firstWeekday - 1;
+    final theme = Theme.of(context);
+    final settings = Provider.of<SettingsProvider>(context, listen: false);
 
     return GridView.builder(
       shrinkWrap: true,
@@ -199,18 +220,24 @@ class _StatsScreenState extends State<StatsScreen> {
          final bool hasActivity = record.minutesFocused > 0;
          final bool isToday = DateUtils.isSameDay(date, DateTime.now());
 
+         // Calculate Status Color
+         final double ratio = settings.dailyGoalMinutes > 0 
+            ? (record.minutesFocused / settings.dailyGoalMinutes) 
+            : 0;
+         final Color statusColor = _getProgressColor(context, ratio);
+
          Color? borderColor;
          Color? fillColor;
          Color? textColor;
          
          if (isToday) {
-            borderColor = AppColors.accent;
-            fillColor = hasActivity ? AppColors.accent : null;
-            textColor = hasActivity ? Colors.white : AppColors.accent;
+            borderColor = statusColor;
+            fillColor = hasActivity ? statusColor : null;
+            textColor = hasActivity ? Colors.white : statusColor; 
          } else if (hasActivity) {
-            borderColor = Colors.green;
-            fillColor = Colors.green.withOpacity(0.2);
-            textColor = Colors.green;
+            borderColor = statusColor;
+            fillColor = statusColor.withOpacity(0.2);
+            textColor = statusColor; // Keep text same as status
          } else {
             borderColor = Colors.transparent;
             textColor = Colors.grey;
@@ -234,72 +261,119 @@ class _StatsScreenState extends State<StatsScreen> {
 
   void _showDailyDetails(BuildContext context, DateTime date, DailyRecord record, HistoryProvider history) {
     TextEditingController noteController = TextEditingController(text: record.note);
+    bool isEditing = false;
+    final settings = Provider.of<SettingsProvider>(context, listen: false);
 
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: Theme.of(context).cardColor,
-        title: Text(_formatDate(date)),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          backgroundColor: Theme.of(context).cardColor,
+          titlePadding: const EdgeInsets.fromLTRB(24, 20, 10, 0),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Stats
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("Focused Time", style: TextStyle(fontSize: 12, color: Colors.grey)),
-                      Text("${record.minutesFocused} min", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              
-              const Text("Tasks Worked On:", style: TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 5),
-              if (record.tasksWorkedOn.isEmpty)
-                const Text("No tasks recorded.", style: TextStyle(fontStyle: FontStyle.italic, color: Colors.grey))
-              else
-                Wrap(
-                  spacing: 8,
-                  children: record.tasksWorkedOn.map((t) => Chip(label: Text(t))).toList(),
-                ),
-
-              const SizedBox(height: 20),
-              const Text("Daily Note:", style: TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 5),
-              TextField(
-                controller: noteController,
-                maxLines: 3,
-                decoration: InputDecoration(
-                  hintText: "How was your focus today?",
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                  filled: true,
-                  fillColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
-                ),
+              Text(_formatDate(date, settings)),
+              IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () => Navigator.pop(ctx),
               ),
             ],
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text("Close"),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Stats
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(settings.translate('focusedTime'), style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                        Text("${record.minutesFocused} ${settings.translate('minutes')}", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                
+                Text(settings.translate('tasksWorkedOn'), style: const TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 5),
+                if (record.tasksWorkedOn.isEmpty)
+                  Text(settings.translate('noTasksRecorded'), style: const TextStyle(fontStyle: FontStyle.italic, color: Colors.grey))
+                else
+                  Wrap(
+                    spacing: 8,
+                    children: record.tasksWorkedOn.map((t) => Chip(label: Text(t))).toList(),
+                  ),
+
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(settings.translate('dailyNote'), style: const TextStyle(fontWeight: FontWeight.bold)),
+                    if (!isEditing)
+                       IconButton(
+                        icon: const Icon(Icons.edit, size: 20),
+                        tooltip: settings.translate('editNote'),
+                        onPressed: () => setState(() => isEditing = true),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                
+                if (isEditing)
+                  TextField(
+                    controller: noteController,
+                    maxLines: 3,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      hintText: settings.translate('noteHint'),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      filled: true,
+                      fillColor: Theme.of(context).colorScheme.background.withOpacity(0.5),
+                    ),
+                  )
+                else
+                   Container(
+                     width: double.infinity,
+                     padding: const EdgeInsets.all(12),
+                     decoration: BoxDecoration(
+                       color: Theme.of(context).colorScheme.background.withOpacity(0.3),
+                       borderRadius: BorderRadius.circular(10),
+                       border: Border.all(color: Colors.white.withOpacity(0.1))
+                     ),
+                     child: Text(
+                       (record.note?.isEmpty ?? true) ? settings.translate('noteHint') : record.note!,
+                       style: TextStyle(
+                         color: (record.note?.isEmpty ?? true) ? Colors.grey : Theme.of(context).textTheme.bodyMedium?.color,
+                         fontStyle: (record.note?.isEmpty ?? true) ? FontStyle.italic : FontStyle.normal
+                       ),
+                     ),
+                   ),
+              ],
+            ),
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.accent),
-            onPressed: () {
-              history.updateNote(date, noteController.text);
-              Navigator.pop(ctx);
-            },
-            child: const Text("Save Note", style: TextStyle(color: Colors.white)),
-          )
-        ],
+          actions: [
+            if (isEditing) ...[
+              TextButton(
+                onPressed: () => setState(() => isEditing = false),
+                child: Text(settings.translate('cancel')),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
+                onPressed: () {
+                  history.updateNote(date, noteController.text);
+                  setState(() => isEditing = false); 
+                },
+                child: Text(settings.translate('save'), style: TextStyle(color: Theme.of(context).colorScheme.onPrimary)),
+              )
+            ]
+          ],
+        ),
       ),
     );
   }
@@ -324,7 +398,7 @@ class _StatsScreenState extends State<StatsScreen> {
                     max: 720, // 12 hours
                     divisions: 23,
                     label: "${(currentVal/60).toStringAsFixed(1)} h",
-                    activeColor: AppColors.accent,
+                    activeColor: Theme.of(context).colorScheme.primary,
                     onChanged: (val) {
                       setState(() => currentVal = val);
                     },
@@ -337,15 +411,15 @@ class _StatsScreenState extends State<StatsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text("Cancel"),
+            child: Text(settings.translate('cancel')),
           ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.accent),
+            style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
             onPressed: () {
               settings.setDailyGoal(currentVal.toInt());
               Navigator.pop(ctx);
             },
-            child: const Text("Save", style: TextStyle(color: Colors.white)),
+            child: Text(settings.translate('save'), style: TextStyle(color: Theme.of(context).colorScheme.onPrimary)),
           )
         ],
       )
@@ -362,12 +436,20 @@ class _StatsScreenState extends State<StatsScreen> {
     );
   }
 
-  String _formatMonth(DateTime date) {
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  }
+
+  String _formatMonth(DateTime date, SettingsProvider settings) {
+    final months = [
+      settings.translate('monthJan'), settings.translate('monthFeb'), 
+      settings.translate('monthMar'), settings.translate('monthApr'),
+      settings.translate('monthMay'), settings.translate('monthJun'), 
+      settings.translate('monthJul'), settings.translate('monthAug'),
+      settings.translate('monthSep'), settings.translate('monthOct'), 
+      settings.translate('monthNov'), settings.translate('monthDec')
+    ];
     return "${months[date.month - 1]} ${date.year}";
   }
 
-  String _formatDate(DateTime date) {
-    return "${date.day} ${_formatMonth(date)}";
+  String _formatDate(DateTime date, SettingsProvider settings) {
+    return "${date.day} ${_formatMonth(date, settings)}";
   }
-}

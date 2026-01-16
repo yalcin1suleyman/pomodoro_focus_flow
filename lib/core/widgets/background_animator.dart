@@ -28,7 +28,7 @@ class _BackgroundAnimatorState extends State<BackgroundAnimator> with SingleTick
 
   void _initParticles() {
     _particles.clear();
-    for (int i = 0; i < 30; i++) {
+    for (int i = 0; i < 20; i++) {
       _particles.add(_createParticle());
     }
   }
@@ -80,15 +80,17 @@ class _BackgroundAnimatorState extends State<BackgroundAnimator> with SingleTick
             AnimatedBuilder(
               animation: _controller,
               builder: (context, _) {
-                return CustomPaint(
-                  painter: _ParticlePainter(
-                    particles: _particles,
-                    theme: settings.currentTheme,
-                    progress: _controller.value,
-                    colorScheme: Theme.of(context).colorScheme,
-                    isActive: isTimerRunning,
+                return RepaintBoundary(
+                  child: CustomPaint(
+                    painter: _ParticlePainter(
+                      particles: _particles,
+                      theme: settings.currentTheme,
+                      progress: _controller.value,
+                      colorScheme: Theme.of(context).colorScheme,
+                      isActive: isTimerRunning,
+                    ),
+                    size: Size.infinite,
                   ),
-                  size: Size.infinite,
                 );
               },
             ),

@@ -25,7 +25,7 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
   DateTime? _backgroundTime;
 
   // Callbacks
-  Function(String taskId)? onPomodoroComplete;
+  Function(String? taskId)? onPomodoroComplete;
 
   TimerService() {
     WidgetsBinding.instance.addObserver(this);
@@ -117,7 +117,7 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
     _status = TimerStatus.running;
     notifyListeners();
 
-    // DEMO MODE: 10ms instead of 1 second
+    // DEMO MODE: 10ms (Ultra Fast)
     _timer = Timer.periodic(const Duration(milliseconds: 10), (timer) {
       if (_remainingSeconds > 0) {
         _remainingSeconds--;
@@ -149,9 +149,8 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
     
     // Auto-increment task ONLY if in Pomodoro mode and a task is active
     if (_mode == TimerMode.pomodoro) {
-      if (_activeTaskId != null) {
-        onPomodoroComplete?.call(_activeTaskId!);
-      }
+      // Notify completion, even if no task is active (passed as null)
+      onPomodoroComplete?.call(_activeTaskId);
       
       // Auto-switch to Short Break
       // This resets the timer to break duration and prevents "spamming" the finish
@@ -177,7 +176,7 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
           _remainingSeconds = 0;
           _complete();
         } else {
-          // Restart timer loop (DEMO MODE)
+          // Restart timer loop
           _timer = Timer.periodic(const Duration(milliseconds: 10), (timer) {
              if (_remainingSeconds > 0) {
               _remainingSeconds--;

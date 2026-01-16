@@ -31,6 +31,7 @@ class _TasksScreenState extends State<TasksScreen> {
   void _showAddTaskDialog(BuildContext context, SettingsProvider settings) {
     final titleController = TextEditingController();
     int estimated = 1;
+    final theme = Theme.of(context);
 
     showModalBottomSheet(
       context: context,
@@ -44,20 +45,20 @@ class _TasksScreenState extends State<TasksScreen> {
           child: GlassBox(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
             opacity: 0.9,
-            color: Theme.of(context).scaffoldBackgroundColor,
+            color: theme.scaffoldBackgroundColor,
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(settings.language == 'tr' ? "Yeni Görev" : "New Task", style: Theme.of(context).textTheme.headlineSmall),
+                  Text(settings.translate('newTask'), style: theme.textTheme.headlineSmall),
                   const SizedBox(height: 20),
                   TextField(
                     controller: titleController,
                     autofocus: true,
                     decoration: InputDecoration(
-                      hintText: settings.language == 'tr' ? "Ne üzerinde çalışıyorsun?" : "What are you working on?",
+                      hintText: settings.translate('taskHint'),
                       border: InputBorder.none,
                     ),
                     style: const TextStyle(fontSize: 18),
@@ -66,7 +67,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(settings.language == 'tr' ? "Tahmini Pomodoro:" : "Est. Pomodoros:", style: Theme.of(context).textTheme.bodyLarge),
+                      Text(settings.translate('estPomodoros'), style: theme.textTheme.bodyLarge),
                       Row(
                         children: [
                           IconButton(
@@ -74,13 +75,13 @@ class _TasksScreenState extends State<TasksScreen> {
                               if (estimated > 1) setState(() => estimated--);
                             },
                             icon: const Icon(Icons.remove_circle_outline),
-                            color: AppColors.accent,
+                            color: theme.colorScheme.primary,
                           ),
                           Text("$estimated", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                           IconButton(
                             onPressed: () => setState(() => estimated++),
                             icon: const Icon(Icons.add_circle_outline),
-                            color: AppColors.accent,
+                            color: theme.colorScheme.primary,
                           ),
                         ],
                       )
@@ -99,12 +100,12 @@ class _TasksScreenState extends State<TasksScreen> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryLight,
+                        backgroundColor: theme.primaryColor,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                       ),
-                      child: Text(settings.language == 'tr' ? "Görev Oluştur" : "Create Task"),
+                      child: Text(settings.translate('createTask')),
                     ),
                   )
                 ],
@@ -121,15 +122,16 @@ class _TasksScreenState extends State<TasksScreen> {
     // Access global providers
     final provider = Provider.of<TaskProvider>(context);
     final settings = Provider.of<SettingsProvider>(context);
+    final theme = Theme.of(context);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 80.0), // Raise FAB
+        padding: const EdgeInsets.only(bottom: 100.0), // Normal padding
         child: FloatingActionButton(
           onPressed: () => _showAddTaskDialog(context, settings),
-          backgroundColor: AppColors.accent,
-          child: const Icon(Icons.add, color: Colors.white),
+          backgroundColor: theme.colorScheme.secondary,
+          child: Icon(Icons.add, color: theme.colorScheme.onSecondary),
         ),
       ),
       body: SafeArea(
@@ -141,7 +143,7 @@ class _TasksScreenState extends State<TasksScreen> {
                 children: [
                   Text(
                     settings.translate('tasks'),
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    style: theme.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -154,14 +156,14 @@ class _TasksScreenState extends State<TasksScreen> {
                   : provider.tasks.isEmpty
                       ? Center(
                           child: Text(
-                            settings.language == 'tr' ? "Henüz görev yok. Bir tane ekle!" : "No tasks yet. Start by adding one!",
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            settings.translate('noTasks'),
+                            style: theme.textTheme.bodyLarge?.copyWith(
                               color: Colors.grey,
                             ),
                           ),
                         )
                       : ListView.builder(
-                          padding: const EdgeInsets.fromLTRB(20, 10, 20, 100),
+                          padding: const EdgeInsets.fromLTRB(20, 10, 20, 110), // Normal list padding
                           itemCount: provider.tasks.length,
                           itemBuilder: (context, index) {
                             final task = provider.tasks[index];
@@ -174,10 +176,10 @@ class _TasksScreenState extends State<TasksScreen> {
                                   alignment: Alignment.centerRight,
                                   padding: const EdgeInsets.only(right: 20),
                                   decoration: BoxDecoration(
-                                    color: Colors.red.withOpacity(0.2),
+                                    color: theme.colorScheme.error.withOpacity(0.2),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child: const Icon(Icons.delete, color: Colors.red),
+                                  child: Icon(Icons.delete, color: theme.colorScheme.error),
                                 ),
                                 child: GlassBox(
                                   opacity: task.isCompleted ? 0.05 : 0.1,
@@ -187,10 +189,10 @@ class _TasksScreenState extends State<TasksScreen> {
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           border: Border.all(
-                                            color: task.isCompleted ? AppColors.accent : Colors.grey,
+                                            color: task.isCompleted ? theme.colorScheme.primary : Colors.grey,
                                             width: 2,
                                           ),
-                                          color: task.isCompleted ? AppColors.accent : null,
+                                          color: task.isCompleted ? theme.colorScheme.primary : null,
                                         ),
                                         padding: const EdgeInsets.all(4),
                                         child: task.isCompleted 
@@ -206,12 +208,12 @@ class _TasksScreenState extends State<TasksScreen> {
                                       ),
                                     ),
                                     subtitle: Text(
-                                      "${task.completedPomodoros} / ${task.estimatedPomodoros} pomodoros",
+                                      "${task.completedPomodoros} / ${task.estimatedPomodoros} ${settings.translate('pomodoroCount')}",
                                       style: const TextStyle(fontSize: 12),
                                     ),
                                     trailing: IconButton(
                                       icon: const Icon(Icons.play_circle_fill),
-                                      color: AppColors.primaryLight.withOpacity(0.8),
+                                      color: theme.colorScheme.primary,
                                       onPressed: () {
                                         // Set Active Task and RESET Timer
                                         Provider.of<TimerService>(context, listen: false)

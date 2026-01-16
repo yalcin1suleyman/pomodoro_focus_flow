@@ -21,15 +21,17 @@ class TimerScreen extends StatelessWidget {
     
     switch (timer.mode) {
       case TimerMode.pomodoro:
-        progressColor = AppColors.accentPink;
+        // Use Theme Primary Color for Focus
+        progressColor = theme.colorScheme.primary; 
         statusText = settings.translate('focusTime');
         break;
       case TimerMode.shortBreak:
-        progressColor = AppColors.accent;
+        // Use Theme Secondary Color for Breaks
+        progressColor = theme.colorScheme.secondary;
         statusText = settings.translate('shortBreak');
         break;
       case TimerMode.longBreak:
-        progressColor = Colors.purpleAccent;
+        progressColor = theme.colorScheme.secondary;
         statusText = settings.translate('longBreak');
         break;
     }
@@ -59,7 +61,10 @@ class TimerScreen extends StatelessWidget {
           const SizedBox(height: 20),
           _buildModeSwitcher(context, timer, settings),
           const Spacer(),
-          _buildCircularTimer(context, timer, theme, progressColor, statusText, 140.0),
+          _buildCircularTimer(context, timer, theme, progressColor, statusText, 
+            MediaQuery.of(context).size.shortestSide >= 600 ? 280.0 : 165.0,
+            lineWidth: MediaQuery.of(context).size.shortestSide >= 600 ? 30.0 : 18.0,
+          ),
           const Spacer(),
           _buildControls(context, timer, theme, progressColor),
           const Spacer(flex: 2),
@@ -81,15 +86,22 @@ class TimerScreen extends StatelessWidget {
               children: [
                  _buildModeSwitcher(context, timer, settings),
                  const SizedBox(height: 30),
-                 _buildCircularTimer(context, timer, theme, progressColor, statusText, 100.0),
+                 _buildCircularTimer(context, timer, theme, progressColor, statusText, 
+                   MediaQuery.of(context).size.shortestSide >= 600 ? 220.0 : 120.0,
+                   lineWidth: MediaQuery.of(context).size.shortestSide >= 600 ? 25.0 : 18.0,
+                 ),
               ],
             ),
           ),
           const SizedBox(width: 40),
           Expanded(
             flex: 1,
-            child: Center(
-              child: _buildControls(context, timer, theme, progressColor),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildControls(context, timer, theme, progressColor),
+                const SizedBox(height: 80), // Prevent overlap with bottom nav in landscape
+              ],
             ),
           ),
         ],
@@ -115,10 +127,10 @@ class TimerScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCircularTimer(BuildContext context, TimerService timer, ThemeData theme, Color progressColor, String statusText, double radius) {
+  Widget _buildCircularTimer(BuildContext context, TimerService timer, ThemeData theme, Color progressColor, String statusText, double radius, {double lineWidth = 18.0}) {
     return CircularPercentIndicator(
       radius: radius,
-      lineWidth: 18.0,
+      lineWidth: lineWidth,
       animation: true,
       animateFromLastPercent: true,
       percent: timer.progress,
@@ -190,6 +202,8 @@ class TimerScreen extends StatelessWidget {
           onTap: () {
             if(timer.mode == TimerMode.pomodoro) {
               timer.setMode(TimerMode.shortBreak);
+            } else if (timer.mode == TimerMode.shortBreak) {
+              timer.setMode(TimerMode.longBreak);
             } else {
               timer.setMode(TimerMode.pomodoro);
             }
