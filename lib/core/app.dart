@@ -11,7 +11,7 @@ class FocusFlowApp extends StatelessWidget {
     final settings = Provider.of<SettingsProvider>(context);
 
     return MaterialApp(
-      title: 'Focus Flow',
+      title: 'Pomodoro Master',
       debugShowCheckedModeBanner: false,
       theme: settings.themeData,
       home: const HomeScreen(),

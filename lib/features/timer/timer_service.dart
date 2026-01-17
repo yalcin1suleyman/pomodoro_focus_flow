@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../../core/services/notification_service.dart';
 
 enum TimerStatus { initial, running, paused, completed }
 enum TimerMode { pomodoro, shortBreak, longBreak }
@@ -13,6 +14,9 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
   int _pomodoroMinutes = 25;
   int _shortBreakMinutes = 5;
   int _longBreakMinutes = 15;
+  
+  // Sound preference (needs to be synced)
+  String _soundType = "bell";
 
   int _remainingSeconds = 1500; 
   int _initialSeconds = 1500;
@@ -53,11 +57,13 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   // Sync Settings
-  void updateSettings(int pomodoro, int short, int long) {
+  void updateSettings(int pomodoro, int short, int long, String soundType) {
     bool changed = false;
     if (_pomodoroMinutes != pomodoro) { _pomodoroMinutes = pomodoro; changed = true; }
     if (_shortBreakMinutes != short) { _shortBreakMinutes = short; changed = true; }
     if (_longBreakMinutes != long) { _longBreakMinutes = long; changed = true; }
+    
+    if (_soundType != soundType) { _soundType = soundType; }
 
     // If settings changed and timer is not running, update current display
     if (changed && _status == TimerStatus.initial) {
@@ -122,6 +128,22 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
       if (_remainingSeconds > 0) {
         _remainingSeconds--;
         notifyListeners();
+        
+        // Show ongoing notification (throttled slightly if needed, but 10ms is too fast for valid notification updates)
+        // Since we are in demo mode (10ms ticks), updating notification every 10ms will crash/lag.
+        // Let's update it every ~1 second of "real time" or every N ticks.
+        // For accurate demo experience, maybe update every 100 ticks?
+        
+        // Update notification approx once per second (100 ticks * 10ms = 1000ms)
+        if (_remainingSeconds % 100 == 0) {
+          NotificationService().showOngoingNotification(
+             progress: _initialSeconds - _remainingSeconds, 
+             maxProgress: _initialSeconds, 
+             title: _mode == TimerMode.pomodoro ? 'Pomodoro - Devam Ediyor' : 'Mola - Keyfine Bak', 
+             body: timeString
+          );
+        }
+        
       } else {
         _complete();
       }
@@ -132,6 +154,7 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
     if (_status != TimerStatus.running) return;
     _timer?.cancel();
     _status = TimerStatus.paused;
+    NotificationService().cancelNotification(0); // Clear progress bar
     notifyListeners();
   }
 
@@ -140,6 +163,7 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
     _status = TimerStatus.initial;
     _updateDurationForMode(_mode); // Reset to full duration
     _remainingSeconds = _initialSeconds;
+    NotificationService().cancelNotification(0); // Clear progress bar
     notifyListeners();
   }
 
@@ -147,7 +171,12 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
     _timer?.cancel();
     _status = TimerStatus.completed;
     
-    // Auto-increment task ONLY if in Pomodoro mode and a task is active
+    // Trigger alarm immediately (important for Demo Mode speed or if app is open)
+    NotificationService().showAlarmNow(useAppBell: _soundType == 'bell');
+    
+    // Cancel the ongoing progress notification (ID 0)
+    NotificationService().cancelNotification(0); 
+
     if (_mode == TimerMode.pomodoro) {
       // Notify completion, even if no task is active (passed as null)
       onPomodoroComplete?.call(_activeTaskId);

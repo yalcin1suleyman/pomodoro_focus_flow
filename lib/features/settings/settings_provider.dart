@@ -6,6 +6,7 @@ class SettingsProvider extends ChangeNotifier {
   bool _isDarkMode = true;
   AppThemeType _currentTheme = AppThemeType.defaultTheme;
   String _language = 'en'; // 'tr' or 'en'
+  String _soundType = "bell"; // 'bell' or 'notification'
   String _selectedSound = "Lofi Beats";
   int _dailyGoalMinutes = 240; // Default 4 hours
   
@@ -18,6 +19,7 @@ class SettingsProvider extends ChangeNotifier {
   bool get isDarkMode => _isDarkMode;
   AppThemeType get currentTheme => _currentTheme;
   String get language => _language;
+  String get soundType => _soundType;
   String get selectedSound => _selectedSound;
   int get dailyGoalMinutes => _dailyGoalMinutes;
   int get pomodoroMinutes => _pomodoroMinutes;
@@ -40,6 +42,7 @@ class SettingsProvider extends ChangeNotifier {
       _currentTheme = AppThemeType.values[themeIndex];
     }
     
+    _soundType = prefs.getString('soundType') ?? "bell";
     _selectedSound = prefs.getString('selectedSound') ?? "Lofi Beats";
     _dailyGoalMinutes = prefs.getInt('dailyGoalMinutes') ?? 240;
     
@@ -75,11 +78,11 @@ class SettingsProvider extends ChangeNotifier {
     await prefs.setString('language', lang);
   }
 
-  Future<void> setSound(String sound) async {
-    _selectedSound = sound;
+  Future<void> setSoundType(String type) async { // 'bell' or 'notification'
+    _soundType = type;
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('selectedSound', sound);
+    await prefs.setString('soundType', type);
   }
 
   Future<void> setDailyGoal(int minutes) async {
@@ -190,6 +193,9 @@ class SettingsProvider extends ChangeNotifier {
     'average': 'Daily Average',
     'sessions': 'Sessions',
     'heatmapLegend': 'Less  •  More',
+    'soundType': 'Alarm Tone',
+    'soundTypeBell': 'Guitar (Standard)',
+    'soundTypeNotification': 'System Notification',
   };
 
   static const Map<String, String> _tr = {
@@ -266,5 +272,8 @@ class SettingsProvider extends ChangeNotifier {
     'average': 'Günlük Ortalama',
     'sessions': 'Oturum',
     'heatmapLegend': 'Az  •  Çok',
+    'soundType': 'Alarm Tipi',
+    'soundTypeBell': 'Gitar',
+    'soundTypeNotification': 'Sistem Bildirimi',
   };
 }

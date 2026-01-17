@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'task_provider.dart';
-import 'task_model.dart';
 import '../timer/timer_service.dart';
 import '../settings/settings_provider.dart';
 import '../../core/widgets/glass_box.dart';
-import '../../core/theme/app_theme.dart';
 
 class TasksScreen extends StatefulWidget {
   final VoidCallback? onNavigationRequest;

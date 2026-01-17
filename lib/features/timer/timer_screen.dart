@@ -4,7 +4,6 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'timer_service.dart';
 import '../settings/settings_provider.dart';
 import '../../core/widgets/glass_box.dart';
-import '../../core/theme/app_theme.dart';
 
 class TimerScreen extends StatelessWidget {
   const TimerScreen({super.key});
@@ -224,7 +223,7 @@ class TimerScreen extends StatelessWidget {
         ],
       ),
       circularStrokeCap: CircularStrokeCap.round,
-      backgroundColor: theme.colorScheme.onBackground.withOpacity(0.1),
+      backgroundColor: theme.colorScheme.onSurface.withOpacity(0.1),
       progressColor: progressColor,
       backgroundWidth: 10,
     );
@@ -280,7 +279,7 @@ class _ModeButton extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           decoration: BoxDecoration(
-            color: isSelected ? Theme.of(context).colorScheme.background : Colors.transparent,
+            color: isSelected ? Theme.of(context).colorScheme.surface : Colors.transparent,
             borderRadius: BorderRadius.circular(25),
           ),
           alignment: Alignment.center,

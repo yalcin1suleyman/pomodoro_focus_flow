@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Theme.of(context).colorScheme.background.withOpacity(0.9),
+                        Theme.of(context).colorScheme.surface.withOpacity(0.9),
                         Theme.of(context).primaryColor.withOpacity(0.1),
                       ],
                     ),

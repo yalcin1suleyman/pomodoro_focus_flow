@@ -6,9 +6,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:flutter/rendering.dart' as rendering;
 import 'dart:ui' as ui;
 import 'dart:io';
-import 'package:flutter/services.dart';
 import '../../core/widgets/glass_box.dart';
-import '../../core/theme/app_theme.dart';
 import '../settings/settings_provider.dart';
 import 'history_provider.dart';
 import 'widgets/share_stats_card.dart';
@@ -225,7 +223,7 @@ class _StatsScreenState extends State<StatsScreen> {
                                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)
                               ),
                               progressColor: Theme.of(context).colorScheme.primary,
-                              backgroundColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+                              backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
                               circularStrokeCap: CircularStrokeCap.round,
                             ),
                           ],

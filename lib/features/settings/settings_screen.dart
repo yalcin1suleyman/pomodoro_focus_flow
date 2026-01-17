@@ -99,16 +99,20 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(height: 30),
 
               // Sound Section
+              // Sound Section
               _buildSectionHeader(context, settings.translate('focusSounds')),
               GlassBox(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 child: Column(
                   children: [
-                    _buildSoundOption(context, settings, "Lofi Beats", Icons.music_note),
-                    const Divider(height: 1),
-                    _buildSoundOption(context, settings, "White Noise", Icons.waves),
-                    const Divider(height: 1),
-                    _buildSoundOption(context, settings, "Forest Rain", Icons.water_drop),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Expanded(child: _buildTypeOption(context, settings, "bell", settings.translate('soundTypeBell'), Icons.music_note)),
+                        const SizedBox(width: 10),
+                        Expanded(child: _buildTypeOption(context, settings, "notification", settings.translate('soundTypeNotification'), Icons.notifications_active)),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -216,20 +220,39 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSoundOption(BuildContext context, SettingsProvider settings, String title, IconData icon) {
-    final isSelected = settings.selectedSound == title;
+  Widget _buildTypeOption(BuildContext context, SettingsProvider settings, String type, String label, IconData icon) {
+    final isSelected = settings.soundType == type;
     final primaryColor = Theme.of(context).colorScheme.primary;
-    return ListTile(
-      leading: Icon(icon, color: isSelected ? primaryColor : Colors.grey),
-      title: Text(
-        title,
-        style: TextStyle(
-          color: isSelected ? primaryColor : null,
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+    
+    return InkWell(
+      onTap: () => settings.setSoundType(type),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? primaryColor.withOpacity(0.1) : Colors.transparent,
+          borderRadius: BorderRadius.circular(10),
+          border: isSelected ? Border.all(color: primaryColor) : Border.all(color: Colors.grey.withOpacity(0.3)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 20, color: isSelected ? primaryColor : Colors.grey),
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: isSelected ? primaryColor : Colors.grey,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  fontSize: 13,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1, 
+              ),
+            ),
+          ],
         ),
       ),
-      trailing: isSelected ? Icon(Icons.check_circle, color: primaryColor) : null,
-      onTap: () => settings.setSound(title),
     );
   }
 }

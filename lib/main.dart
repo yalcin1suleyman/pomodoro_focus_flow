@@ -5,9 +5,15 @@ import 'features/settings/settings_provider.dart';
 import 'features/tasks/task_provider.dart';
 import 'features/timer/timer_service.dart';
 import 'features/stats/history_provider.dart';
+import 'core/services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await NotificationService().init();
+  } catch (e) {
+    debugPrint("Failed to initialize notifications: $e");
+  }
   runApp(
     MultiProvider(
       providers: [
@@ -19,7 +25,8 @@ void main() async {
             timer?.updateSettings(
               settings.pomodoroMinutes, 
               settings.shortBreakMinutes, 
-              settings.longBreakMinutes
+              settings.longBreakMinutes,
+              settings.soundType,
             );
             return timer!;
           },

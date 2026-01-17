@@ -1,20 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/glass_box.dart';
 import '../../settings/settings_provider.dart';
 
-import 'package:flutter/material.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/glass_box.dart';
-import '../../settings/settings_provider.dart';
 
-import 'package:flutter/material.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../core/widgets/glass_box.dart';
-import '../../settings/settings_provider.dart';
 
 enum ShareMode { daily, monthly, heatmap }
 

@@ -148,7 +148,6 @@ class AppTheme {
         onPrimary: Colors.black,
         secondary: Colors.white,
         onSecondary: Colors.black,
-        background: Colors.black,
         surface: Color(0xFF121212), // Or Colors.black if strictly flat
         onSurface: Colors.white,
       );
@@ -159,7 +158,6 @@ class AppTheme {
         onPrimary: Colors.black, // Black text on White button
         secondary: Colors.black,
         onSecondary: Colors.white,
-        background: Colors.white,
         surface: Color(0xFFF5F5F5),
         onSurface: Colors.black,
       );
@@ -170,7 +168,6 @@ class AppTheme {
         onPrimary: Colors.black, // Black Text on Silver
         secondary: Color(0xFFFFFFFF), // White Accents
         onSecondary: Colors.black,
-        background: Colors.black,
         surface: Color(0xFF1E1E1E), // Dark Steel Surface
         onSurface: Color(0xFFE0E0E0), // Silver Text
       );
@@ -180,8 +177,7 @@ class AppTheme {
         primary: Color(0xFFFFE082), // Warm Amber (Softer)
         onPrimary: Colors.black,
         secondary: Color(0xFF3F51B5), // Indigo
-        onSecondary: Colors.white,
-        background: Color(0xFF050510), // Deep Midnight
+        onSecondary: Colors.white, // Deep Midnight
         surface: Color(0xFF14142B), // Harmonious Dark Blue Surface
         onSurface: Color(0xFFE0E0E0), 
       );
