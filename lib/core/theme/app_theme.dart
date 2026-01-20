@@ -148,17 +148,17 @@ class AppTheme {
         onPrimary: Colors.black,
         secondary: Colors.white,
         onSecondary: Colors.black,
-        surface: Color(0xFF121212), // Or Colors.black if strictly flat
+        surface: Color(0xFF333333), // Lighter Grey to stand out against Black BG + GlassBox
         onSurface: Colors.white,
       );
     } else if (type == AppThemeType.cleanWhite) {
-      // Manual White Scheme: Buttons are White, Text Black
+      // Manual White Scheme: Buttons should be BLACK for contrast on White background
       colorScheme = const ColorScheme.light(
-        primary: Colors.white, 
-        onPrimary: Colors.black, // Black text on White button
-        secondary: Colors.black,
+        primary: Colors.black, 
+        onPrimary: Colors.white, 
+        secondary: Color(0xFF424242),
         onSecondary: Colors.white,
-        surface: Color(0xFFF5F5F5),
+        surface: Color(0xFFBDBDBD), // Medium Grey to stand out against White BG + GlassBox
         onSurface: Colors.black,
       );
     } else if (type == AppThemeType.luxury) {

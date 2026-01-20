@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../core/services/notification_service.dart';
+import '../../core/localization/languages/language.dart';
 
 enum TimerStatus { initial, running, paused, completed }
 enum TimerMode { pomodoro, shortBreak, longBreak }
@@ -17,6 +18,9 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
   
   // Sound preference (needs to be synced)
   String _soundType = "bell";
+  
+  // Localization references
+  Language? _currentLanguage;
 
   int _remainingSeconds = 1500; 
   int _initialSeconds = 1500;
@@ -57,12 +61,13 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   // Sync Settings
-  void updateSettings(int pomodoro, int short, int long, String soundType) {
+  void updateSettings(int pomodoro, int short, int long, String soundType, Language language) {
     bool changed = false;
     if (_pomodoroMinutes != pomodoro) { _pomodoroMinutes = pomodoro; changed = true; }
     if (_shortBreakMinutes != short) { _shortBreakMinutes = short; changed = true; }
     if (_longBreakMinutes != long) { _longBreakMinutes = long; changed = true; }
     
+    _currentLanguage = language;
     if (_soundType != soundType) { _soundType = soundType; }
 
     // If settings changed and timer is not running, update current display
@@ -121,6 +126,10 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
     }
 
     _status = TimerStatus.running;
+    
+    // Clear any existing alarm notifications to prevent "Double Notification" issues on restart
+    NotificationService().cancelNotification(1); 
+    
     notifyListeners();
 
     // DEMO MODE: 10ms (Ultra Fast)
@@ -136,10 +145,14 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
         
         // Update notification approx once per second (100 ticks * 10ms = 1000ms)
         if (_remainingSeconds % 100 == 0) {
+          final title = _mode == TimerMode.pomodoro 
+              ? (_currentLanguage?.focus ?? 'Focus') + ' - ' + (_currentLanguage?.inProgress ?? 'In Progress')
+              : (_currentLanguage?.shortBreak ?? 'Break');
+              
           NotificationService().showOngoingNotification(
              progress: _initialSeconds - _remainingSeconds, 
              maxProgress: _initialSeconds, 
-             title: _mode == TimerMode.pomodoro ? 'Pomodoro - Devam Ediyor' : 'Mola - Keyfine Bak', 
+             title: title, 
              body: timeString
           );
         }
@@ -172,7 +185,13 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
     _status = TimerStatus.completed;
     
     // Trigger alarm immediately (important for Demo Mode speed or if app is open)
-    NotificationService().showAlarmNow(useAppBell: _soundType == 'bell');
+    NotificationService().showAlarmNow(
+      useAppBell: _soundType == 'bell',
+      title: _currentLanguage?.timeIsUp ?? 'Time is up!',
+      body: _mode == TimerMode.pomodoro 
+          ? (_currentLanguage?.sessionCompleted ?? 'Session Completed') 
+          : (_currentLanguage?.breakOver ?? 'Break Over'),
+    );
     
     // Cancel the ongoing progress notification (ID 0)
     NotificationService().cancelNotification(0); 

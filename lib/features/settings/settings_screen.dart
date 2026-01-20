@@ -77,6 +77,40 @@ class SettingsScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
+              // Goals Section
+              _buildSectionHeader(context, settings.translate('dailyGoal')),
+              GlassBox(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(settings.translate('dailyGoal'), style: const TextStyle(fontWeight: FontWeight.w600)),
+                        Text(
+                          "${(settings.dailyGoalMinutes / 60).toStringAsFixed(1)} ${settings.translate('hours')}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 16
+                          ),
+                        ),
+                      ],
+                    ),
+                    Slider(
+                      value: settings.dailyGoalMinutes.toDouble(),
+                      min: 30,
+                      max: 600, // 10 hours
+                      divisions: 19,
+                      label: "${(settings.dailyGoalMinutes / 60).toStringAsFixed(1)} h",
+                      onChanged: (val) => settings.setDailyGoal(val.toInt()),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
               // Timer Settings Section
               _buildSectionHeader(context, settings.translate('timerSettings')),
               GlassBox(
@@ -118,10 +152,27 @@ class SettingsScreen extends StatelessWidget {
               ),
 
               const SizedBox(height: 40),
-               Center(
-                child: Text(
-                  "${settings.translate('version')} 1.1.0",
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+              Center(
+                child: Column(
+                  children: [
+                    Text(
+                      "Pomodoro Master",
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "Yalcin Studio",
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "${settings.translate('version')} 1.1.0",
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey.withOpacity(0.5)),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 80), // Space for bottom nav

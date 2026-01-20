@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/localization/languages/language.dart';
+import '../../core/localization/languages/english_language.dart';
+import '../../core/localization/languages/turkish_language.dart';
 
 class SettingsProvider extends ChangeNotifier {
   bool _isDarkMode = true;
   AppThemeType _currentTheme = AppThemeType.defaultTheme;
   String _language = 'en'; // 'tr' or 'en'
+  Language _currentLanguage = EnglishLanguage(); // Default
+  
   String _soundType = "bell"; // 'bell' or 'notification'
   String _selectedSound = "Lofi Beats";
   int _dailyGoalMinutes = 240; // Default 4 hours
+
   
   // Custom Durations (in minutes)
   int _pomodoroMinutes = 25;
@@ -19,9 +25,12 @@ class SettingsProvider extends ChangeNotifier {
   bool get isDarkMode => _isDarkMode;
   AppThemeType get currentTheme => _currentTheme;
   String get language => _language;
+  Language get currentLanguageObj => _currentLanguage; // Expose object if needed
+  
   String get soundType => _soundType;
   String get selectedSound => _selectedSound;
   int get dailyGoalMinutes => _dailyGoalMinutes;
+
   int get pomodoroMinutes => _pomodoroMinutes;
   int get shortBreakMinutes => _shortBreakMinutes;
   int get longBreakMinutes => _longBreakMinutes;
@@ -37,6 +46,13 @@ class SettingsProvider extends ChangeNotifier {
     _isDarkMode = prefs.getBool('isDarkMode') ?? true;
     _language = prefs.getString('language') ?? 'en';
     
+    // Set Language Object
+    if (_language == 'tr') {
+      _currentLanguage = TurkishLanguage();
+    } else {
+      _currentLanguage = EnglishLanguage();
+    }
+
     final themeIndex = prefs.getInt('themeIndex') ?? 0;
     if (themeIndex >= 0 && themeIndex < AppThemeType.values.length) {
       _currentTheme = AppThemeType.values[themeIndex];
@@ -45,6 +61,7 @@ class SettingsProvider extends ChangeNotifier {
     _soundType = prefs.getString('soundType') ?? "bell";
     _selectedSound = prefs.getString('selectedSound') ?? "Lofi Beats";
     _dailyGoalMinutes = prefs.getInt('dailyGoalMinutes') ?? 240;
+
     
     _pomodoroMinutes = prefs.getInt('pomodoroMinutes') ?? 25;
     _shortBreakMinutes = prefs.getInt('shortBreakMinutes') ?? 5;
@@ -73,6 +90,12 @@ class SettingsProvider extends ChangeNotifier {
 
   Future<void> setLanguage(String lang) async {
     _language = lang;
+    if (_language == 'tr') {
+      _currentLanguage = TurkishLanguage();
+    } else {
+      _currentLanguage = EnglishLanguage();
+    }
+    
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('language', lang);
@@ -91,6 +114,8 @@ class SettingsProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('dailyGoalMinutes', minutes);
   }
+
+
 
   Future<void> setTimerDuration(String type, int minutes) async { // type: 'pomodoro', 'short', 'long'
     final prefs = await SharedPreferences.getInstance();
@@ -113,167 +138,108 @@ class SettingsProvider extends ChangeNotifier {
 
   // Localization Helper
   String translate(String key) {
-    if (_language == 'tr') {
-      return _tr[key] ?? key;
+    // Dynamic dispatch using reflection (mirrors) is heavy in Flutter.
+    // Since we defined getters in the interface, we need a way to access them dynamically OR 
+    // we just use the getter directly if we know the key at compile time.
+    // However, existing code uses strings like translate('settings').
+    // We need a map-like access or switch case. 
+    // To solve this efficiently without changing every call site:
+    // We will Implement a helper in Language class or here.
+    
+    // BETTER APPROACH: 
+    // Let's make the Language class support a `operator []` or `get(String key)` 
+    // But since I already wrote the class with getters, let me add a big switch here 
+    // OR just use a map in the Language definition. 
+    
+    // Wait, the "cleanest" way for the future is to change usage to `s.language.settings`
+    // But that requires changing ALL files.
+    // For now, let's map the string key to the getter.
+    
+    switch (key) {
+      case 'settings': return _currentLanguage.settings;
+      case 'appearance': return _currentLanguage.appearance;
+      case 'darkMode': return _currentLanguage.darkMode;
+      case 'theme': return _currentLanguage.theme;
+      case 'language': return _currentLanguage.language;
+      case 'focusSounds': return _currentLanguage.focusSounds;
+      case 'tasks': return _currentLanguage.tasks;
+      case 'stats': return _currentLanguage.stats;
+      case 'focus': return _currentLanguage.focus;
+      case 'shortBreak': return _currentLanguage.shortBreak;
+      case 'longBreak': return _currentLanguage.longBreak;
+      case 'version': return _currentLanguage.version;
+      case 'weeklyActivity': return _currentLanguage.weeklyActivity;
+      case 'focusTime': return _currentLanguage.focusTime;
+      case 'dailyGoal': return _currentLanguage.dailyGoal;
+      case 'remaining': return _currentLanguage.remaining;
+      case 'completed': return _currentLanguage.completed;
+      case 'setGoal': return _currentLanguage.setGoal;
+      case 'hours': return _currentLanguage.hours;
+      case 'timerSettings': return _currentLanguage.timerSettings;
+      case 'pomodoroDuration': return _currentLanguage.pomodoroDuration;
+      case 'shortBreakDuration': return _currentLanguage.shortBreakDuration;
+      case 'longBreakDuration': return _currentLanguage.longBreakDuration;
+      case 'minutes': return _currentLanguage.minutes;
+      case 'themeDefault': return _currentLanguage.themeDefault;
+      case 'themeSakura': return _currentLanguage.themeSakura;
+      case 'themeOcean': return _currentLanguage.themeOcean;
+      case 'themeForest': return _currentLanguage.themeForest;
+      case 'themeSpace': return _currentLanguage.themeSpace;
+      case 'themeBlack': return _currentLanguage.themeBlack;
+      case 'themeWhite': return _currentLanguage.themeWhite;
+      case 'themeLuxury': return _currentLanguage.themeLuxury;
+      case 'themeSunset': return _currentLanguage.themeSunset;
+      case 'themeNight': return _currentLanguage.themeNight;
+      case 'cancel': return _currentLanguage.cancel;
+      case 'save': return _currentLanguage.save;
+      case 'close': return _currentLanguage.close;
+      case 'saveNote': return _currentLanguage.saveNote;
+      case 'editNote': return _currentLanguage.editNote;
+      case 'today': return _currentLanguage.today;
+      case 'empty': return _currentLanguage.empty;
+      case 'newTask': return _currentLanguage.newTask;
+      case 'taskHint': return _currentLanguage.taskHint;
+      case 'estPomodoros': return _currentLanguage.estPomodoros;
+      case 'createTask': return _currentLanguage.createTask;
+      case 'noTasks': return _currentLanguage.noTasks;
+      case 'pomodoroCount': return _currentLanguage.pomodoroCount;
+      case 'inProgress': return _currentLanguage.inProgress;
+      case 'focusedTime': return _currentLanguage.focusedTime;
+      case 'tasksWorkedOn': return _currentLanguage.tasksWorkedOn;
+      case 'noTasksRecorded': return _currentLanguage.noTasksRecorded;
+      case 'dailyNote': return _currentLanguage.dailyNote;
+      case 'noteHint': return _currentLanguage.noteHint;
+      case 'navFocus': return _currentLanguage.navFocus;
+      case 'navTasks': return _currentLanguage.navTasks;
+      case 'navStats': return _currentLanguage.navStats;
+      case 'navSettings': return _currentLanguage.navSettings;
+      case 'monthJan': return _currentLanguage.monthJan;
+      case 'monthFeb': return _currentLanguage.monthFeb;
+      case 'monthMar': return _currentLanguage.monthMar;
+      case 'monthApr': return _currentLanguage.monthApr;
+      case 'monthMay': return _currentLanguage.monthMay;
+      case 'monthJun': return _currentLanguage.monthJun;
+      case 'monthJul': return _currentLanguage.monthJul;
+      case 'monthAug': return _currentLanguage.monthAug;
+      case 'monthSep': return _currentLanguage.monthSep;
+      case 'monthOct': return _currentLanguage.monthOct;
+      case 'monthNov': return _currentLanguage.monthNov;
+      case 'monthDec': return _currentLanguage.monthDec;
+      case 'generalFocus': return _currentLanguage.generalFocus;
+      case 'share': return _currentLanguage.share;
+      case 'shareStatsTitle': return _currentLanguage.shareStatsTitle;
+      case 'shareMessage': return _currentLanguage.shareMessage;
+      case 'statsDaily': return _currentLanguage.statsDaily;
+      case 'statsMonthly': return _currentLanguage.statsMonthly;
+      case 'stats6Months': return _currentLanguage.stats6Months;
+      case 'statsYearly': return _currentLanguage.statsYearly;
+      case 'average': return _currentLanguage.average;
+      case 'sessions': return _currentLanguage.sessions;
+      case 'heatmapLegend': return _currentLanguage.heatmapLegend;
+      case 'soundType': return _currentLanguage.soundType;
+      case 'soundTypeBell': return _currentLanguage.soundTypeBell;
+      case 'soundTypeNotification': return _currentLanguage.soundTypeNotification;
+      default: return key;
     }
-    return _en[key] ?? key;
   }
-
-  static const Map<String, String> _en = {
-    'settings': 'Settings',
-    'appearance': 'Appearance',
-    'darkMode': 'Dark Mode',
-    'theme': 'Theme',
-    'language': 'Language',
-    'focusSounds': 'Focus Sounds',
-    'tasks': 'Tasks',
-    'stats': 'Statistics',
-    'focus': 'Focus',
-    'shortBreak': 'Short Break',
-    'longBreak': 'Long Break',
-    'version': 'Version',
-    'weeklyActivity': 'Weekly Activity',
-    'focusTime': 'Focus Time',
-    'dailyGoal': 'Daily Goal',
-    'remaining': 'Remaining',
-    'completed': 'Completed',
-    'setGoal': 'Set Daily Goal',
-    'hours': 'Hours',
-    'timerSettings': 'Timer Settings',
-    'pomodoroDuration': 'Pomodoro Duration',
-    'shortBreakDuration': 'Short Break Duration',
-    'longBreakDuration': 'Long Break Duration',
-    'minutes': 'Minutes',
-    'themeDefault': 'Default',
-    'themeSakura': 'Sakura',
-    'themeOcean': 'Ocean',
-    'themeForest': 'Forest',
-    'themeSpace': 'Space',
-    'themeBlack': 'True Black',
-    'themeWhite': 'Pure White',
-    'themeLuxury': 'Silver Luxury',
-    'themeSunset': 'Sunset',
-    'themeNight': 'Night Light',
-    // New Keys
-    'cancel': 'Cancel',
-    'save': 'Save',
-    'close': 'Close',
-    'saveNote': 'Save Note',
-    'editNote': 'Edit Note',
-    'today': 'Today',
-    'empty': 'Empty',
-    'newTask': 'New Task',
-    'taskHint': 'What are you working on?',
-    'estPomodoros': 'Est. Pomodoros:',
-    'createTask': 'Create Task',
-    'noTasks': 'No tasks yet. Start by adding one!',
-    'pomodoroCount': 'pomodoros',
-    'inProgress': 'In Progress',
-    'focusedTime': 'Focused Time',
-    'tasksWorkedOn': 'Completed Activities:',
-    'noTasksRecorded': 'No tasks recorded.',
-    'dailyNote': 'Daily Note:',
-    'noteHint': 'How was your focus today?',
-    'navFocus': 'Focus',
-    'navTasks': 'Tasks',
-    'navStats': 'Stats',
-    'navSettings': 'Settings',
-    // Months
-    'monthJan': 'January', 'monthFeb': 'February', 'monthMar': 'March', 'monthApr': 'April',
-    'monthMay': 'May', 'monthJun': 'June', 'monthJul': 'July', 'monthAug': 'August',
-    'monthSep': 'September', 'monthOct': 'October', 'monthNov': 'November', 'monthDec': 'December',
-    'generalFocus': 'General Focus',
-    'share': 'Share',
-    'shareStatsTitle': 'My Focus Stats',
-    'shareMessage': 'Check out my focus progress!',
-    'statsDaily': 'Daily Stats',
-    'statsMonthly': 'Monthly Stats',
-    'stats6Months': '6 Months Stats',
-    'statsYearly': 'Yearly Stats',
-    'average': 'Daily Average',
-    'sessions': 'Sessions',
-    'heatmapLegend': 'Less  •  More',
-    'soundType': 'Alarm Tone',
-    'soundTypeBell': 'Guitar (Standard)',
-    'soundTypeNotification': 'System Notification',
-  };
-
-  static const Map<String, String> _tr = {
-    'settings': 'Ayarlar',
-    'appearance': 'Görünüm',
-    'darkMode': 'Karanlık Mod',
-    'theme': 'Tema',
-    'language': 'Dil',
-    'focusSounds': 'Odak Sesleri',
-    'tasks': 'Görevler',
-    'stats': 'İstatistikler',
-    'focus': 'Odaklan',
-    'shortBreak': 'Kısa Mola',
-    'longBreak': 'Uzun Mola',
-    'version': 'Sürüm',
-    'weeklyActivity': 'Haftalık Aktivite',
-    'focusTime': 'Odak Süresi',
-    'dailyGoal': 'Günlük Hedef',
-    'remaining': 'Kalan',
-    'completed': 'Tamamlanan',
-    'setGoal': 'Günlük Hedef Belirle',
-    'hours': 'Saat',
-    'timerSettings': 'Zamanlayıcı Ayarları',
-    'pomodoroDuration': 'Pomodoro Süresi',
-    'shortBreakDuration': 'Kısa Mola Süresi',
-    'longBreakDuration': 'Uzun Mola Süresi',
-    'minutes': 'Dakika',
-    'themeDefault': 'Varsayılan',
-    'themeSakura': 'Sakura',
-    'themeOcean': 'Okyanus',
-    'themeForest': 'Orman',
-    'themeSpace': 'Uzay',
-    'themeBlack': 'Tam Siyah',
-    'themeWhite': 'Saf Beyaz',
-    'themeLuxury': 'Gümüş Lüks',
-    'themeSunset': 'Gün Batımı',
-    'themeNight': 'Gece Işığı',
-    // New Keys
-    'cancel': 'İptal',
-    'save': 'Kaydet',
-    'close': 'Kapat',
-    'saveNote': 'Kaydet',
-    'editNote': 'Düzenle',
-    'today': 'Bugün',
-    'empty': 'Boş',
-    'newTask': 'Yeni Görev',
-    'taskHint': 'Ne üzerinde çalışıyorsun?',
-    'estPomodoros': 'Tahmini Pomodoro:',
-    'createTask': 'Görev Oluştur',
-    'noTasks': 'Henüz görev yok. Bir tane ekle!',
-    'pomodoroCount': 'pomodoro',
-    'inProgress': 'Devam Ediyor',
-    'focusedTime': 'Odak Süresi',
-    'tasksWorkedOn': 'Tamamlanan Etkinlikler:',
-    'noTasksRecorded': 'Kayıtlı görev yok.',
-    'dailyNote': 'Günlük Not:',
-    'noteHint': 'Bugünkü odaklanman nasıldı?',
-    'navFocus': 'Odak',
-    'navTasks': 'Görevler',
-    'navStats': 'İstatistik',
-    'navSettings': 'Ayarlar',
-    // Months
-    'monthJan': 'Ocak', 'monthFeb': 'Şubat', 'monthMar': 'Mart', 'monthApr': 'Nisan',
-    'monthMay': 'Mayıs', 'monthJun': 'Haziran', 'monthJul': 'Temmuz', 'monthAug': 'Ağustos',
-    'monthSep': 'Eylül', 'monthOct': 'Ekim', 'monthNov': 'Kasım', 'monthDec': 'Aralık',
-    'generalFocus': 'Genel Odak',
-    'share': 'Paylaş',
-    'shareStatsTitle': 'Odak İstatistiklerim',
-    'shareMessage': 'Odak ilerlememe göz at!',
-    'statsDaily': 'Günlük İstatistik',
-    'statsMonthly': 'Aylık İstatistik',
-    'stats6Months': '6 Aylık İstatistik',
-    'statsYearly': 'Yıllık İstatistik',
-    'average': 'Günlük Ortalama',
-    'sessions': 'Oturum',
-    'heatmapLegend': 'Az  •  Çok',
-    'soundType': 'Alarm Tipi',
-    'soundTypeBell': 'Gitar',
-    'soundTypeNotification': 'Sistem Bildirimi',
-  };
 }

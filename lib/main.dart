@@ -27,6 +27,7 @@ void main() async {
               settings.shortBreakMinutes, 
               settings.longBreakMinutes,
               settings.soundType,
+              settings.currentLanguageObj,
             );
             return timer!;
           },

@@ -96,7 +96,11 @@ class NotificationService {
   }
 
   // Show alarm immediately (Top priority)
-  Future<void> showAlarmNow({required bool useAppBell}) async {
+  Future<void> showAlarmNow({
+    required bool useAppBell, 
+    required String title, 
+    required String body,
+  }) async {
     debugPrint("showAlarmNow called. useAppBell: $useAppBell");
     
     // 1. Play Sound (Custom Guitar)
@@ -112,15 +116,19 @@ class NotificationService {
     }
 
     // 2. Show Visual Notification (High Priority)
-    // We use a FRESH Channel ID to ensure sound settings are re-applied by OS
+    // CRITICAL: Android Channels are immutable. We MUST use different IDs for Silent vs Sound.
+    final String channelId = useAppBell ? 'pomodoro_alarm_silent_v2' : 'pomodoro_alarm_system_v2';
+    final String channelName = useAppBell ? 'Timer Alarms (Silent)' : 'Timer Alarms (System Sound)';
+    
     final AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-      'pomodoro_alarm_channel_final', // NEW ID to reset settings
-      'Timer Completion Alarms',
-      channelDescription: 'Notifications for timer completion with sound',
+      channelId,
+      channelName,
+      channelDescription: 'Notifications for timer completion',
       importance: Importance.max,
       priority: Priority.high,
-      playSound: !useAppBell, // True = System Sound, False = Silent (since we play Guitar)
+      playSound: !useAppBell, // True if NOT using App Bell
+      sound: !useAppBell ? const RawResourceAndroidNotificationSound('notification') : null, // Default system sound or custom if needed
       fullScreenIntent: true,
       visibility: NotificationVisibility.public,
     );
@@ -130,8 +138,8 @@ class NotificationService {
 
     await flutterLocalNotificationsPlugin.show(
       1, // ID 1 for Alarm
-      'Time is up!', 
-      'Pomodoro session completed.', 
+      title, 
+      body, 
       platformChannelSpecifics,
     );
   }

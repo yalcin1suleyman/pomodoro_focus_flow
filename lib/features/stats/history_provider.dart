@@ -7,12 +7,14 @@ class DailyRecord {
   int minutesFocused;
   List<String> tasksWorkedOn;
   String? note;
+  int? targetMinutes; // The goal at the time of recording
 
   DailyRecord({
     required this.date,
     this.minutesFocused = 0,
     this.tasksWorkedOn = const [],
     this.note,
+    this.targetMinutes,
   });
 
   Map<String, dynamic> toJson() {
@@ -21,6 +23,7 @@ class DailyRecord {
       'minutesFocused': minutesFocused,
       'tasksWorkedOn': tasksWorkedOn,
       'note': note,
+      'targetMinutes': targetMinutes,
     };
   }
 
@@ -30,6 +33,7 @@ class DailyRecord {
       minutesFocused: json['minutesFocused'] ?? 0,
       tasksWorkedOn: List<String>.from(json['tasksWorkedOn'] ?? []),
       note: json['note'],
+      targetMinutes: json['targetMinutes'],
     );
   }
 }
@@ -87,6 +91,22 @@ class HistoryProvider extends ChangeNotifier {
     return totalMinutes;
   }
 
+  int getStatsForWeek(DateTime date) {
+    // Assuming Monday start. 
+    // date.weekday: 1 (Mon) -> 7 (Sun)
+    // To get Monday: subtract weekday-1 days.
+    final startOfWeek = date.subtract(Duration(days: date.weekday - 1));
+    final endOfWeek = startOfWeek.add(const Duration(days: 6));
+    
+    // Ensure we strip time for accurate comparison in getStatsForPeriod if needed, 
+    // but _dateToKey handles YYYY-MM-DD so Time doesn't matter much there.
+    // However, clean dates are safer.
+    final start = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
+    final end = DateTime(endOfWeek.year, endOfWeek.month, endOfWeek.day);
+    
+    return getStatsForPeriod(start, end);
+  }
+
   Map<DateTime, int> getDailyRecordsForPeriod(DateTime start, DateTime end) {
     Map<DateTime, int> data = {};
     final startKey = _dateToKey(start);
@@ -103,7 +123,7 @@ class HistoryProvider extends ChangeNotifier {
     return data;
   }
 
-  Future<void> logSession(int minutes, String taskTitle) async {
+  Future<void> logSession(int minutes, String taskTitle, int currentDailyGoal) async {
     final now = DateTime.now();
     final dateKey = _dateToKey(now);
     
@@ -112,6 +132,9 @@ class HistoryProvider extends ChangeNotifier {
     if (index != -1) {
       // Update existing record
       _history[index].minutesFocused += minutes;
+      // Always update target to the latest one for today
+      _history[index].targetMinutes = currentDailyGoal; 
+      
       if (!_history[index].tasksWorkedOn.contains(taskTitle)) {
         _history[index].tasksWorkedOn.add(taskTitle);
       }
@@ -121,6 +144,7 @@ class HistoryProvider extends ChangeNotifier {
         date: dateKey,
         minutesFocused: minutes,
         tasksWorkedOn: [taskTitle],
+        targetMinutes: currentDailyGoal,
       ));
     }
     await _saveHistory();
@@ -139,6 +163,22 @@ class HistoryProvider extends ChangeNotifier {
       ));
     }
     await _saveHistory();
+  }
+
+  Future<void> updateDailyGoal(DateTime date, int goalMinutes) async {
+    final dateKey = _dateToKey(date);
+    int index = _history.indexWhere((e) => e.date == dateKey);
+    
+    if (index != -1) {
+      _history[index].targetMinutes = goalMinutes;
+    } else {
+       _history.add(DailyRecord(
+        date: dateKey,
+        targetMinutes: goalMinutes,
+      ));
+    }
+    await _saveHistory();
+    notifyListeners();
   }
 
   String _dateToKey(DateTime date) {

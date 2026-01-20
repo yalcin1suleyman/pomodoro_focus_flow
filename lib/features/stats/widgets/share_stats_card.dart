@@ -93,7 +93,7 @@ class ShareStatsCard extends StatelessWidget {
                     Icon(Icons.timer_outlined, color: Colors.white, size: 24),
                     const SizedBox(width: 8),
                     Text(
-                      "Pomodoro Focus Flow",
+                      "Pomodoro Master",
                       style: theme.textTheme.titleSmall?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -177,7 +177,7 @@ class ShareStatsCard extends StatelessWidget {
                 ),
 
                 const Spacer(),
-                const Text("Get focused with Focus Flow", style: TextStyle(color: Colors.white38, fontSize: 11, letterSpacing: 1)),
+                const Text("Pomodoro Master by Yalcin Studio", style: TextStyle(color: Colors.white38, fontSize: 11, letterSpacing: 1)),
               ],
             ),
           ),

@@ -50,7 +50,11 @@ class _HomeScreenState extends State<HomeScreen> {
           final task = taskProvider.tasks.firstWhere((t) => t.id == taskId);
           
           // LOG HISTORY
-          historyProvider.logSession(settings.pomodoroMinutes, task.title);
+          historyProvider.logSession(
+            settings.pomodoroMinutes, 
+            task.title,
+            settings.dailyGoalMinutes,
+          );
 
           if (task.isCompleted) {
             timerService.setActiveTask(null, null); // Clear active task from timer
@@ -62,7 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
         // Log generic session for plain Pomodoro
         historyProvider.logSession(
           settings.pomodoroMinutes, 
-          settings.translate('generalFocus')
+          settings.translate('generalFocus'),
+          settings.dailyGoalMinutes,
         );
       }
     };
