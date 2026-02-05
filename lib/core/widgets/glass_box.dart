@@ -28,32 +28,39 @@ class GlassBox extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final baseColor = color ?? (isDark ? Colors.white : Colors.black);
 
+    // Optimization: Skip BackdropFilter if blur is 0 (it's expensive)
+    Widget content = Container(
+      width: width,
+      height: height,
+      padding: padding ?? const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: baseColor.withOpacity(opacity),
+        borderRadius: borderRadius ?? BorderRadius.circular(20),
+        border: Border.all(
+          color: baseColor.withOpacity(0.05),
+          width: 1.5,
+        ),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            baseColor.withOpacity(opacity + 0.05),
+            baseColor.withOpacity(opacity),
+          ],
+        ),
+      ),
+      child: child,
+    );
+
+    if (blur <= 0) {
+      return content;
+    }
+
     return ClipRRect(
       borderRadius: borderRadius ?? BorderRadius.circular(20),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-        child: Container(
-          width: width,
-          height: height,
-          padding: padding ?? const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: baseColor.withOpacity(opacity),
-            borderRadius: borderRadius ?? BorderRadius.circular(20),
-            border: Border.all(
-              color: baseColor.withOpacity(0.05),
-              width: 1.5,
-            ),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                baseColor.withOpacity(opacity + 0.05),
-                baseColor.withOpacity(opacity),
-              ],
-            ),
-          ),
-          child: child,
-        ),
+        child: content,
       ),
     );
   }

@@ -197,7 +197,7 @@ class AppTheme {
       primaryColor: primary,
       scaffoldBackgroundColor: background,
       cardColor: surface,
-      textTheme: GoogleFonts.outfitTextTheme(
+      textTheme: GoogleFonts.manropeTextTheme(
         brightness == Brightness.dark ? ThemeData.dark().textTheme : ThemeData.light().textTheme
       ).apply(
         bodyColor: brightness == Brightness.dark ? AppColors.textDark : AppColors.textLight,

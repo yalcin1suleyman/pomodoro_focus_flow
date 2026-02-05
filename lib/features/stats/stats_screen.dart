@@ -10,6 +10,7 @@ import '../../core/widgets/glass_box.dart';
 import '../settings/settings_provider.dart';
 import 'history_provider.dart';
 import 'widgets/share_stats_card.dart';
+import 'widgets/story_stats_card.dart';
 
 class StatsScreen extends StatefulWidget {
   const StatsScreen({super.key});
@@ -231,29 +232,7 @@ class _StatsScreenState extends State<StatsScreen> {
                                     ],
                                   ),
                                 ),
-                                if (isSelectedToday || true) // Allow setting goal for ANY day now
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: InkWell(
-                                      onTap: () => _showGoalDialog(context, settings, historyProvider),
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                                          borderRadius: BorderRadius.circular(20),
-                                        ),
-                                        child: Text(
-                                          settings.translate('setGoal'),
-                                          style: TextStyle(
-                                            color: Theme.of(context).colorScheme.primary,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+
                               ],
                             ),
                           ),
@@ -531,58 +510,7 @@ class _StatsScreenState extends State<StatsScreen> {
     return "${date.day} ${_formatMonth(date, settings)}";
   }
 
-  void _showGoalDialog(BuildContext context, SettingsProvider settings, HistoryProvider history) {
-    // Determine the current goal to show in slider
-    // Use the specific day's goal if it exists, otherwise the global default.
-    final record = history.getRecord(_selectedDate);
-    double currentVal = (record.targetMinutes ?? settings.dailyGoalMinutes).toDouble();
-    
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: Theme.of(context).cardColor,
-        title: Text(settings.translate('setGoal')),
-        content: SizedBox(
-          height: 100,
-          child: Column(
-            children: [
-              Text("${(currentVal/60).toStringAsFixed(1)} ${settings.translate('hours')}"),
-              StatefulBuilder(
-                builder: (context, setState) {
-                  return Slider(
-                    value: currentVal,
-                    min: 30, // 30 min
-                    max: 1440, // 24 hours
-                    divisions: 47, // 30 min increments
-                    label: "${(currentVal/60).toStringAsFixed(1)} h",
-                    activeColor: Theme.of(context).colorScheme.primary,
-                    onChanged: (val) {
-                      setState(() => currentVal = val);
-                    },
-                  );
-                }
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(settings.translate('cancel')),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
-            onPressed: () {
-              // FIX: Update ONLY the specific day's goal
-              history.updateDailyGoal(_selectedDate, currentVal.toInt());
-              Navigator.pop(ctx);
-            },
-            child: Text(settings.translate('save'), style: TextStyle(color: Theme.of(context).colorScheme.onPrimary)),
-          )
-        ],
-      )
-    );
-  }
+
 
   Widget _buildLegendItem(Color color, String label) {
     return Row(
@@ -601,8 +529,9 @@ class _StatsScreenState extends State<StatsScreen> {
     final history = Provider.of<HistoryProvider>(context, listen: false);
     
     // Initial State
-    // Default to 'weekly' if in weekly mode, else 'daily'
     String selectedRange = 'daily'; 
+    ShareVisualType visualType = ShareVisualType.calendar;
+    bool isStoryMode = true; // Default to Story Mode as requested
     
     showDialog(
       context: context,
@@ -616,59 +545,60 @@ class _StatsScreenState extends State<StatsScreen> {
           ShareMode displayMode = ShareMode.daily;
           Map<DateTime, int>? periodData;
           
-          final now = DateTime.now();
-          
+          ShareVisualType currentVisual = ShareVisualType.calendar; // Default
+          DateTime referenceDate = _selectedDate;
+
           if (selectedRange == 'daily') {
-            displayMinutes = focusedMinutes; // Passed from parent (Daily or Weekly total depending on previous view, but here we want specific range)
-            // Wait, focusedMinutes passed might be weekly total if we are in weekly mode.
-            // Let's recalculate to be safe/correct for the specific range.
             displayMinutes = record.minutesFocused;
             displayGoal = settings.dailyGoalMinutes;
             displayTitle = settings.translate('statsDaily');
             displayDateLabel = _formatDate(_selectedDate, settings);
             displayMode = ShareMode.daily;
+            referenceDate = _selectedDate;
           } else if (selectedRange == 'weekly') {
-            /* 
-            displayMinutes = history.getStatsForWeek(_selectedDate); 
-            displayGoal = settings.weeklyGoalMinutes;
-            displayTitle = settings.translate('weeklyActivity') ?? "Weekly Stats";
-            
-            final startOfWeek = _selectedDate.subtract(Duration(days: _selectedDate.weekday - 1));
-            final endOfWeek = startOfWeek.add(const Duration(days: 6));
-            displayDateLabel = "${_formatDate(startOfWeek, settings)} - ${_formatDate(endOfWeek, settings)}";
-            
-            displayMode = ShareMode.daily; // Re-use the simple Ring layout
-            */
-            // Fallback to daily if somehow weekly is selected
-            displayMinutes = record.minutesFocused;
-            displayGoal = settings.dailyGoalMinutes;
-            displayTitle = settings.translate('statsDaily');
-            displayDateLabel = _formatDate(_selectedDate, settings);
-            displayMode = ShareMode.daily;
+             // Calculate current week (Mon-Sun)
+             final date = _selectedDate; 
+             referenceDate = date; // Anchor for Weekly
+
+             final startOfWeek = date.subtract(Duration(days: date.weekday - 1));
+             final endOfWeek = startOfWeek.add(const Duration(days: 6));
+             
+             final start = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
+             final end = DateTime(endOfWeek.year, endOfWeek.month, endOfWeek.day);
+             
+             displayMinutes = history.getStatsForPeriod(start, end);
+             periodData = history.getDailyRecordsForPeriod(start, end);
+             displayGoal = settings.dailyGoalMinutes; // Display Daily Goal as ref
+             displayTitle = settings.translate('weeklyActivity') ?? "Haftalık Özeti";
+             displayDateLabel = "${_formatDate(start, settings)} - ${_formatDate(end, settings)}";
+             displayMode = ShareMode.weekly;
+             currentVisual = ShareVisualType.chart; // Weekly defaults to Chart
           } else if (selectedRange == 'monthly') {
-            final start = DateTime(now.year, now.month, 1);
-            final end = DateTime(now.year, now.month + 1, 0);
+            // Use _focusedMonth for Monthly context
+            referenceDate = _focusedMonth;
+            
+            final start = DateTime(_focusedMonth.year, _focusedMonth.month, 1);
+            final end = DateTime(_focusedMonth.year, _focusedMonth.month + 1, 0);
+            
             displayMinutes = history.getStatsForPeriod(start, end);
             periodData = history.getDailyRecordsForPeriod(start, end);
             displayTitle = settings.translate('statsMonthly');
-            displayDateLabel = _formatMonth(now, settings);
+            displayDateLabel = _formatMonth(_focusedMonth, settings);
             displayMode = ShareMode.monthly;
-          } else if (selectedRange == '6months') {
-             final start = DateTime(now.year, now.month - 5, 1);
-             final end = DateTime(now.year, now.month + 1, 0);
-             displayMinutes = history.getStatsForPeriod(start, end);
-             periodData = history.getDailyRecordsForPeriod(start, end);
-             displayTitle = settings.translate('stats6Months');
-             displayDateLabel = "${_formatMonth(start, settings)} - ${_formatMonth(end, settings)}";
-             displayMode = ShareMode.heatmap;
+            currentVisual = visualType; // Use the toggle state
           } else if (selectedRange == 'yearly') {
-             final start = DateTime(now.year, 1, 1);
-             final end = DateTime(now.year, 12, 31);
+             // Use _focusedMonth for Year context
+             referenceDate = _focusedMonth;
+             final year = _focusedMonth.year;
+
+             final start = DateTime(year, 1, 1);
+             final end = DateTime(year, 12, 31);
              displayMinutes = history.getStatsForPeriod(start, end);
              periodData = history.getDailyRecordsForPeriod(start, end);
              displayTitle = settings.translate('statsYearly');
-             displayDateLabel = "${now.year}";
-             displayMode = ShareMode.heatmap;
+             displayDateLabel = "$year";
+             displayMode = ShareMode.yearly;
+             currentVisual = ShareVisualType.heatmap;
           }
 
           return Dialog(
@@ -678,61 +608,111 @@ class _StatsScreenState extends State<StatsScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                   // Controls
+                  // Controls Row
                   Container(
                     margin: const EdgeInsets.only(bottom: 10),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: selectedRange,
-                        dropdownColor: Theme.of(context).cardColor,
-                        style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontWeight: FontWeight.bold),
-                        onChanged: (val) {
-                          if (val != null) setState(() => selectedRange = val);
-                        },
-                        items: [
-                          DropdownMenuItem(value: 'daily', child: Text(settings.translate('statsDaily'))),
-                          // DropdownMenuItem(value: 'weekly', child: Text(settings.translate('weeklyActivity') ?? 'Weekly')),
-                          DropdownMenuItem(value: 'monthly', child: Text(settings.translate('statsMonthly'))),
-                          DropdownMenuItem(value: '6months', child: Text(settings.translate('stats6Months'))),
-                          DropdownMenuItem(value: 'yearly', child: Text(settings.translate('statsYearly'))),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Range Selector
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(30),
+                              border: Border.all(color: Colors.white10),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: selectedRange,
+                                dropdownColor: Theme.of(context).cardColor,
+                                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontWeight: FontWeight.bold, fontSize: 13),
+                                onChanged: (val) {
+                                  if (val != null) setState(() => selectedRange = val);
+                                },
+                                items: [
+                                  DropdownMenuItem(value: 'daily', child: Text(settings.translate('statsDaily'))),
+                                  DropdownMenuItem(value: 'weekly', child: Text(settings.translate('weeklyActivity') ?? 'Haftalık')),
+                                  DropdownMenuItem(value: 'monthly', child: Text(settings.translate('statsMonthly'))),
+                                  DropdownMenuItem(value: 'yearly', child: Text(settings.translate('statsYearly'))),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          
+                          // Format Toggle (Story vs Post)
+                          Container(
+                             decoration: BoxDecoration(
+                               color: Theme.of(context).cardColor,
+                               borderRadius: BorderRadius.circular(30),
+                               border: Border.all(color: Colors.white10),
+                             ),
+                             child: Row(
+                               children: [
+                                 IconButton(
+                                   icon: Icon(Icons.crop_portrait, 
+                                     color: isStoryMode ? Theme.of(context).colorScheme.primary : Colors.grey,
+                                     size: 20
+                                   ),
+                                   onPressed: () => setState(() => isStoryMode = true),
+                                   tooltip: "Story Mode (9:16)",
+                                   constraints: const BoxConstraints(maxHeight: 40, maxWidth: 40),
+                                 ),
+                                 Container(width: 1, height: 20, color: Colors.white24),
+                                 IconButton(
+                                   icon: Icon(Icons.crop_square, 
+                                     color: !isStoryMode ? Theme.of(context).colorScheme.primary : Colors.grey,
+                                     size: 20
+                                   ),
+                                   onPressed: () => setState(() => isStoryMode = false),
+                                   tooltip: "Post Mode (Square)",
+                                   constraints: const BoxConstraints(maxHeight: 40, maxWidth: 40),
+                                 ),
+                               ],
+                             ),
+                          )
                         ],
                       ),
                     ),
                   ),
 
                   Stack(
+                    alignment: Alignment.topRight,
                     children: [
                       RepaintBoundary(
                         key: boundaryKey,
-                        child: ShareStatsCard(
-                          focusedMinutes: displayMinutes,
-                          goalMinutes: displayGoal,
-                          dateLabel: displayDateLabel,
-                          title: displayTitle,
-                          settings: settings,
-                          mode: displayMode,
-                          periodData: periodData,
-                        ),
+                        child: isStoryMode 
+                          ? StoryStatsCard(
+                              mode: _getStoryMode(selectedRange),
+                              date: _getShareDate(selectedRange),
+                              settings: settings,
+                              historyProvider: history,
+                              dailyRecord: record,
+                            )
+                          : ShareStatsCard(
+                              focusedMinutes: displayMinutes,
+                              goalMinutes: displayGoal,
+                              dateLabel: displayDateLabel,
+                              title: displayTitle,
+                              settings: settings,
+                              mode: displayMode,
+                              periodData: periodData,
+                              visualType: currentVisual,
+                              referenceDate: referenceDate,
+                            ),
                       ),
-                       Positioned(
-                        top: 0, 
-                        right: 0,
-                        child: IconButton(
-                          icon: const Icon(Icons.close, color: Colors.white),
-                          onPressed: () => Navigator.of(ctx).pop(),
-                        ),
-                      ),
+                       IconButton(
+                         icon: const Icon(Icons.close, color: Colors.white),
+                         onPressed: () => Navigator.of(ctx).pop(),
+                       ),
                     ],
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton.icon(
                     onPressed: () async {
-                      // 1. Capture Image
                       try {
                         final boundary = boundaryKey.currentContext?.findRenderObject() as rendering.RenderRepaintBoundary?;
                         if (boundary == null) return;
@@ -742,16 +722,14 @@ class _StatsScreenState extends State<StatsScreen> {
                         final pngBytes = byteData?.buffer.asUint8List();
 
                         if (pngBytes != null) {
-                          // 2. Save to Temp File
                           final directory = await getTemporaryDirectory();
-                          final path = '${directory.path}/focus_stats_share.png';
+                          final path = '${directory.path}/focus_story_share.png';
                           final file = File(path);
                           await file.writeAsBytes(pngBytes);
 
-                          // 3. Share
                           final xFile = XFile(path);
                           if (context.mounted) {
-                            Navigator.pop(ctx); // Close dialog first
+                            Navigator.pop(ctx); 
                             await Share.shareXFiles([xFile], text: settings.translate('shareMessage'));
                           }
                         }
@@ -826,5 +804,21 @@ class _StatsScreenState extends State<StatsScreen> {
         ],
       )
     );
+  }
+  StoryMode _getStoryMode(String range) {
+    switch (range) {
+      case 'daily': return StoryMode.daily;
+      case 'weekly': return StoryMode.weekly;
+      case 'monthly': return StoryMode.monthly;
+      case 'yearly': return StoryMode.yearly;
+      default: return StoryMode.daily;
+    }
+  }
+
+  DateTime _getShareDate(String range) {
+    if (range == 'monthly' || range == 'yearly') {
+       return _focusedMonth; 
+    }
+    return _selectedDate;
   }
 }

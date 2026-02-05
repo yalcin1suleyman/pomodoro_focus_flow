@@ -109,7 +109,7 @@ class NotificationService {
         await _audioPlayer.stop();
         await _audioPlayer.setVolume(1.0);
         await _audioPlayer.setReleaseMode(ReleaseMode.stop);
-        await _audioPlayer.play(AssetSource('sounds/ses1.wav'));
+        await _audioPlayer.play(AssetSource('sounds/bell.mp3'));
       } catch (e) {
         debugPrint("Audio Play Error: $e");
       }

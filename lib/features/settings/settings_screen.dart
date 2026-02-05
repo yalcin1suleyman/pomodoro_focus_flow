@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'settings_provider.dart';
+import '../stats/history_provider.dart';
 import '../../core/widgets/glass_box.dart';
 import '../../core/theme/app_theme.dart';
 
@@ -103,7 +104,10 @@ class SettingsScreen extends StatelessWidget {
                       max: 600, // 10 hours
                       divisions: 19,
                       label: "${(settings.dailyGoalMinutes / 60).toStringAsFixed(1)} h",
-                      onChanged: (val) => settings.setDailyGoal(val.toInt()),
+                      onChanged: (val) {
+                        settings.setDailyGoal(val.toInt());
+                        Provider.of<HistoryProvider>(context, listen: false).updateDailyGoal(DateTime.now(), val.toInt());
+                      },
                     ),
                   ],
                 ),
