@@ -358,7 +358,7 @@ class StoryStatsCard extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text("MONTHLY OVERVIEW", style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
+        Text(settings.translate('monthlyOverview'), style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
         const SizedBox(height: 30),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),

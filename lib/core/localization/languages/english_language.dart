@@ -58,11 +58,14 @@ class EnglishLanguage implements Language {
   @override String get pomodoroCount => 'pomodoros';
   @override String get inProgress => 'In Progress';
   @override String get focusedTime => 'Focused Time';
-  @override String get tasksWorkedOn => 'Completed Activities:';
+  @override String get tasksWorkedOn => 'Activities:';
+  @override String get completedTasksLabel => 'Completed Tasks';
   @override String get noTasksRecorded => 'No tasks recorded.';
   @override String get dailyNote => 'Daily Note:';
   @override String get noteHint => 'How was your focus today?';
   @override String get generalFocus => 'General Focus';
+  @override String get goalMet => 'Goal Met';
+  @override String get goalMissed => 'Below Goal';
   @override String get tasksHelpTitle => 'How to Use Tasks';
   @override String get tasksHelpContent => '1. Click the + button to add a new task.\n2. Estimate how many Pomodoros it will take.\n3. Click the Play button on a task to start focusing on it.\n4. Swipe LEFT on a task to reveal Edit and Delete options.\n5. When the timer finishes, your progress will be logged!';
 
@@ -98,4 +101,34 @@ class EnglishLanguage implements Language {
   @override String get soundType => 'Alarm Tone';
   @override String get soundTypeBell => 'Guitar (Standard)';
   @override String get soundTypeNotification => 'System Notification';
+
+  // Motivational Quotes
+  @override String get quoteMotivation1 => "Focus is the key to success.";
+  @override String get quoteMotivation2 => "One pomodoro at a time.";
+  @override String get quoteMotivation3 => "Small steps, big results.";
+  @override String get quoteMotivation4 => "Keep pushing forward!";
+  @override String get quoteMotivation5 => "Your future is created by what you do today.";
+  @override String get quoteMotivation6 => "Stay consistent, stay focused.";
+  @override String get quoteMotivation7 => "Deep work matters.";
+
+  // Share Dialog
+  @override String get shareRange => 'Range';
+  @override String get shareRangeDaily => 'Daily';
+  @override String get shareRangeWeekly => 'Weekly';
+  @override String get shareRangeMonthly => 'Monthly';
+  @override String get shareRangeYearly => 'Yearly';
+  @override String get shareButton => 'Share';
+  @override String get monthlyOverview => 'MONTHLY OVERVIEW';
+
+  // Language Names
+  @override String get languageEnglish => 'English';
+  @override String get languageTurkish => 'Türkçe';
+
+  // Timer Mode Labels (shortened)
+  @override String get focusShort => 'Focus';
+  @override String get shortBreakShort => 'Short';
+  @override String get longBreakShort => 'Long';
+
+  // Misc
+  @override String get addNote => 'Add a note';
 }

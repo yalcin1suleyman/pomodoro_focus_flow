@@ -6,6 +6,7 @@ class DailyRecord {
   final String date; // Format: YYYY-MM-DD
   int minutesFocused;
   List<String> tasksWorkedOn;
+  List<String> completedTasks;
   String? note;
   int? targetMinutes; // The goal at the time of recording
 
@@ -13,6 +14,7 @@ class DailyRecord {
     required this.date,
     this.minutesFocused = 0,
     this.tasksWorkedOn = const [],
+    this.completedTasks = const [],
     this.note,
     this.targetMinutes,
   });
@@ -22,6 +24,7 @@ class DailyRecord {
       'date': date,
       'minutesFocused': minutesFocused,
       'tasksWorkedOn': tasksWorkedOn,
+      'completedTasks': completedTasks,
       'note': note,
       'targetMinutes': targetMinutes,
     };
@@ -32,6 +35,7 @@ class DailyRecord {
       date: json['date'],
       minutesFocused: json['minutesFocused'] ?? 0,
       tasksWorkedOn: List<String>.from(json['tasksWorkedOn'] ?? []),
+      completedTasks: List<String>.from(json['completedTasks'] ?? []),
       note: json['note'],
       targetMinutes: json['targetMinutes'],
     );
@@ -145,6 +149,27 @@ class HistoryProvider extends ChangeNotifier {
         minutesFocused: minutes,
         tasksWorkedOn: [taskTitle],
         targetMinutes: currentDailyGoal,
+      ));
+    }
+    await _saveHistory();
+  }
+
+  Future<void> logCompletedTask(String taskTitle) async {
+    final now = DateTime.now();
+    final dateKey = _dateToKey(now);
+    
+    int index = _history.indexWhere((e) => e.date == dateKey);
+    
+    if (index != -1) {
+      // Add to completed tasks if not already there
+      if (!_history[index].completedTasks.contains(taskTitle)) {
+        _history[index].completedTasks = List.from(_history[index].completedTasks)..add(taskTitle);
+      }
+    } else {
+      // Create new record with completed task
+      _history.add(DailyRecord(
+        date: dateKey,
+        completedTasks: [taskTitle],
       ));
     }
     await _saveHistory();

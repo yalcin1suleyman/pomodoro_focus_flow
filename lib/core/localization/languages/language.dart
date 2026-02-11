@@ -73,10 +73,13 @@ abstract class Language {
   String get inProgress;
   String get focusedTime;
   String get tasksWorkedOn;
+  String get completedTasksLabel;
   String get noTasksRecorded;
   String get dailyNote;
   String get noteHint;
   String get generalFocus;
+  String get goalMet;
+  String get goalMissed;
   String get tasksHelpTitle;
   String get tasksHelpContent;
 
@@ -104,4 +107,34 @@ abstract class Language {
   String get soundType;
   String get soundTypeBell;
   String get soundTypeNotification;
+
+  // Motivational Quotes (Timer Screen)
+  String get quoteMotivation1;
+  String get quoteMotivation2;
+  String get quoteMotivation3;
+  String get quoteMotivation4;
+  String get quoteMotivation5;
+  String get quoteMotivation6;
+  String get quoteMotivation7;
+
+  // Share Dialog
+  String get shareRange;
+  String get shareRangeDaily;
+  String get shareRangeWeekly;
+  String get shareRangeMonthly;
+  String get shareRangeYearly;
+  String get shareButton;
+  String get monthlyOverview;
+
+  // Language Names (for Settings dropdown)
+  String get languageEnglish;
+  String get languageTurkish;
+
+  // Timer Mode Labels (shortened)
+  String get focusShort;
+  String get shortBreakShort;
+  String get longBreakShort;
+
+  // Misc
+  String get addNote;
 }

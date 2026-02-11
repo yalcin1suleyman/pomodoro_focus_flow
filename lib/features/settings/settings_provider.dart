@@ -203,9 +203,12 @@ class SettingsProvider extends ChangeNotifier {
       case 'inProgress': return _currentLanguage.inProgress;
       case 'focusedTime': return _currentLanguage.focusedTime;
       case 'tasksWorkedOn': return _currentLanguage.tasksWorkedOn;
+      case 'completedTasksLabel': return _currentLanguage.completedTasksLabel;
       case 'noTasksRecorded': return _currentLanguage.noTasksRecorded;
       case 'dailyNote': return _currentLanguage.dailyNote;
       case 'noteHint': return _currentLanguage.noteHint;
+      case 'goalMet': return _currentLanguage.goalMet;
+      case 'goalMissed': return _currentLanguage.goalMissed;
       case 'navFocus': return _currentLanguage.navFocus;
       case 'navTasks': return _currentLanguage.navTasks;
       case 'navStats': return _currentLanguage.navStats;
@@ -235,10 +238,34 @@ class SettingsProvider extends ChangeNotifier {
       case 'heatmapLegend': return _currentLanguage.heatmapLegend;
       case 'soundType': return _currentLanguage.soundType;
       case 'soundTypeBell': return _currentLanguage.soundTypeBell;
-      case 'soundTypeBell': return _currentLanguage.soundTypeBell;
       case 'soundTypeNotification': return _currentLanguage.soundTypeNotification;
       case 'tasksHelpTitle': return _currentLanguage.tasksHelpTitle;
       case 'tasksHelpContent': return _currentLanguage.tasksHelpContent;
+      // Motivational Quotes
+      case 'quoteMotivation1': return _currentLanguage.quoteMotivation1;
+      case 'quoteMotivation2': return _currentLanguage.quoteMotivation2;
+      case 'quoteMotivation3': return _currentLanguage.quoteMotivation3;
+      case 'quoteMotivation4': return _currentLanguage.quoteMotivation4;
+      case 'quoteMotivation5': return _currentLanguage.quoteMotivation5;
+      case 'quoteMotivation6': return _currentLanguage.quoteMotivation6;
+      case 'quoteMotivation7': return _currentLanguage.quoteMotivation7;
+      // Share Dialog
+      case 'shareRange': return _currentLanguage.shareRange;
+      case 'shareRangeDaily': return _currentLanguage.shareRangeDaily;
+      case 'shareRangeWeekly': return _currentLanguage.shareRangeWeekly;
+      case 'shareRangeMonthly': return _currentLanguage.shareRangeMonthly;
+      case 'shareRangeYearly': return _currentLanguage.shareRangeYearly;
+      case 'shareButton': return _currentLanguage.shareButton;
+      case 'monthlyOverview': return _currentLanguage.monthlyOverview;
+      // Language Names
+      case 'languageEnglish': return _currentLanguage.languageEnglish;
+      case 'languageTurkish': return _currentLanguage.languageTurkish;
+      // Timer Mode Labels (shortened)
+      case 'focusShort': return _currentLanguage.focusShort;
+      case 'shortBreakShort': return _currentLanguage.shortBreakShort;
+      case 'longBreakShort': return _currentLanguage.longBreakShort;
+      // Misc
+      case 'addNote': return _currentLanguage.addNote;
       default: return key;
     }
   }

@@ -56,7 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
             settings.dailyGoalMinutes,
           );
 
+          // Log completed task if task just got completed
           if (task.isCompleted) {
+            historyProvider.logCompletedTask(task.title);
             timerService.setActiveTask(null, null); // Clear active task from timer
           }
         } catch (e) {

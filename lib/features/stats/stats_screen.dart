@@ -309,7 +309,7 @@ class _StatsScreenState extends State<StatsScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                "${settings.translate('addNote') ?? "Bir not ekle"}",
+                                "${settings.translate('addNote')}",
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                                   fontSize: 14,
@@ -343,21 +343,35 @@ class _StatsScreenState extends State<StatsScreen> {
                           style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
                         )
                       else
-                        ...selectedRecord.tasksWorkedOn.map((task) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: Row(
-                            children: [
-                              Icon(Icons.check_circle_outline, size: 16, color: Theme.of(context).colorScheme.secondary),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  task,
-                                  style: const TextStyle(fontSize: 16),
+                        ...selectedRecord.tasksWorkedOn.map((task) {
+                          // Check if this task is completed
+                          final isCompleted = selectedRecord.completedTasks.contains(task);
+                          
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  isCompleted ? Icons.check_circle : Icons.check_circle_outline,
+                                  size: 16,
+                                  color: isCompleted 
+                                    ? Theme.of(context).colorScheme.primary 
+                                    : Theme.of(context).colorScheme.secondary,
                                 ),
-                              ),
-                            ],
-                          ),
-                        )),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    task,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: isCompleted ? FontWeight.w600 : FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
                     ],
                   ),
                 ),
@@ -564,10 +578,10 @@ class _StatsScreenState extends State<StatsScreen> {
                                   if (val != null) setState(() => selectedRange = val);
                                 },
                                 items: [
-                                  DropdownMenuItem(value: 'daily', child: Text(settings.translate('statsDaily'))),
-                                  DropdownMenuItem(value: 'weekly', child: Text(settings.translate('weeklyActivity') ?? 'Haftalık')),
-                                  DropdownMenuItem(value: 'monthly', child: Text(settings.translate('statsMonthly'))),
-                                  DropdownMenuItem(value: 'yearly', child: Text(settings.translate('statsYearly'))),
+                                  DropdownMenuItem(value: 'daily', child: Text(settings.translate('shareRangeDaily'))),
+                                  DropdownMenuItem(value: 'weekly', child: Text(settings.translate('shareRangeWeekly'))),
+                                  DropdownMenuItem(value: 'monthly', child: Text(settings.translate('shareRangeMonthly'))),
+                                  DropdownMenuItem(value: 'yearly', child: Text(settings.translate('shareRangeYearly'))),
                                 ],
                               ),
                             ),

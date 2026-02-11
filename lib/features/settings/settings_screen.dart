@@ -44,9 +44,9 @@ class SettingsScreen extends StatelessWidget {
                         onChanged: (String? newValue) {
                           if (newValue != null) settings.setLanguage(newValue);
                         },
-                        items: const [
-                          DropdownMenuItem(value: 'en', child: Text("English")),
-                          DropdownMenuItem(value: 'tr', child: Text("Türkçe")),
+                        items: [
+                          DropdownMenuItem(value: 'en', child: Text(settings.translate('languageEnglish'))),
+                          DropdownMenuItem(value: 'tr', child: Text(settings.translate('languageTurkish'))),
                         ],
                       ),
                     ),
@@ -96,8 +96,8 @@ class SettingsScreen extends StatelessWidget {
                     Slider(
                       value: settings.dailyGoalMinutes.toDouble(),
                       min: 30,
-                      max: 600, // 10 hours
-                      divisions: 19,
+                      max: 720, // 12 hours
+                      divisions: 46,
                       label: "${(settings.dailyGoalMinutes / 60).toStringAsFixed(1)} h",
                       onChanged: (val) {
                         settings.setDailyGoal(val.toInt());
