@@ -98,8 +98,8 @@ class EnglishLanguage implements Language {
   @override String get sessions => 'Sessions';
   @override String get heatmapLegend => 'Less  •  More';
 
-  @override String get soundType => 'Alarm Tone';
-  @override String get soundTypeBell => 'Guitar (Standard)';
+  @override String get soundType => 'Notification Sounds';
+  @override String get soundTypeBell => 'Bell';
   @override String get soundTypeNotification => 'System Notification';
 
   // Motivational Quotes

@@ -127,8 +127,8 @@ class NotificationService {
       channelDescription: 'Notifications for timer completion',
       importance: Importance.max,
       priority: Priority.high,
-      playSound: !useAppBell, // True if NOT using App Bell
-      sound: !useAppBell ? const RawResourceAndroidNotificationSound('notification') : null, // Default system sound or custom if needed
+      playSound: !useAppBell, // Play system sound only if NOT using app bell
+      // When playSound is true and sound is null, Android uses default notification sound
       fullScreenIntent: true,
       visibility: NotificationVisibility.public,
     );

@@ -98,8 +98,8 @@ class TurkishLanguage implements Language {
   @override String get sessions => 'Oturum';
   @override String get heatmapLegend => 'Az  •  Çok';
 
-  @override String get soundType => 'Alarm Tipi';
-  @override String get soundTypeBell => 'Gitar';
+  @override String get soundType => 'Bildirim Sesleri';
+  @override String get soundTypeBell => 'Zil';
   @override String get soundTypeNotification => 'Sistem Bildirimi';
 
   // Motivational Quotes
