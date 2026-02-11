@@ -1,6 +1,8 @@
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'task_provider.dart';
+import 'task_model.dart'; // Ensure Task model is imported if needed, usually exported by provider or same file structure
 import '../timer/timer_service.dart';
 import '../settings/settings_provider.dart';
 import '../../core/widgets/glass_box.dart';
@@ -26,10 +28,38 @@ class _TasksScreenState extends State<TasksScreen> {
     super.dispose();
   }
 
-  void _showAddTaskDialog(BuildContext context, SettingsProvider settings) {
-    final titleController = TextEditingController();
-    int estimated = 1;
+  void _showHelpDialog(BuildContext context, SettingsProvider settings) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Theme.of(context).cardColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            Icon(Icons.help_outline, color: Theme.of(context).colorScheme.primary),
+            const SizedBox(width: 10),
+            Expanded(child: Text(settings.translate('tasksHelpTitle'), style: const TextStyle(fontSize: 18))),
+          ],
+        ),
+        content: Text(
+          settings.translate('tasksHelpContent'),
+          style: const TextStyle(fontSize: 15, height: 1.5),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(settings.translate('close')),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showTaskDialog(BuildContext context, SettingsProvider settings, {Task? task}) {
+    final titleController = TextEditingController(text: task?.title ?? "");
+    int estimated = task?.estimatedPomodoros ?? 1;
     final theme = Theme.of(context);
+    final isEditing = task != null;
 
     showModalBottomSheet(
       context: context,
@@ -50,7 +80,10 @@ class _TasksScreenState extends State<TasksScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(settings.translate('newTask'), style: theme.textTheme.headlineSmall),
+                  Text(
+                    isEditing ? settings.translate('updateTask') : settings.translate('newTask'), 
+                    style: theme.textTheme.headlineSmall
+                  ),
                   const SizedBox(height: 20),
                   TextField(
                     controller: titleController,
@@ -91,9 +124,12 @@ class _TasksScreenState extends State<TasksScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (titleController.text.isNotEmpty) {
-                          // Access the GLOBAL provider, not a local one
-                          Provider.of<TaskProvider>(context, listen: false)
-                              .addTask(titleController.text, estimated);
+                          final provider = Provider.of<TaskProvider>(context, listen: false);
+                          if (isEditing) {
+                            provider.updateTask(task.id, titleController.text, estimated);
+                          } else {
+                            provider.addTask(titleController.text, estimated);
+                          }
                           Navigator.pop(context);
                         }
                       },
@@ -103,7 +139,7 @@ class _TasksScreenState extends State<TasksScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                       ),
-                      child: Text(settings.translate('createTask')),
+                      child: Text(isEditing ? settings.translate('save') : settings.translate('createTask')),
                     ),
                   )
                 ],
@@ -127,7 +163,7 @@ class _TasksScreenState extends State<TasksScreen> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 100.0), // Normal padding
         child: FloatingActionButton(
-          onPressed: () => _showAddTaskDialog(context, settings),
+          onPressed: () => _showTaskDialog(context, settings),
           backgroundColor: theme.colorScheme.secondary,
           child: Icon(Icons.add, color: theme.colorScheme.onSecondary),
         ),
@@ -138,14 +174,20 @@ class _TasksScreenState extends State<TasksScreen> {
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: Row(
-                children: [
-                  Text(
-                    settings.translate('tasks'),
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+                  children: [
+                    Text(
+                      settings.translate('tasks'),
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ],
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () => _showHelpDialog(context, settings),
+                      icon: Icon(Icons.help_outline, color: theme.colorScheme.primary),
+                      tooltip: settings.translate('tasksHelpTitle'),
+                    ),
+                  ],
               ),
             ),
             Expanded(
@@ -167,17 +209,28 @@ class _TasksScreenState extends State<TasksScreen> {
                             final task = provider.tasks[index];
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 15),
-                              child: Dismissible(
+                              child: Slidable(
                                 key: Key(task.id),
-                                onDismissed: (_) => provider.deleteTask(task.id),
-                                background: Container(
-                                  alignment: Alignment.centerRight,
-                                  padding: const EdgeInsets.only(right: 20),
-                                  decoration: BoxDecoration(
-                                    color: theme.colorScheme.error.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Icon(Icons.delete, color: theme.colorScheme.error),
+                                endActionPane: ActionPane(
+                                  motion: const ScrollMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      onPressed: (context) => _showTaskDialog(context, settings, task: task),
+                                      backgroundColor: theme.colorScheme.secondary,
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.edit,
+                                      label: settings.translate('editNote'), // Using 'editNote' as 'Edit'
+                                      borderRadius: const BorderRadius.horizontal(left: Radius.circular(20)),
+                                    ),
+                                    SlidableAction(
+                                      onPressed: (context) => provider.deleteTask(task.id),
+                                      backgroundColor: theme.colorScheme.error,
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.delete,
+                                      label: settings.translate('delete'),
+                                      borderRadius: const BorderRadius.horizontal(right: Radius.circular(20)),
+                                    ),
+                                  ],
                                 ),
                                 child: GlassBox(
                                   opacity: task.isCompleted ? 0.05 : 0.1,
@@ -205,14 +258,29 @@ class _TasksScreenState extends State<TasksScreen> {
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                    subtitle: Text(
-                                      "${task.completedPomodoros} / ${task.estimatedPomodoros} ${settings.translate('pomodoroCount')}",
-                                      style: const TextStyle(fontSize: 12),
+                                    subtitle: Row(
+                                      children: [
+                                        Icon(Icons.flag, size: 14, color: theme.colorScheme.primary),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          "${task.estimatedPomodoros}",
+                                          style: const TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        const Text("/"),
+                                        const SizedBox(width: 8),
+                                        Icon(Icons.check_circle, size: 14, color: theme.colorScheme.primary),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          "${task.completedPomodoros}",
+                                          style: const TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
                                     ),
                                     trailing: IconButton(
                                       icon: const Icon(Icons.play_circle_fill),
-                                      color: theme.colorScheme.primary,
-                                      onPressed: () {
+                                      color: task.isCompleted ? Colors.grey : theme.colorScheme.primary,
+                                      onPressed: task.isCompleted ? null : () {
                                         // Set Active Task and RESET Timer
                                         Provider.of<TimerService>(context, listen: false)
                                             .startSessionForTask(task.id, task.title);

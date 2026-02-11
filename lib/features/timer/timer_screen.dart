@@ -275,8 +275,10 @@ class _ModeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque, // Fix touch target ambiguity
         onTap: () => Provider.of<TimerService>(context, listen: false).setMode(mode),
         child: AnimatedContainer(
+          margin: const EdgeInsets.symmetric(horizontal: 2), // Slight separation
           duration: const Duration(milliseconds: 200),
           decoration: BoxDecoration(
             color: isSelected ? Theme.of(context).colorScheme.surface : Colors.transparent,

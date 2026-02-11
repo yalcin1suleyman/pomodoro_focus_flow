@@ -43,6 +43,7 @@ class TurkishLanguage implements Language {
   @override String get cancel => 'İptal';
   @override String get save => 'Kaydet';
   @override String get close => 'Kapat';
+  @override String get delete => 'Sil';
   @override String get saveNote => 'Kaydet';
   @override String get editNote => 'Düzenle';
 
@@ -52,6 +53,7 @@ class TurkishLanguage implements Language {
   @override String get taskHint => 'Ne üzerinde çalışıyorsun?';
   @override String get estPomodoros => 'Tahmini Pomodoro:';
   @override String get createTask => 'Görev Oluştur';
+  @override String get updateTask => 'Görevi Güncelle';
   @override String get noTasks => 'Henüz görev yok. Bir tane ekle!';
   @override String get pomodoroCount => 'pomodoro';
   @override String get inProgress => 'Devam Ediyor';
@@ -61,6 +63,8 @@ class TurkishLanguage implements Language {
   @override String get dailyNote => 'Günlük Not:';
   @override String get noteHint => 'Bugünkü odaklanman nasıldı?';
   @override String get generalFocus => 'Genel Odak';
+  @override String get tasksHelpTitle => 'Görevler Nasıl Kullanılır?';
+  @override String get tasksHelpContent => '1. Yeni bir görev eklemek için + butonuna tıkla.\n2. Kaç Pomodoro süreceğini tahmin et.\n3. Göreve odaklanmak için üzerindeki Oynat (Play) butonuna bas.\n4. Düzenleme ve Silme seçeneklerini görmek için görevi SOLA kaydır.\n5. Süre bittiğinde ilerlemen kaydedilir!';
 
   @override String get navFocus => 'Odak';
   @override String get navTasks => 'Görevler';

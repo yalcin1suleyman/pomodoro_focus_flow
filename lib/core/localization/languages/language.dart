@@ -56,6 +56,7 @@ abstract class Language {
   String get cancel;
   String get save;
   String get close;
+  String get delete;
   String get saveNote;
   String get editNote;
   
@@ -66,6 +67,7 @@ abstract class Language {
   String get taskHint;
   String get estPomodoros;
   String get createTask;
+  String get updateTask;
   String get noTasks;
   String get pomodoroCount;
   String get inProgress;
@@ -75,6 +77,8 @@ abstract class Language {
   String get dailyNote;
   String get noteHint;
   String get generalFocus;
+  String get tasksHelpTitle;
+  String get tasksHelpContent;
 
   // Navigation
   String get navFocus;

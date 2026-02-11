@@ -188,6 +188,7 @@ class SettingsProvider extends ChangeNotifier {
       case 'cancel': return _currentLanguage.cancel;
       case 'save': return _currentLanguage.save;
       case 'close': return _currentLanguage.close;
+      case 'delete': return _currentLanguage.delete;
       case 'saveNote': return _currentLanguage.saveNote;
       case 'editNote': return _currentLanguage.editNote;
       case 'today': return _currentLanguage.today;
@@ -196,6 +197,7 @@ class SettingsProvider extends ChangeNotifier {
       case 'taskHint': return _currentLanguage.taskHint;
       case 'estPomodoros': return _currentLanguage.estPomodoros;
       case 'createTask': return _currentLanguage.createTask;
+      case 'updateTask': return _currentLanguage.updateTask;
       case 'noTasks': return _currentLanguage.noTasks;
       case 'pomodoroCount': return _currentLanguage.pomodoroCount;
       case 'inProgress': return _currentLanguage.inProgress;
@@ -233,7 +235,10 @@ class SettingsProvider extends ChangeNotifier {
       case 'heatmapLegend': return _currentLanguage.heatmapLegend;
       case 'soundType': return _currentLanguage.soundType;
       case 'soundTypeBell': return _currentLanguage.soundTypeBell;
+      case 'soundTypeBell': return _currentLanguage.soundTypeBell;
       case 'soundTypeNotification': return _currentLanguage.soundTypeNotification;
+      case 'tasksHelpTitle': return _currentLanguage.tasksHelpTitle;
+      case 'tasksHelpContent': return _currentLanguage.tasksHelpContent;
       default: return key;
     }
   }

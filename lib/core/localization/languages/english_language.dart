@@ -43,6 +43,7 @@ class EnglishLanguage implements Language {
   @override String get cancel => 'Cancel';
   @override String get save => 'Save';
   @override String get close => 'Close';
+  @override String get delete => 'Delete';
   @override String get saveNote => 'Save Note';
   @override String get editNote => 'Edit Note';
 
@@ -52,6 +53,7 @@ class EnglishLanguage implements Language {
   @override String get taskHint => 'What are you working on?';
   @override String get estPomodoros => 'Est. Pomodoros:';
   @override String get createTask => 'Create Task';
+  @override String get updateTask => 'Update Task';
   @override String get noTasks => 'No tasks yet. Start by adding one!';
   @override String get pomodoroCount => 'pomodoros';
   @override String get inProgress => 'In Progress';
@@ -61,6 +63,8 @@ class EnglishLanguage implements Language {
   @override String get dailyNote => 'Daily Note:';
   @override String get noteHint => 'How was your focus today?';
   @override String get generalFocus => 'General Focus';
+  @override String get tasksHelpTitle => 'How to Use Tasks';
+  @override String get tasksHelpContent => '1. Click the + button to add a new task.\n2. Estimate how many Pomodoros it will take.\n3. Click the Play button on a task to start focusing on it.\n4. Swipe LEFT on a task to reveal Edit and Delete options.\n5. When the timer finishes, your progress will be logged!';
 
   @override String get navFocus => 'Focus';
   @override String get navTasks => 'Tasks';
