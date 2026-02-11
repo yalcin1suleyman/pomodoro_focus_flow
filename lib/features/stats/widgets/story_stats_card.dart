@@ -151,7 +151,7 @@ class StoryStatsCard extends StatelessWidget {
 
   Widget _buildFooter() {
     return Text(
-      "\"Stay Focused, Stay Unstoppable.\"",
+      settings.translate('shareFooterQuote'),
       textAlign: TextAlign.center,
       style: TextStyle(
         color: Colors.white.withOpacity(0.5),
@@ -185,7 +185,7 @@ class StoryStatsCard extends StatelessWidget {
     final int sessionCount = (focusedMinutes / settings.pomodoroMinutes).ceil(); // Approx
     
     // Find top task
-    String topTask = "General Focus";
+    String topTask = settings.translate('generalFocus');
     if (record.tasksWorkedOn.isNotEmpty) {
       topTask = record.tasksWorkedOn.first; // Simplified: take first
     }
@@ -228,11 +228,11 @@ class StoryStatsCard extends StatelessWidget {
            ),
            child: Column(
              children: [
-               _buildStatRow(context, Icons.check_circle_outline, "${(progress * 100).toInt()}%", "Goal Completed"),
+               _buildStatRow(context, Icons.check_circle_outline, "${(progress * 100).toInt()}%", settings.translate('shareGoalCompleted')),
                const Divider(color: Colors.white10, height: 30),
-               _buildStatRow(context, Icons.refresh, "$sessionCount", "Sessions"),
+               _buildStatRow(context, Icons.refresh, "$sessionCount", settings.translate('sessions')),
                const Divider(color: Colors.white10, height: 30),
-               _buildStatRow(context, Icons.star_outline, topTask, "Top Focus"),
+               _buildStatRow(context, Icons.star_outline, topTask, settings.translate('shareTopFocus')),
              ],
            ),
          ),
@@ -278,7 +278,7 @@ class StoryStatsCard extends StatelessWidget {
       children: [
         const SizedBox(height: 20),
         Text(
-          "WEEKLY FOCUS",
+          settings.translate('shareWeeklyFocus'),
           style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold, letterSpacing: 1.5),
         ),
         const SizedBox(height: 40),
@@ -402,7 +402,7 @@ class StoryStatsCard extends StatelessWidget {
       children: [
         const SizedBox(height: 10),
         Text(
-          "$year JOURNEY", 
+          "$year ${settings.translate('shareYearlyJourney')}", 
           style: TextStyle(
             color: Colors.white, 
             fontSize: 24, 
@@ -530,9 +530,9 @@ class StoryStatsCard extends StatelessWidget {
           children: [
             _buildLegendDot(Colors.white.withOpacity(0.03), "0"),
             const SizedBox(width: 8),
-            _buildLegendDot(primaryColor.withOpacity(0.3), "Start"),
+            _buildLegendDot(primaryColor.withOpacity(0.3), settings.translate('shareLegendStart')),
             const SizedBox(width: 8),
-            _buildLegendDot(primaryColor, "Goal"),
+            _buildLegendDot(primaryColor, settings.translate('shareLegendGoal')),
           ],
         ),
         const SizedBox(height: 10),

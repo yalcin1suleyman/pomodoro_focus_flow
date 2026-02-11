@@ -108,6 +108,15 @@ abstract class Language {
   String get soundTypeBell;
   String get soundTypeNotification;
 
+  // Share Screen
+  String get shareFooterQuote;
+  String get shareGoalCompleted;
+  String get shareTopFocus;
+  String get shareLegendStart;
+  String get shareLegendGoal;
+  String get shareWeeklyFocus;
+  String get shareYearlyJourney;
+
   // Motivational Quotes (Timer Screen)
   String get quoteMotivation1;
   String get quoteMotivation2;

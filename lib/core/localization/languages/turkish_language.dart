@@ -102,6 +102,15 @@ class TurkishLanguage implements Language {
   @override String get soundTypeBell => 'Zil';
   @override String get soundTypeNotification => 'Sistem Bildirimi';
 
+  // Share Screen
+  @override String get shareFooterQuote => 'Pomodoro Master ile Odaklan';
+  @override String get shareGoalCompleted => 'Hedef Tamamlandı';
+  @override String get shareTopFocus => 'En Çok Odaklanılan';
+  @override String get shareLegendStart => 'Başlangıç';
+  @override String get shareLegendGoal => 'Hedef';
+  @override String get shareWeeklyFocus => 'HAFTALIK ODAK';
+  @override String get shareYearlyJourney => 'YOLCULUK';
+
   // Motivational Quotes
   @override String get quoteMotivation1 => "Odaklanmak başarının anahtarıdır.";
   @override String get quoteMotivation2 => "Her seferinde bir pomodoro.";

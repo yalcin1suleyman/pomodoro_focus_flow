@@ -102,6 +102,15 @@ class EnglishLanguage implements Language {
   @override String get soundTypeBell => 'Bell';
   @override String get soundTypeNotification => 'System Notification';
 
+  // Share Screen
+  @override String get shareFooterQuote => 'Focus with Pomodoro Master';
+  @override String get shareGoalCompleted => 'Goal Completed';
+  @override String get shareTopFocus => 'Top Focus';
+  @override String get shareLegendStart => 'Start';
+  @override String get shareLegendGoal => 'Goal';
+  @override String get shareWeeklyFocus => 'WEEKLY FOCUS';
+  @override String get shareYearlyJourney => 'JOURNEY';
+
   // Motivational Quotes
   @override String get quoteMotivation1 => "Focus is the key to success.";
   @override String get quoteMotivation2 => "One pomodoro at a time.";

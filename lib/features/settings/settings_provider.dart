@@ -239,6 +239,13 @@ class SettingsProvider extends ChangeNotifier {
       case 'soundType': return _currentLanguage.soundType;
       case 'soundTypeBell': return _currentLanguage.soundTypeBell;
       case 'soundTypeNotification': return _currentLanguage.soundTypeNotification;
+      case 'shareFooterQuote': return _currentLanguage.shareFooterQuote;
+      case 'shareGoalCompleted': return _currentLanguage.shareGoalCompleted;
+      case 'shareTopFocus': return _currentLanguage.shareTopFocus;
+      case 'shareLegendStart': return _currentLanguage.shareLegendStart;
+      case 'shareLegendGoal': return _currentLanguage.shareLegendGoal;
+      case 'shareWeeklyFocus': return _currentLanguage.shareWeeklyFocus;
+      case 'shareYearlyJourney': return _currentLanguage.shareYearlyJourney;
       case 'tasksHelpTitle': return _currentLanguage.tasksHelpTitle;
       case 'tasksHelpContent': return _currentLanguage.tasksHelpContent;
       // Motivational Quotes
