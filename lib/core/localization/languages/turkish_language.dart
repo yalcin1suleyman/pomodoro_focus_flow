@@ -38,12 +38,7 @@ class TurkishLanguage implements Language {
   @override String get themeSakura => 'Sakura';
   @override String get themeOcean => 'Okyanus';
   @override String get themeForest => 'Orman';
-  @override String get themeSpace => 'Uzay';
-  @override String get themeBlack => 'Tam Siyah';
-  @override String get themeWhite => 'Saf Beyaz';
   @override String get themeLuxury => 'Gümüş Lüks';
-  @override String get themeSunset => 'Gün Batımı';
-  @override String get themeNight => 'Gece Işığı';
 
   @override String get cancel => 'İptal';
   @override String get save => 'Kaydet';

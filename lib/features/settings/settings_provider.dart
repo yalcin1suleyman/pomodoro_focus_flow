@@ -79,8 +79,8 @@ class SettingsProvider extends ChangeNotifier {
 
   Future<void> setTheme(AppThemeType theme) async {
     _currentTheme = theme;
-    // Force dark mode for space, else restore user pref or default
-    if (theme == AppThemeType.space) {
+    // Force dark mode for Luxury (if desired), else restore user pref or default logic
+    if (theme == AppThemeType.luxury) {
       _isDarkMode = true;
     }
     notifyListeners();
@@ -184,12 +184,7 @@ class SettingsProvider extends ChangeNotifier {
       case 'themeSakura': return _currentLanguage.themeSakura;
       case 'themeOcean': return _currentLanguage.themeOcean;
       case 'themeForest': return _currentLanguage.themeForest;
-      case 'themeSpace': return _currentLanguage.themeSpace;
-      case 'themeBlack': return _currentLanguage.themeBlack;
-      case 'themeWhite': return _currentLanguage.themeWhite;
       case 'themeLuxury': return _currentLanguage.themeLuxury;
-      case 'themeSunset': return _currentLanguage.themeSunset;
-      case 'themeNight': return _currentLanguage.themeNight;
       case 'cancel': return _currentLanguage.cancel;
       case 'save': return _currentLanguage.save;
       case 'close': return _currentLanguage.close;

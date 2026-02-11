@@ -18,15 +18,15 @@ class GlassBox extends StatelessWidget {
     this.height,
     this.borderRadius,
     this.padding,
-    this.blur = 10.0,
-    this.opacity = 0.1,
+    this.blur = 20.0, // Significant blur for readability
+    this.opacity = 0.25, // Higher opacity to separate from background
     this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final baseColor = color ?? (isDark ? Colors.white : Colors.black);
+    final baseColor = color ?? (isDark ? Colors.black : Colors.white); // Darker base for dark mode
 
     // Optimization: Skip BackdropFilter if blur is 0 (it's expensive)
     Widget content = Container(
@@ -35,19 +35,26 @@ class GlassBox extends StatelessWidget {
       padding: padding ?? const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: baseColor.withOpacity(opacity),
-        borderRadius: borderRadius ?? BorderRadius.circular(20),
+        borderRadius: borderRadius ?? BorderRadius.circular(24), // Softer corners
         border: Border.all(
-          color: baseColor.withOpacity(0.05),
-          width: 1.5,
+          color: Colors.white.withOpacity(0.12), // Subtle but visible border
+          width: 1.0, 
         ),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            baseColor.withOpacity(opacity + 0.05),
+            baseColor.withOpacity(opacity + 0.1), // Slightly lighter top-left
             baseColor.withOpacity(opacity),
           ],
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            spreadRadius: -5,
+          )
+        ]
       ),
       child: child,
     );
@@ -57,7 +64,7 @@ class GlassBox extends StatelessWidget {
     }
 
     return ClipRRect(
-      borderRadius: borderRadius ?? BorderRadius.circular(20),
+      borderRadius: borderRadius ?? BorderRadius.circular(24),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
         child: content,

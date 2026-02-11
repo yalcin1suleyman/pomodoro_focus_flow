@@ -38,12 +38,7 @@ class EnglishLanguage implements Language {
   @override String get themeSakura => 'Sakura';
   @override String get themeOcean => 'Ocean';
   @override String get themeForest => 'Forest';
-  @override String get themeSpace => 'Space';
-  @override String get themeBlack => 'True Black';
-  @override String get themeWhite => 'Pure White';
   @override String get themeLuxury => 'Silver Luxury';
-  @override String get themeSunset => 'Sunset';
-  @override String get themeNight => 'Night Light';
 
   @override String get cancel => 'Cancel';
   @override String get save => 'Save';

@@ -50,12 +50,7 @@ abstract class Language {
   String get themeSakura;
   String get themeOcean;
   String get themeForest;
-  String get themeSpace;
-  String get themeBlack;
-  String get themeWhite;
   String get themeLuxury;
-  String get themeSunset;
-  String get themeNight;
 
   // Actions
   String get cancel;

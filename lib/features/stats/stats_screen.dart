@@ -176,15 +176,7 @@ class _StatsScreenState extends State<StatsScreen> {
                               ),
                             ],
                           ),
-                          IconButton(
-                            onPressed: () => _showNoteDialog(context, settings, selectedRecord),
-                            icon: Icon(
-                              Icons.edit_note, 
-                              color: Theme.of(context).colorScheme.primary,
-                              size: 28,
-                            ),
-                            tooltip: settings.translate('editNote') ?? "Not Ekle", 
-                          ),
+// IconButton removed per request
                         ],
                       ),
                       const SizedBox(height: 20),
@@ -261,42 +253,45 @@ class _StatsScreenState extends State<StatsScreen> {
 
                       // Note Section with improved visual
                       if (selectedRecord.note != null && selectedRecord.note!.isNotEmpty)
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
-                            )
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.format_quote_rounded, size: 20, color: Theme.of(context).colorScheme.primary.withOpacity(0.7)),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    settings.translate('dailyNote') ?? "Günün Notu", 
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
+                        GestureDetector(
+                          onTap: () => _showNoteDialog(context, settings, selectedRecord),
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+                              )
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(Icons.format_quote_rounded, size: 20, color: Theme.of(context).colorScheme.primary.withOpacity(0.7)),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      settings.translate('dailyNote') ?? "Günün Notu", 
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                selectedRecord.note!,
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  fontStyle: FontStyle.italic,
-                                  height: 1.4,
+                                  ],
                                 ),
-                              ),
-                            ],
+                                const SizedBox(height: 8),
+                                Text(
+                                  selectedRecord.note!,
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontStyle: FontStyle.italic,
+                                    height: 1.4,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         )
                       else
@@ -314,7 +309,7 @@ class _StatsScreenState extends State<StatsScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                "+ ${settings.translate('addNote') ?? "Bir not ekle"}",
+                                "${settings.translate('addNote') ?? "Bir not ekle"}",
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                                   fontSize: 14,

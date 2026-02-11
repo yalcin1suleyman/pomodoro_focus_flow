@@ -66,12 +66,7 @@ class SettingsScreen extends StatelessWidget {
                     _buildThemeCard(context, settings, AppThemeType.sakura, settings.translate('themeSakura'), AppColors.sakuraPrimary),
                     _buildThemeCard(context, settings, AppThemeType.ocean, settings.translate('themeOcean'), AppColors.oceanPrimary),
                     _buildThemeCard(context, settings, AppThemeType.forest, settings.translate('themeForest'), AppColors.forestPrimary),
-                    _buildThemeCard(context, settings, AppThemeType.sunset, settings.translate('themeSunset'), AppColors.sunsetPrimary),
-                    _buildThemeCard(context, settings, AppThemeType.nightLight, settings.translate('themeNight'), AppColors.nightPrimary),
-                    _buildThemeCard(context, settings, AppThemeType.space, settings.translate('themeSpace'), AppColors.spacePrimary),
                     _buildThemeCard(context, settings, AppThemeType.luxury, settings.translate('themeLuxury'), AppColors.luxuryPrimary),
-                    _buildThemeCard(context, settings, AppThemeType.superBlack, settings.translate('themeBlack'), Colors.black),
-                    _buildThemeCard(context, settings, AppThemeType.cleanWhite, settings.translate('themeWhite'), Colors.white), // Use White icon for better rep
                   ],
                 ),
               ),

@@ -82,12 +82,9 @@ class _HomeScreenState extends State<HomeScreen> {
             // Base Background (Gradient or Solid)
             Builder(
               builder: (context) {
-                final isFlat = settings.currentTheme == AppThemeType.superBlack || 
-                               settings.currentTheme == AppThemeType.cleanWhite;
                 return Container(
                   decoration: BoxDecoration(
-                    color: isFlat ? Theme.of(context).scaffoldBackgroundColor : null,
-                    gradient: isFlat ? null : LinearGradient(
+                    gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
