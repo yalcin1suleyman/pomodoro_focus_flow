@@ -9,7 +9,6 @@ import 'dart:io';
 import '../../core/widgets/glass_box.dart';
 import '../settings/settings_provider.dart';
 import 'history_provider.dart';
-import 'widgets/share_stats_card.dart';
 import 'widgets/story_stats_card.dart';
 
 class StatsScreen extends StatefulWidget {
@@ -530,76 +529,13 @@ class _StatsScreenState extends State<StatsScreen> {
     
     // Initial State
     String selectedRange = 'daily'; 
-    ShareVisualType visualType = ShareVisualType.calendar;
-    bool isStoryMode = true; // Default to Story Mode as requested
     
     showDialog(
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (context, setState) {
-          // Calculate Stats based on Range
-          int displayMinutes = 0;
-          int displayGoal = 0;
-          String displayTitle = "";
-          String displayDateLabel = "";
-          ShareMode displayMode = ShareMode.daily;
-          Map<DateTime, int>? periodData;
-          
-          ShareVisualType currentVisual = ShareVisualType.calendar; // Default
-          DateTime referenceDate = _selectedDate;
 
-          if (selectedRange == 'daily') {
-            displayMinutes = record.minutesFocused;
-            displayGoal = settings.dailyGoalMinutes;
-            displayTitle = settings.translate('statsDaily');
-            displayDateLabel = _formatDate(_selectedDate, settings);
-            displayMode = ShareMode.daily;
-            referenceDate = _selectedDate;
-          } else if (selectedRange == 'weekly') {
-             // Calculate current week (Mon-Sun)
-             final date = _selectedDate; 
-             referenceDate = date; // Anchor for Weekly
 
-             final startOfWeek = date.subtract(Duration(days: date.weekday - 1));
-             final endOfWeek = startOfWeek.add(const Duration(days: 6));
-             
-             final start = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
-             final end = DateTime(endOfWeek.year, endOfWeek.month, endOfWeek.day);
-             
-             displayMinutes = history.getStatsForPeriod(start, end);
-             periodData = history.getDailyRecordsForPeriod(start, end);
-             displayGoal = settings.dailyGoalMinutes; // Display Daily Goal as ref
-             displayTitle = settings.translate('weeklyActivity') ?? "Haftalık Özeti";
-             displayDateLabel = "${_formatDate(start, settings)} - ${_formatDate(end, settings)}";
-             displayMode = ShareMode.weekly;
-             currentVisual = ShareVisualType.chart; // Weekly defaults to Chart
-          } else if (selectedRange == 'monthly') {
-            // Use _focusedMonth for Monthly context
-            referenceDate = _focusedMonth;
-            
-            final start = DateTime(_focusedMonth.year, _focusedMonth.month, 1);
-            final end = DateTime(_focusedMonth.year, _focusedMonth.month + 1, 0);
-            
-            displayMinutes = history.getStatsForPeriod(start, end);
-            periodData = history.getDailyRecordsForPeriod(start, end);
-            displayTitle = settings.translate('statsMonthly');
-            displayDateLabel = _formatMonth(_focusedMonth, settings);
-            displayMode = ShareMode.monthly;
-            currentVisual = visualType; // Use the toggle state
-          } else if (selectedRange == 'yearly') {
-             // Use _focusedMonth for Year context
-             referenceDate = _focusedMonth;
-             final year = _focusedMonth.year;
-
-             final start = DateTime(year, 1, 1);
-             final end = DateTime(year, 12, 31);
-             displayMinutes = history.getStatsForPeriod(start, end);
-             periodData = history.getDailyRecordsForPeriod(start, end);
-             displayTitle = settings.translate('statsYearly');
-             displayDateLabel = "$year";
-             displayMode = ShareMode.yearly;
-             currentVisual = ShareVisualType.heatmap;
-          }
 
           return Dialog(
             backgroundColor: Colors.transparent,
@@ -642,66 +578,23 @@ class _StatsScreenState extends State<StatsScreen> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          
-                          // Format Toggle (Story vs Post)
-                          Container(
-                             decoration: BoxDecoration(
-                               color: Theme.of(context).cardColor,
-                               borderRadius: BorderRadius.circular(30),
-                               border: Border.all(color: Colors.white10),
-                             ),
-                             child: Row(
-                               children: [
-                                 IconButton(
-                                   icon: Icon(Icons.crop_portrait, 
-                                     color: isStoryMode ? Theme.of(context).colorScheme.primary : Colors.grey,
-                                     size: 20
-                                   ),
-                                   onPressed: () => setState(() => isStoryMode = true),
-                                   tooltip: "Story Mode (9:16)",
-                                   constraints: const BoxConstraints(maxHeight: 40, maxWidth: 40),
-                                 ),
-                                 Container(width: 1, height: 20, color: Colors.white24),
-                                 IconButton(
-                                   icon: Icon(Icons.crop_square, 
-                                     color: !isStoryMode ? Theme.of(context).colorScheme.primary : Colors.grey,
-                                     size: 20
-                                   ),
-                                   onPressed: () => setState(() => isStoryMode = false),
-                                   tooltip: "Post Mode (Square)",
-                                   constraints: const BoxConstraints(maxHeight: 40, maxWidth: 40),
-                                 ),
-                               ],
-                             ),
-                          )
                         ],
                       ),
                     ),
                   ),
+
 
                   Stack(
                     alignment: Alignment.topRight,
                     children: [
                       RepaintBoundary(
                         key: boundaryKey,
-                        child: isStoryMode 
-                          ? StoryStatsCard(
+                        child: StoryStatsCard(
                               mode: _getStoryMode(selectedRange),
                               date: _getShareDate(selectedRange),
                               settings: settings,
                               historyProvider: history,
                               dailyRecord: record,
-                            )
-                          : ShareStatsCard(
-                              focusedMinutes: displayMinutes,
-                              goalMinutes: displayGoal,
-                              dateLabel: displayDateLabel,
-                              title: displayTitle,
-                              settings: settings,
-                              mode: displayMode,
-                              periodData: periodData,
-                              visualType: currentVisual,
-                              referenceDate: referenceDate,
                             ),
                       ),
                        IconButton(

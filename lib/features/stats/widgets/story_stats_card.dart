@@ -31,11 +31,7 @@ class StoryStatsCard extends StatelessWidget {
       height: 711, // 9:16
       decoration: const BoxDecoration(
         color: Color(0xFF0F172A), 
-        image: DecorationImage(
-           image: AssetImage('assets/images/story_bg_placeholder.png'),
-           fit: BoxFit.cover,
-           opacity: 0.2
-        )
+        // Background image removed to fix crash
       ),
       child: Stack(
          children: [
@@ -289,56 +285,65 @@ class StoryStatsCard extends StatelessWidget {
         
         // Bar Chart
         Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: List.generate(7, (index) {
-              final day = startOfWeek.add(Duration(days: index));
-              final rec = historyProvider.getRecord(day);
-              final minutes = rec.minutesFocused;
-              final dayGoal = rec.targetMinutes ?? settings.dailyGoalMinutes;
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final double availableHeight = constraints.maxHeight;
               
-              // Opacity logic: Darker if closer to goal
-              double goalRatio = dayGoal > 0 ? (minutes / dayGoal).clamp(0.0, 1.0) : 0.0;
-              double opacity = 0.3 + (goalRatio * 0.7); // 0.3 to 1.0
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: List.generate(7, (index) {
+                  final day = startOfWeek.add(Duration(days: index));
+                  final rec = historyProvider.getRecord(day);
+                  final minutes = rec.minutesFocused;
+                  final dayGoal = rec.targetMinutes ?? settings.dailyGoalMinutes;
+                  
+                  // Opacity logic: Darker if closer to goal
+                  double goalRatio = dayGoal > 0 ? (minutes / dayGoal).clamp(0.0, 1.0) : 0.0;
+                  double opacity = 0.3 + (goalRatio * 0.7); // 0.3 to 1.0
 
-              // Height logic
-              double heightFactor = maxMinutes > 0 ? (minutes / maxMinutes) : 0.0;
-              if (minutes == 0) heightFactor = 0.02; // Tiny dot for empty
+                  // Height logic
+                  double heightFactor = maxMinutes > 0 ? (minutes / maxMinutes) : 0.0;
+                  // Ensure bar fits within available height leaving space for labels (~60px)
+                  final double maxBarHeight = (availableHeight - 60).clamp(0.0, availableHeight);
+                  double barHeight = (maxBarHeight * heightFactor).clamp(4.0, maxBarHeight);
+                  if (minutes == 0) barHeight = 4.0; // Tiny dot for empty
 
-              final dayName = DateFormat('E').format(day)[0]; // M, T, W...
+                  final dayName = DateFormat('E').format(day)[0]; // M, T, W...
 
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  // Minutes Label (if significant)
-                  if (minutes > 30) 
-                    Text(
-                      "${(minutes/60).toStringAsFixed(1)}", 
-                      style: TextStyle(color: Colors.white54, fontSize: 10)
-                    ),
-                  const SizedBox(height: 4),
-                  // BAR
-                  Container(
-                    width: 24,
-                    height: (400 * heightFactor).clamp(10.0, 400.0), // Max height 400
-                    decoration: BoxDecoration(
-                      color: primaryColor.withOpacity(opacity),
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: goalRatio >= 1.0 ? [
-                        BoxShadow(color: primaryColor.withOpacity(0.5), blurRadius: 10, offset: const Offset(0, -2))
-                      ] : null
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  // Day Label
-                  Text(
-                    dayName, 
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
-                  ),
-                ],
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // Minutes Label (if significant and enough space)
+                      if (minutes > 30 && maxBarHeight > 60) 
+                        Text(
+                          "${(minutes/60).toStringAsFixed(1)}", 
+                          style: TextStyle(color: Colors.white54, fontSize: 10)
+                        ),
+                      const SizedBox(height: 4),
+                      // BAR
+                      Container(
+                        width: 24,
+                        height: barHeight, 
+                        decoration: BoxDecoration(
+                          color: primaryColor.withOpacity(opacity),
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: goalRatio >= 1.0 ? [
+                            BoxShadow(color: primaryColor.withOpacity(0.5), blurRadius: 10, offset: const Offset(0, -2))
+                          ] : null
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      // Day Label
+                      Text(
+                        dayName, 
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
+                      ),
+                    ],
+                  );
+                }),
               );
-            }),
+            }
           ),
         ),
         const SizedBox(height: 40),
@@ -558,52 +563,57 @@ class StoryStatsCard extends StatelessWidget {
     final primaryColor = Theme.of(context).colorScheme.primary;
 
     return Center(
-      child: GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 7,
-          crossAxisSpacing: 4,
-          mainAxisSpacing: 4,
-        ),
-        itemCount: daysInMonth + offset,
-        itemBuilder: (ctx, i) {
-          if (i < offset) return const SizedBox();
-          final day = i - offset + 1;
-          final dayDate = DateTime(monthDate.year, monthDate.month, day);
-          final record = historyProvider.getRecord(dayDate);
-          
-          // Logic:
-          // 1. Goal Met -> Solid
-          // 2. Focused > 0 -> Hollow ring, stroke width/size based on amount? OR Just ring.
-          // 3. 0 -> Dot.
-
-          final goal = record.targetMinutes ?? settings.dailyGoalMinutes;
-          bool isMet = record.minutesFocused >= goal && record.minutesFocused > 0;
-          bool hasActivity = record.minutesFocused > 0;
-
-          if (isMet) {
-             return Container(
-               decoration: BoxDecoration(shape: BoxShape.circle, color: primaryColor),
-             );
-          } else if (hasActivity) {
-             // Ring
-             return Container(
-               decoration: BoxDecoration(
-                 shape: BoxShape.circle, 
-                 border: Border.all(color: primaryColor.withOpacity(0.6), width: 1.5)
-               ),
-             );
-          } else {
-             // Empty dot
-             return UnconstrainedBox(
-               child: Container(
-                 width: 3, height: 3,
-                 decoration: BoxDecoration(color: Colors.white.withOpacity(0.1), shape: BoxShape.circle),
-               ),
-             );
-          }
-        },
+      child: Column(
+        children: [
+          // Days Header
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: ["M", "T", "W", "T", "F", "S", "S"]
+                .map((e) => Text(e, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white38, fontSize: 12)))
+                .toList(),
+          ),
+          const SizedBox(height: 12),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 7,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+              childAspectRatio: 1.0,
+            ),
+            itemCount: daysInMonth + offset,
+            itemBuilder: (ctx, i) {
+              if (i < offset) return const SizedBox();
+              final day = i - offset + 1;
+              final dayDate = DateTime(monthDate.year, monthDate.month, day);
+              final record = historyProvider.getRecord(dayDate);
+              
+              final goal = record.targetMinutes ?? settings.dailyGoalMinutes;
+              bool isMet = record.minutesFocused >= goal && record.minutesFocused > 0;
+              bool hasActivity = record.minutesFocused > 0;
+              
+              // Only simple visualization for Story Mode
+              return Container(
+                 decoration: BoxDecoration(
+                   shape: BoxShape.circle, 
+                   color: isMet ? primaryColor : (hasActivity ? primaryColor.withOpacity(0.3) : Colors.white.withOpacity(0.05)),
+                   border: hasActivity && !isMet ? Border.all(color: primaryColor, width: 1) : null,
+                 ),
+                 child: Center(
+                   child: Text(
+                     "$day",
+                     style: TextStyle(
+                       color: isMet ? Colors.black : Colors.white70, 
+                       fontSize: 12, 
+                       fontWeight: isMet ? FontWeight.bold : FontWeight.normal
+                     ),
+                   ),
+                 ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
