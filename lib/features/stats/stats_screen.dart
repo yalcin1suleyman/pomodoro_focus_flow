@@ -9,7 +9,7 @@ import 'dart:io';
 import '../../core/widgets/glass_box.dart';
 import '../settings/settings_provider.dart';
 import 'history_provider.dart';
-import 'widgets/share_stats_card.dart';
+import 'widgets/story_stats_card.dart';
 
 class StatsScreen extends StatefulWidget {
   const StatsScreen({super.key});
@@ -176,15 +176,7 @@ class _StatsScreenState extends State<StatsScreen> {
                               ),
                             ],
                           ),
-                          IconButton(
-                            onPressed: () => _showNoteDialog(context, settings, selectedRecord),
-                            icon: Icon(
-                              Icons.edit_note, 
-                              color: Theme.of(context).colorScheme.primary,
-                              size: 28,
-                            ),
-                            tooltip: settings.translate('editNote') ?? "Not Ekle", 
-                          ),
+// IconButton removed per request
                         ],
                       ),
                       const SizedBox(height: 20),
@@ -231,29 +223,7 @@ class _StatsScreenState extends State<StatsScreen> {
                                     ],
                                   ),
                                 ),
-                                if (isSelectedToday || true) // Allow setting goal for ANY day now
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: InkWell(
-                                      onTap: () => _showGoalDialog(context, settings, historyProvider),
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                                          borderRadius: BorderRadius.circular(20),
-                                        ),
-                                        child: Text(
-                                          settings.translate('setGoal'),
-                                          style: TextStyle(
-                                            color: Theme.of(context).colorScheme.primary,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+
                               ],
                             ),
                           ),
@@ -283,42 +253,45 @@ class _StatsScreenState extends State<StatsScreen> {
 
                       // Note Section with improved visual
                       if (selectedRecord.note != null && selectedRecord.note!.isNotEmpty)
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
-                            )
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(Icons.format_quote_rounded, size: 20, color: Theme.of(context).colorScheme.primary.withOpacity(0.7)),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    settings.translate('dailyNote') ?? "Günün Notu", 
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
+                        GestureDetector(
+                          onTap: () => _showNoteDialog(context, settings, selectedRecord),
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+                              )
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(Icons.format_quote_rounded, size: 20, color: Theme.of(context).colorScheme.primary.withOpacity(0.7)),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      settings.translate('dailyNote') ?? "Günün Notu", 
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                selectedRecord.note!,
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  fontStyle: FontStyle.italic,
-                                  height: 1.4,
+                                  ],
                                 ),
-                              ),
-                            ],
+                                const SizedBox(height: 8),
+                                Text(
+                                  selectedRecord.note!,
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontStyle: FontStyle.italic,
+                                    height: 1.4,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         )
                       else
@@ -336,7 +309,7 @@ class _StatsScreenState extends State<StatsScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                "+ ${settings.translate('addNote') ?? "Bir not ekle"}",
+                                "${settings.translate('addNote')}",
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                                   fontSize: 14,
@@ -370,21 +343,35 @@ class _StatsScreenState extends State<StatsScreen> {
                           style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
                         )
                       else
-                        ...selectedRecord.tasksWorkedOn.map((task) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: Row(
-                            children: [
-                              Icon(Icons.check_circle_outline, size: 16, color: Theme.of(context).colorScheme.secondary),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  task,
-                                  style: const TextStyle(fontSize: 16),
+                        ...selectedRecord.tasksWorkedOn.map((task) {
+                          // Check if this task is completed
+                          final isCompleted = selectedRecord.completedTasks.contains(task);
+                          
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  isCompleted ? Icons.check_circle : Icons.check_circle_outline,
+                                  size: 16,
+                                  color: isCompleted 
+                                    ? Theme.of(context).colorScheme.primary 
+                                    : Theme.of(context).colorScheme.secondary,
                                 ),
-                              ),
-                            ],
-                          ),
-                        )),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    task,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: isCompleted ? FontWeight.w600 : FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
                     ],
                   ),
                 ),
@@ -531,58 +518,7 @@ class _StatsScreenState extends State<StatsScreen> {
     return "${date.day} ${_formatMonth(date, settings)}";
   }
 
-  void _showGoalDialog(BuildContext context, SettingsProvider settings, HistoryProvider history) {
-    // Determine the current goal to show in slider
-    // Use the specific day's goal if it exists, otherwise the global default.
-    final record = history.getRecord(_selectedDate);
-    double currentVal = (record.targetMinutes ?? settings.dailyGoalMinutes).toDouble();
-    
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: Theme.of(context).cardColor,
-        title: Text(settings.translate('setGoal')),
-        content: SizedBox(
-          height: 100,
-          child: Column(
-            children: [
-              Text("${(currentVal/60).toStringAsFixed(1)} ${settings.translate('hours')}"),
-              StatefulBuilder(
-                builder: (context, setState) {
-                  return Slider(
-                    value: currentVal,
-                    min: 30, // 30 min
-                    max: 1440, // 24 hours
-                    divisions: 47, // 30 min increments
-                    label: "${(currentVal/60).toStringAsFixed(1)} h",
-                    activeColor: Theme.of(context).colorScheme.primary,
-                    onChanged: (val) {
-                      setState(() => currentVal = val);
-                    },
-                  );
-                }
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(settings.translate('cancel')),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
-            onPressed: () {
-              // FIX: Update ONLY the specific day's goal
-              history.updateDailyGoal(_selectedDate, currentVal.toInt());
-              Navigator.pop(ctx);
-            },
-            child: Text(settings.translate('save'), style: TextStyle(color: Theme.of(context).colorScheme.onPrimary)),
-          )
-        ],
-      )
-    );
-  }
+
 
   Widget _buildLegendItem(Color color, String label) {
     return Row(
@@ -601,75 +537,14 @@ class _StatsScreenState extends State<StatsScreen> {
     final history = Provider.of<HistoryProvider>(context, listen: false);
     
     // Initial State
-    // Default to 'weekly' if in weekly mode, else 'daily'
     String selectedRange = 'daily'; 
     
     showDialog(
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (context, setState) {
-          // Calculate Stats based on Range
-          int displayMinutes = 0;
-          int displayGoal = 0;
-          String displayTitle = "";
-          String displayDateLabel = "";
-          ShareMode displayMode = ShareMode.daily;
-          Map<DateTime, int>? periodData;
-          
-          final now = DateTime.now();
-          
-          if (selectedRange == 'daily') {
-            displayMinutes = focusedMinutes; // Passed from parent (Daily or Weekly total depending on previous view, but here we want specific range)
-            // Wait, focusedMinutes passed might be weekly total if we are in weekly mode.
-            // Let's recalculate to be safe/correct for the specific range.
-            displayMinutes = record.minutesFocused;
-            displayGoal = settings.dailyGoalMinutes;
-            displayTitle = settings.translate('statsDaily');
-            displayDateLabel = _formatDate(_selectedDate, settings);
-            displayMode = ShareMode.daily;
-          } else if (selectedRange == 'weekly') {
-            /* 
-            displayMinutes = history.getStatsForWeek(_selectedDate); 
-            displayGoal = settings.weeklyGoalMinutes;
-            displayTitle = settings.translate('weeklyActivity') ?? "Weekly Stats";
-            
-            final startOfWeek = _selectedDate.subtract(Duration(days: _selectedDate.weekday - 1));
-            final endOfWeek = startOfWeek.add(const Duration(days: 6));
-            displayDateLabel = "${_formatDate(startOfWeek, settings)} - ${_formatDate(endOfWeek, settings)}";
-            
-            displayMode = ShareMode.daily; // Re-use the simple Ring layout
-            */
-            // Fallback to daily if somehow weekly is selected
-            displayMinutes = record.minutesFocused;
-            displayGoal = settings.dailyGoalMinutes;
-            displayTitle = settings.translate('statsDaily');
-            displayDateLabel = _formatDate(_selectedDate, settings);
-            displayMode = ShareMode.daily;
-          } else if (selectedRange == 'monthly') {
-            final start = DateTime(now.year, now.month, 1);
-            final end = DateTime(now.year, now.month + 1, 0);
-            displayMinutes = history.getStatsForPeriod(start, end);
-            periodData = history.getDailyRecordsForPeriod(start, end);
-            displayTitle = settings.translate('statsMonthly');
-            displayDateLabel = _formatMonth(now, settings);
-            displayMode = ShareMode.monthly;
-          } else if (selectedRange == '6months') {
-             final start = DateTime(now.year, now.month - 5, 1);
-             final end = DateTime(now.year, now.month + 1, 0);
-             displayMinutes = history.getStatsForPeriod(start, end);
-             periodData = history.getDailyRecordsForPeriod(start, end);
-             displayTitle = settings.translate('stats6Months');
-             displayDateLabel = "${_formatMonth(start, settings)} - ${_formatMonth(end, settings)}";
-             displayMode = ShareMode.heatmap;
-          } else if (selectedRange == 'yearly') {
-             final start = DateTime(now.year, 1, 1);
-             final end = DateTime(now.year, 12, 31);
-             displayMinutes = history.getStatsForPeriod(start, end);
-             periodData = history.getDailyRecordsForPeriod(start, end);
-             displayTitle = settings.translate('statsYearly');
-             displayDateLabel = "${now.year}";
-             displayMode = ShareMode.heatmap;
-          }
+
+
 
           return Dialog(
             backgroundColor: Colors.transparent,
@@ -678,61 +553,68 @@ class _StatsScreenState extends State<StatsScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                   // Controls
+                  // Controls Row
                   Container(
                     margin: const EdgeInsets.only(bottom: 10),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: selectedRange,
-                        dropdownColor: Theme.of(context).cardColor,
-                        style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontWeight: FontWeight.bold),
-                        onChanged: (val) {
-                          if (val != null) setState(() => selectedRange = val);
-                        },
-                        items: [
-                          DropdownMenuItem(value: 'daily', child: Text(settings.translate('statsDaily'))),
-                          // DropdownMenuItem(value: 'weekly', child: Text(settings.translate('weeklyActivity') ?? 'Weekly')),
-                          DropdownMenuItem(value: 'monthly', child: Text(settings.translate('statsMonthly'))),
-                          DropdownMenuItem(value: '6months', child: Text(settings.translate('stats6Months'))),
-                          DropdownMenuItem(value: 'yearly', child: Text(settings.translate('statsYearly'))),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Range Selector
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardColor,
+                              borderRadius: BorderRadius.circular(30),
+                              border: Border.all(color: Colors.white10),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: selectedRange,
+                                dropdownColor: Theme.of(context).cardColor,
+                                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontWeight: FontWeight.bold, fontSize: 13),
+                                onChanged: (val) {
+                                  if (val != null) setState(() => selectedRange = val);
+                                },
+                                items: [
+                                  DropdownMenuItem(value: 'daily', child: Text(settings.translate('shareRangeDaily'))),
+                                  DropdownMenuItem(value: 'weekly', child: Text(settings.translate('shareRangeWeekly'))),
+                                  DropdownMenuItem(value: 'monthly', child: Text(settings.translate('shareRangeMonthly'))),
+                                  DropdownMenuItem(value: 'yearly', child: Text(settings.translate('shareRangeYearly'))),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
                         ],
                       ),
                     ),
                   ),
 
+
                   Stack(
+                    alignment: Alignment.topRight,
                     children: [
                       RepaintBoundary(
                         key: boundaryKey,
-                        child: ShareStatsCard(
-                          focusedMinutes: displayMinutes,
-                          goalMinutes: displayGoal,
-                          dateLabel: displayDateLabel,
-                          title: displayTitle,
-                          settings: settings,
-                          mode: displayMode,
-                          periodData: periodData,
-                        ),
+                        child: StoryStatsCard(
+                              mode: _getStoryMode(selectedRange),
+                              date: _getShareDate(selectedRange),
+                              settings: settings,
+                              historyProvider: history,
+                              dailyRecord: record,
+                            ),
                       ),
-                       Positioned(
-                        top: 0, 
-                        right: 0,
-                        child: IconButton(
-                          icon: const Icon(Icons.close, color: Colors.white),
-                          onPressed: () => Navigator.of(ctx).pop(),
-                        ),
-                      ),
+                       IconButton(
+                         icon: const Icon(Icons.close, color: Colors.white),
+                         onPressed: () => Navigator.of(ctx).pop(),
+                       ),
                     ],
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton.icon(
                     onPressed: () async {
-                      // 1. Capture Image
                       try {
                         final boundary = boundaryKey.currentContext?.findRenderObject() as rendering.RenderRepaintBoundary?;
                         if (boundary == null) return;
@@ -742,16 +624,14 @@ class _StatsScreenState extends State<StatsScreen> {
                         final pngBytes = byteData?.buffer.asUint8List();
 
                         if (pngBytes != null) {
-                          // 2. Save to Temp File
                           final directory = await getTemporaryDirectory();
-                          final path = '${directory.path}/focus_stats_share.png';
+                          final path = '${directory.path}/focus_story_share.png';
                           final file = File(path);
                           await file.writeAsBytes(pngBytes);
 
-                          // 3. Share
                           final xFile = XFile(path);
                           if (context.mounted) {
-                            Navigator.pop(ctx); // Close dialog first
+                            Navigator.pop(ctx); 
                             await Share.shareXFiles([xFile], text: settings.translate('shareMessage'));
                           }
                         }
@@ -826,5 +706,21 @@ class _StatsScreenState extends State<StatsScreen> {
         ],
       )
     );
+  }
+  StoryMode _getStoryMode(String range) {
+    switch (range) {
+      case 'daily': return StoryMode.daily;
+      case 'weekly': return StoryMode.weekly;
+      case 'monthly': return StoryMode.monthly;
+      case 'yearly': return StoryMode.yearly;
+      default: return StoryMode.daily;
+    }
+  }
+
+  DateTime _getShareDate(String range) {
+    if (range == 'monthly' || range == 'yearly') {
+       return _focusedMonth; 
+    }
+    return _selectedDate;
   }
 }

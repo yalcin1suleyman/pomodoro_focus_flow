@@ -2,8 +2,8 @@ import 'dart:convert';
 
 class Task {
   final String id;
-  final String title;
-  final int estimatedPomodoros;
+  String title;
+  int estimatedPomodoros;
   int completedPomodoros;
   bool isCompleted;
 

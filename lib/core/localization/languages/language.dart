@@ -50,17 +50,13 @@ abstract class Language {
   String get themeSakura;
   String get themeOcean;
   String get themeForest;
-  String get themeSpace;
-  String get themeBlack;
-  String get themeWhite;
   String get themeLuxury;
-  String get themeSunset;
-  String get themeNight;
 
   // Actions
   String get cancel;
   String get save;
   String get close;
+  String get delete;
   String get saveNote;
   String get editNote;
   
@@ -71,15 +67,21 @@ abstract class Language {
   String get taskHint;
   String get estPomodoros;
   String get createTask;
+  String get updateTask;
   String get noTasks;
   String get pomodoroCount;
   String get inProgress;
   String get focusedTime;
   String get tasksWorkedOn;
+  String get completedTasksLabel;
   String get noTasksRecorded;
   String get dailyNote;
   String get noteHint;
   String get generalFocus;
+  String get goalMet;
+  String get goalMissed;
+  String get tasksHelpTitle;
+  String get tasksHelpContent;
 
   // Navigation
   String get navFocus;
@@ -105,4 +107,43 @@ abstract class Language {
   String get soundType;
   String get soundTypeBell;
   String get soundTypeNotification;
+
+  // Share Screen
+  String get shareFooterQuote;
+  String get shareGoalCompleted;
+  String get shareTopFocus;
+  String get shareLegendStart;
+  String get shareLegendGoal;
+  String get shareWeeklyFocus;
+  String get shareYearlyJourney;
+
+  // Motivational Quotes (Timer Screen)
+  String get quoteMotivation1;
+  String get quoteMotivation2;
+  String get quoteMotivation3;
+  String get quoteMotivation4;
+  String get quoteMotivation5;
+  String get quoteMotivation6;
+  String get quoteMotivation7;
+
+  // Share Dialog
+  String get shareRange;
+  String get shareRangeDaily;
+  String get shareRangeWeekly;
+  String get shareRangeMonthly;
+  String get shareRangeYearly;
+  String get shareButton;
+  String get monthlyOverview;
+
+  // Language Names (for Settings dropdown)
+  String get languageEnglish;
+  String get languageTurkish;
+
+  // Timer Mode Labels (shortened)
+  String get focusShort;
+  String get shortBreakShort;
+  String get longBreakShort;
+
+  // Misc
+  String get addNote;
 }

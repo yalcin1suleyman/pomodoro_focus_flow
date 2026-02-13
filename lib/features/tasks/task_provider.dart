@@ -60,6 +60,24 @@ class TaskProvider extends ChangeNotifier {
       }
       
       _saveTasks();
+      _saveTasks();
+    }
+  }
+
+  void updateTask(String id, String title, int estimatedPomodoros) {
+    final index = _tasks.indexWhere((task) => task.id == id);
+    if (index != -1) {
+      _tasks[index].title = title;
+      _tasks[index].estimatedPomodoros = estimatedPomodoros;
+      
+      // Auto-update completion status based on estimate vs completed
+      if (_tasks[index].estimatedPomodoros <= _tasks[index].completedPomodoros) {
+        _tasks[index].isCompleted = true;
+      } else {
+        _tasks[index].isCompleted = false;
+      }
+      
+      _saveTasks();
     }
   }
 

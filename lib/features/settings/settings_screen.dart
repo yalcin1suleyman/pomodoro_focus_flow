@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'settings_provider.dart';
+import '../stats/history_provider.dart';
 import '../../core/widgets/glass_box.dart';
 import '../../core/theme/app_theme.dart';
 
@@ -43,9 +44,9 @@ class SettingsScreen extends StatelessWidget {
                         onChanged: (String? newValue) {
                           if (newValue != null) settings.setLanguage(newValue);
                         },
-                        items: const [
-                          DropdownMenuItem(value: 'en', child: Text("English")),
-                          DropdownMenuItem(value: 'tr', child: Text("Türkçe")),
+                        items: [
+                          DropdownMenuItem(value: 'en', child: Text(settings.translate('languageEnglish'))),
+                          DropdownMenuItem(value: 'tr', child: Text(settings.translate('languageTurkish'))),
                         ],
                       ),
                     ),
@@ -65,12 +66,7 @@ class SettingsScreen extends StatelessWidget {
                     _buildThemeCard(context, settings, AppThemeType.sakura, settings.translate('themeSakura'), AppColors.sakuraPrimary),
                     _buildThemeCard(context, settings, AppThemeType.ocean, settings.translate('themeOcean'), AppColors.oceanPrimary),
                     _buildThemeCard(context, settings, AppThemeType.forest, settings.translate('themeForest'), AppColors.forestPrimary),
-                    _buildThemeCard(context, settings, AppThemeType.sunset, settings.translate('themeSunset'), AppColors.sunsetPrimary),
-                    _buildThemeCard(context, settings, AppThemeType.nightLight, settings.translate('themeNight'), AppColors.nightPrimary),
-                    _buildThemeCard(context, settings, AppThemeType.space, settings.translate('themeSpace'), AppColors.spacePrimary),
                     _buildThemeCard(context, settings, AppThemeType.luxury, settings.translate('themeLuxury'), AppColors.luxuryPrimary),
-                    _buildThemeCard(context, settings, AppThemeType.superBlack, settings.translate('themeBlack'), Colors.black),
-                    _buildThemeCard(context, settings, AppThemeType.cleanWhite, settings.translate('themeWhite'), Colors.white), // Use White icon for better rep
                   ],
                 ),
               ),
@@ -100,10 +96,13 @@ class SettingsScreen extends StatelessWidget {
                     Slider(
                       value: settings.dailyGoalMinutes.toDouble(),
                       min: 30,
-                      max: 600, // 10 hours
-                      divisions: 19,
+                      max: 720, // 12 hours
+                      divisions: 46,
                       label: "${(settings.dailyGoalMinutes / 60).toStringAsFixed(1)} h",
-                      onChanged: (val) => settings.setDailyGoal(val.toInt()),
+                      onChanged: (val) {
+                        settings.setDailyGoal(val.toInt());
+                        Provider.of<HistoryProvider>(context, listen: false).updateDailyGoal(DateTime.now(), val.toInt());
+                      },
                     ),
                   ],
                 ),

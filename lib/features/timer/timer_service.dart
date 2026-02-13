@@ -132,18 +132,22 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
     
     notifyListeners();
 
-    // DEMO MODE: 10ms (Ultra Fast)
+      // DEMO MODE: 10ms (100Hz)
     _timer = Timer.periodic(const Duration(milliseconds: 10), (timer) {
       if (_remainingSeconds > 0) {
         _remainingSeconds--;
-        notifyListeners();
         
-        // Show ongoing notification (throttled slightly if needed, but 10ms is too fast for valid notification updates)
-        // Since we are in demo mode (10ms ticks), updating notification every 10ms will crash/lag.
-        // Let's update it every ~1 second of "real time" or every N ticks.
-        // For accurate demo experience, maybe update every 100 ticks?
+        // Throttled UI Updates: 
+        // 10ms * 3 = 30ms (~33 FPS) - Sufficient for UI, saves CPU
+        // _initialSeconds is large in demo mode?? No, duration is normal but tick is fast.
+        // Actually, if we tick 100 times a second, we don't need to rebuild UI 100 times.
+        // Let's update UI every 5 ticks (50ms = 20 FPS) -> sufficient for text timer
+        if (_remainingSeconds % 5 == 0) {
+           notifyListeners();
+        }
         
-        // Update notification approx once per second (100 ticks * 10ms = 1000ms)
+        // Notification Updates:
+        // Update every 100 ticks (100 * 10ms = 1000ms = 1 second)
         if (_remainingSeconds % 100 == 0) {
           final title = _mode == TimerMode.pomodoro 
               ? (_currentLanguage?.focus ?? 'Focus') + ' - ' + (_currentLanguage?.inProgress ?? 'In Progress')

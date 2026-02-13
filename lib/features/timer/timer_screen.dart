@@ -8,29 +8,16 @@ import '../../core/widgets/glass_box.dart';
 class TimerScreen extends StatelessWidget {
   const TimerScreen({super.key});
 
-  // Rotating motivational quotes
-  static const List<String> _enQuotes = [
-    "Focus is the key to success.",
-    "One pomodoro at a time.",
-    "Small steps, big results.",
-    "Keep pushing forward!",
-    "Your future is created by what you do today.",
-    "Stay consistent, stay focused.",
-    "Deep work matters.",
-  ];
-  
-  static const List<String> _trQuotes = [
-    "Odaklanmak başarının anahtarıdır.",
-    "Her seferinde bir pomodoro.",
-    "Küçük adımlar, büyük sonuçlar.",
-    "İlerlemeye devam et!",
-    "Geleceğin, bugün yaptıklarınla şekillenir.",
-    "İstikrarlı ol, odaklan.",
-    "Derin çalışma önemlidir.",
-  ];
-
   String _getMotivationQuote(SettingsProvider settings) {
-    final quotes = settings.language == 'tr' ? _trQuotes : _enQuotes;
+    final quotes = [
+      settings.translate('quoteMotivation1'),
+      settings.translate('quoteMotivation2'),
+      settings.translate('quoteMotivation3'),
+      settings.translate('quoteMotivation4'),
+      settings.translate('quoteMotivation5'),
+      settings.translate('quoteMotivation6'),
+      settings.translate('quoteMotivation7'),
+    ];
     return quotes[DateTime.now().day % quotes.length];
   }
 
@@ -166,11 +153,9 @@ class TimerScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _ModeButton(title: settings.translate('focus'), mode: TimerMode.pomodoro, isSelected: timer.mode == TimerMode.pomodoro),
-          _ModeButton(title: settings.translate('shortBreak') == 'Kısa Mola' ? 'Kısa' : 'Short', // Shortened for button fit
-                     mode: TimerMode.shortBreak, isSelected: timer.mode == TimerMode.shortBreak),
-          _ModeButton(title: settings.translate('longBreak') == 'Uzun Mola' ? 'Uzun' : 'Long', // Shortened for button fit
-                     mode: TimerMode.longBreak, isSelected: timer.mode == TimerMode.longBreak),
+          _ModeButton(title: settings.translate('focusShort'), mode: TimerMode.pomodoro, isSelected: timer.mode == TimerMode.pomodoro),
+          _ModeButton(title: settings.translate('shortBreakShort'), mode: TimerMode.shortBreak, isSelected: timer.mode == TimerMode.shortBreak),
+          _ModeButton(title: settings.translate('longBreakShort'), mode: TimerMode.longBreak, isSelected: timer.mode == TimerMode.longBreak),
         ],
       ),
     );
@@ -275,8 +260,10 @@ class _ModeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque, // Fix touch target ambiguity
         onTap: () => Provider.of<TimerService>(context, listen: false).setMode(mode),
         child: AnimatedContainer(
+          margin: const EdgeInsets.symmetric(horizontal: 2), // Slight separation
           duration: const Duration(milliseconds: 200),
           decoration: BoxDecoration(
             color: isSelected ? Theme.of(context).colorScheme.surface : Colors.transparent,
