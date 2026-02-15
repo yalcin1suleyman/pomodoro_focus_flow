@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
+
 import '../../settings/settings_provider.dart';
 import '../history_provider.dart';
 import 'package:intl/intl.dart';
@@ -59,10 +59,10 @@ class StoryStatsCard extends StatelessWidget {
                height: 500,
                decoration: BoxDecoration(
                  shape: BoxShape.circle,
-                 color: Theme.of(context).colorScheme.primary.withOpacity(0.15),
+                 color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
                  boxShadow: [
                    BoxShadow(
-                     color: Theme.of(context).colorScheme.primary.withOpacity(0.2), 
+                     color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2), 
                      blurRadius: 100, 
                      spreadRadius: 20
                    )
@@ -121,7 +121,7 @@ class StoryStatsCard extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            color: Colors.white.withOpacity(0.6), 
+            color: Colors.white.withValues(alpha: 0.6), 
             letterSpacing: 2.0,
             fontSize: 14,
             fontWeight: FontWeight.bold
@@ -154,7 +154,7 @@ class StoryStatsCard extends StatelessWidget {
       settings.translate('shareFooterQuote'),
       textAlign: TextAlign.center,
       style: TextStyle(
-        color: Colors.white.withOpacity(0.5),
+        color: Colors.white.withValues(alpha: 0.5),
         fontStyle: FontStyle.italic,
         fontSize: 14,
       ),
@@ -222,7 +222,7 @@ class StoryStatsCard extends StatelessWidget {
          Container(
            padding: const EdgeInsets.all(20),
            decoration: BoxDecoration(
-             color: Colors.white.withOpacity(0.05),
+             color: Colors.white.withValues(alpha: 0.05),
              borderRadius: BorderRadius.circular(20),
              border: Border.all(color: Colors.white10)
            ),
@@ -317,7 +317,7 @@ class StoryStatsCard extends StatelessWidget {
                       // Minutes Label (if significant and enough space)
                       if (minutes > 30 && maxBarHeight > 60) 
                         Text(
-                          "${(minutes/60).toStringAsFixed(1)}", 
+                          (minutes/60).toStringAsFixed(1), 
                           style: TextStyle(color: Colors.white54, fontSize: 10)
                         ),
                       const SizedBox(height: 4),
@@ -326,10 +326,10 @@ class StoryStatsCard extends StatelessWidget {
                         width: 24,
                         height: barHeight, 
                         decoration: BoxDecoration(
-                          color: primaryColor.withOpacity(opacity),
+                          color: primaryColor.withValues(alpha: opacity),
                           borderRadius: BorderRadius.circular(8),
                           boxShadow: goalRatio >= 1.0 ? [
-                            BoxShadow(color: primaryColor.withOpacity(0.5), blurRadius: 10, offset: const Offset(0, -2))
+                            BoxShadow(color: primaryColor.withValues(alpha: 0.5), blurRadius: 10, offset: const Offset(0, -2))
                           ] : null
                         ),
                       ),
@@ -434,7 +434,7 @@ class StoryStatsCard extends StatelessWidget {
                              child: Text(
                                entry.value.toUpperCase(),
                                style: TextStyle(
-                                 color: Colors.white.withOpacity(0.5), 
+                                 color: Colors.white.withValues(alpha: 0.5), 
                                  fontSize: 10, 
                                  fontWeight: FontWeight.bold
                                )
@@ -479,8 +479,8 @@ class StoryStatsCard extends StatelessWidget {
                           ),
                           itemCount: totalWeeks * 7,
                           itemBuilder: (ctx, index) {
-                             final int weekIndex = index ~/ 7;
-                             final int dayInfo = index % 7; // 0=Mon
+                             // weekIndex and dayInfo removed as unused
+                             
                              
                              // Calculate Date
                              // StartDate weekday: e.g. Wed (3).
@@ -498,7 +498,7 @@ class StoryStatsCard extends StatelessWidget {
                              if (minutes == 0) {
                                 return Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.03),
+                                    color: Colors.white.withValues(alpha: 0.03),
                                     borderRadius: BorderRadius.circular(2),
                                   ),
                                 );
@@ -509,7 +509,7 @@ class StoryStatsCard extends StatelessWidget {
 
                              return Container(
                                decoration: BoxDecoration(
-                                 color: primaryColor.withOpacity(opacity),
+                                 color: primaryColor.withValues(alpha: opacity),
                                  borderRadius: BorderRadius.circular(2),
                                ),
                              );
@@ -528,9 +528,9 @@ class StoryStatsCard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildLegendDot(Colors.white.withOpacity(0.03), "0"),
+            _buildLegendDot(Colors.white.withValues(alpha: 0.03), "0"),
             const SizedBox(width: 8),
-            _buildLegendDot(primaryColor.withOpacity(0.3), settings.translate('shareLegendStart')),
+            _buildLegendDot(primaryColor.withValues(alpha: 0.3), settings.translate('shareLegendStart')),
             const SizedBox(width: 8),
             _buildLegendDot(primaryColor, settings.translate('shareLegendGoal')),
           ],
@@ -597,7 +597,7 @@ class StoryStatsCard extends StatelessWidget {
               return Container(
                  decoration: BoxDecoration(
                    shape: BoxShape.circle, 
-                   color: isMet ? primaryColor : (hasActivity ? primaryColor.withOpacity(0.3) : Colors.white.withOpacity(0.05)),
+                   color: isMet ? primaryColor : (hasActivity ? primaryColor.withValues(alpha: 0.3) : Colors.white.withValues(alpha: 0.05)),
                    border: hasActivity && !isMet ? Border.all(color: primaryColor, width: 1) : null,
                  ),
                  child: Center(

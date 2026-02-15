@@ -86,7 +86,7 @@ class TimerScreen extends StatelessWidget {
               _getMotivationQuote(settings),
               style: theme.textTheme.bodyMedium?.copyWith(
                 fontStyle: FontStyle.italic,
-                color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
+                color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                 fontSize: 14,
               ),
               textAlign: TextAlign.center,
@@ -132,7 +132,7 @@ class TimerScreen extends StatelessWidget {
                   _getMotivationQuote(settings),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     fontStyle: FontStyle.italic,
-                    color: theme.textTheme.bodyMedium?.color?.withOpacity(0.7),
+                    color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -174,7 +174,7 @@ class TimerScreen extends StatelessWidget {
           Text(
             statusText,
             style: theme.textTheme.titleMedium?.copyWith(
-              color: theme.textTheme.bodyMedium?.color?.withOpacity(0.6),
+              color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.6),
               letterSpacing: 2,
             ),
           ),
@@ -191,7 +191,7 @@ class TimerScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: BoxDecoration(
-                color: theme.colorScheme.primary.withOpacity(0.1),
+                color: theme.colorScheme.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Text(
@@ -208,7 +208,7 @@ class TimerScreen extends StatelessWidget {
         ],
       ),
       circularStrokeCap: CircularStrokeCap.round,
-      backgroundColor: theme.colorScheme.onSurface.withOpacity(0.1),
+      backgroundColor: theme.colorScheme.onSurface.withValues(alpha: 0.1),
       progressColor: progressColor,
       backgroundWidth: 10,
     );
@@ -274,7 +274,7 @@ class _ModeButton extends StatelessWidget {
             title,
             style: TextStyle(
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              color: isSelected ? Theme.of(context).primaryColor : Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.6),
+              color: isSelected ? Theme.of(context).primaryColor : Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.6),
             ),
           ),
         ),
@@ -299,7 +299,7 @@ class _ControlButton extends StatelessWidget {
         width: isMain ? 90 : 60,
         height: isMain ? 90 : 60,
         borderRadius: BorderRadius.circular(isMain ? 45 : 30),
-        color: isMain ? color?.withOpacity(0.2) : null,
+        color: isMain ? color?.withValues(alpha: 0.2) : null,
         child: Icon(
           icon,
           size: isMain ? 40 : 28,

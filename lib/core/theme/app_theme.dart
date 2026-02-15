@@ -76,7 +76,7 @@ class AppTheme {
         brightness = Brightness.dark;
         break;
       case AppThemeType.defaultTheme:
-      default:
+
         // Classic Harmonious Blue - RESTORED
         primary = isDark ? AppColors.primaryDark : AppColors.primaryLight;
         secondary = AppColors.accent;
@@ -105,7 +105,7 @@ class AppTheme {
          onSecondary: Colors.black, // Ensure text on secondary (often bright/accent) is black
          surface: surface,
          onSurface: onSurface,
-         surfaceContainerHighest: surface.withOpacity(0.5), // For GlassBox contrast
+         surfaceContainerHighest: surface.withValues(alpha: 0.5), // For GlassBox contrast
        );
     } else {
        colorScheme = ColorScheme.light(

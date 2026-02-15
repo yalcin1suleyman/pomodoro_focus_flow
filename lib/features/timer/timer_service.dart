@@ -150,7 +150,7 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
         // Update every 100 ticks (100 * 10ms = 1000ms = 1 second)
         if (_remainingSeconds % 100 == 0) {
           final title = _mode == TimerMode.pomodoro 
-              ? (_currentLanguage?.focus ?? 'Focus') + ' - ' + (_currentLanguage?.inProgress ?? 'In Progress')
+              ? "${_currentLanguage?.focus ?? 'Focus'} - ${_currentLanguage?.inProgress ?? 'In Progress'}"
               : (_currentLanguage?.shortBreak ?? 'Break');
               
           NotificationService().showOngoingNotification(

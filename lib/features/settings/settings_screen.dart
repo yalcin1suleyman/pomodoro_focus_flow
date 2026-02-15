@@ -154,6 +154,15 @@ class SettingsScreen extends StatelessWidget {
               Center(
                 child: Column(
                   children: [
+                    Image.asset(
+                      'assets/images/logo.png',
+                      width: 60,
+                      height: 60,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(Icons.timer_outlined, size: 50, color: Theme.of(context).colorScheme.primary);
+                      },
+                    ),
+                    const SizedBox(height: 10),
                     Text(
                       "Pomodoro Master",
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -169,7 +178,7 @@ class SettingsScreen extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       "${settings.translate('version')} 1.1.0",
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey.withOpacity(0.5)),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey.withValues(alpha: 0.5)),
                     ),
                   ],
                 ),
@@ -189,7 +198,7 @@ class SettingsScreen extends StatelessWidget {
         title,
         style: Theme.of(context).textTheme.titleMedium?.copyWith(
           fontWeight: FontWeight.bold,
-          color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.7),
+          color: Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.7),
         ),
       ),
     );
@@ -204,7 +213,7 @@ class SettingsScreen extends StatelessWidget {
         width: 80,
         height: 100,
         decoration: BoxDecoration(
-          color: color.withOpacity(0.2),
+          color: color.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(15),
           border: isSelected ? Border.all(color: color, width: 2) : null,
         ),
@@ -240,7 +249,7 @@ class SettingsScreen extends StatelessWidget {
               isDense: true,
               contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               filled: true,
-              fillColor: Theme.of(context).cardColor.withOpacity(0.5),
+              fillColor: Theme.of(context).cardColor.withValues(alpha: 0.5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
@@ -254,7 +263,7 @@ class SettingsScreen extends StatelessWidget {
                 borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 1.5),
               ),
               suffixText: settings.translate("minutes").substring(0, 2), // "mi" or "da" (assuming 'min'/'dk' roughly)
-              suffixStyle: TextStyle(fontSize: 12, color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.5)),
+              suffixStyle: TextStyle(fontSize: 12, color: Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.5)),
             ),
             onChanged: (val) {
               if (val.isNotEmpty) {
@@ -279,9 +288,9 @@ class SettingsScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
-          color: isSelected ? primaryColor.withOpacity(0.1) : Colors.transparent,
+          color: isSelected ? primaryColor.withValues(alpha: 0.1) : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
-          border: isSelected ? Border.all(color: primaryColor) : Border.all(color: Colors.grey.withOpacity(0.3)),
+          border: isSelected ? Border.all(color: primaryColor) : Border.all(color: Colors.grey.withValues(alpha: 0.3)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

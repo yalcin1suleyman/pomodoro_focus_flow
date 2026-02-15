@@ -3,6 +3,9 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
@@ -19,7 +22,7 @@ class NotificationService {
       tz.setLocalLocation(tz.getLocation('UTC'));
 
       const AndroidInitializationSettings initializationSettingsAndroid =
-          AndroidInitializationSettings('@mipmap/ic_launcher');
+          AndroidInitializationSettings('@mipmap/launcher_icon');
 
       final DarwinInitializationSettings initializationSettingsDarwin =
           DarwinInitializationSettings(
@@ -120,6 +123,17 @@ class NotificationService {
     final String channelId = useAppBell ? 'pomodoro_alarm_silent_v2' : 'pomodoro_alarm_system_v2';
     final String channelName = useAppBell ? 'Timer Alarms (Silent)' : 'Timer Alarms (System Sound)';
     
+    // Try to load logo as large icon
+    String? largeIconPath;
+    try {
+      final byteData = await rootBundle.load('assets/images/logo.png');
+      final file = File('${(await getTemporaryDirectory()).path}/notification_logo.png');
+      await file.writeAsBytes(byteData.buffer.asUint8List());
+      largeIconPath = file.path;
+    } catch (e) {
+      debugPrint("Error loading large icon: $e");
+    }
+
     final AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
       channelId,
@@ -131,6 +145,7 @@ class NotificationService {
       // When playSound is true and sound is null, Android uses default notification sound
       fullScreenIntent: true,
       visibility: NotificationVisibility.public,
+      largeIcon: largeIconPath != null ? FilePathAndroidBitmap(largeIconPath) : null,
     );
 
     final NotificationDetails platformChannelSpecifics =

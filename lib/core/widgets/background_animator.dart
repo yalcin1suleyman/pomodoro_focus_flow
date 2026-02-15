@@ -152,7 +152,7 @@ class _ParticlePainter extends CustomPainter {
       final dx = particle.x * size.width;
       final dy = particle.y * size.height;
       
-      paint.color = _getParticleColor(theme).withOpacity(isActive ? 0.6 : 0.3); // Fade out when idle
+      paint.color = _getParticleColor(theme).withValues(alpha: isActive ? 0.6 : 0.3); // Fade out when idle
 
       canvas.save();
       canvas.translate(dx, dy);
@@ -173,7 +173,7 @@ class _ParticlePainter extends CustomPainter {
         canvas.drawCircle(Offset.zero, particle.size * 0.4, paint);
       } else if (theme == AppThemeType.luxury) {
         // Draw Silver Sparkle 
-        paint.color = const Color(0xFFE0E0E0).withOpacity(isActive ? 0.9 : 0.5); 
+        paint.color = const Color(0xFFE0E0E0).withValues(alpha: isActive ? 0.9 : 0.5); 
         
         final path = Path();
         final double w = particle.size * 0.25;

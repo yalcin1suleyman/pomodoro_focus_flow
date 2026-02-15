@@ -117,7 +117,7 @@ class _StatsScreenState extends State<StatsScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         // Goal Met (Solid)
-                        _buildLegendItem(Theme.of(context).colorScheme.primary, settings.translate('goalMet') ?? 'Hedef Tamam'), 
+                        _buildLegendItem(Theme.of(context).colorScheme.primary, settings.translate('goalMet')), 
                         const SizedBox(width: 15),
                         // Goal Missed (Hollow/Ring)
                         Row(
@@ -132,12 +132,12 @@ class _StatsScreenState extends State<StatsScreen> {
                               )
                             ),
                             const SizedBox(width: 5),
-                            Text(settings.translate('goalMissed') ?? 'Hedef Altı', style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                            Text(settings.translate('goalMissed'), style: const TextStyle(fontSize: 12, color: Colors.grey)),
                           ],
                         ),
                         const SizedBox(width: 15),
                         // Empty
-                        _buildLegendItem(Colors.grey.withOpacity(0.3), settings.translate('empty')), 
+                        _buildLegendItem(Colors.grey.withValues(alpha: 0.3), settings.translate('empty')), 
                       ],
                     )
                   ],
@@ -171,7 +171,7 @@ class _StatsScreenState extends State<StatsScreen> {
                                   ? settings.translate('dailyGoal') 
                                   : settings.translate('completed'),
                                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
                                 ),
                               ),
                             ],
@@ -216,7 +216,7 @@ class _StatsScreenState extends State<StatsScreen> {
                                       Text(
                                         "/ ${(targetGoal / 60).toStringAsFixed(1)} h",
                                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                                          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
@@ -242,7 +242,7 @@ class _StatsScreenState extends State<StatsScreen> {
                               ],
                             ),
                             progressColor: Theme.of(context).colorScheme.primary,
-                            backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
+                            backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
                             circularStrokeCap: CircularStrokeCap.round,
                             animation: true,
                           ),
@@ -259,10 +259,10 @@ class _StatsScreenState extends State<StatsScreen> {
                             width: double.infinity,
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
+                              color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+                                color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.1),
                               )
                             ),
                             child: Column(
@@ -270,14 +270,14 @@ class _StatsScreenState extends State<StatsScreen> {
                               children: [
                                 Row(
                                   children: [
-                                    Icon(Icons.format_quote_rounded, size: 20, color: Theme.of(context).colorScheme.primary.withOpacity(0.7)),
+                                    Icon(Icons.format_quote_rounded, size: 20, color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.7)),
                                     const SizedBox(width: 8),
                                     Text(
-                                      settings.translate('dailyNote') ?? "Günün Notu", 
+                                      settings.translate('dailyNote'), 
                                       style: TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold,
-                                        color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
+                                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
                                       ),
                                     ),
                                   ],
@@ -302,16 +302,16 @@ class _StatsScreenState extends State<StatsScreen> {
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                                color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
                                 style: BorderStyle.solid,
                               ),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Center(
                               child: Text(
-                                "${settings.translate('addNote')}",
+                                settings.translate('addNote'),
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                                  color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
                                   fontSize: 14,
                                 ),
                               ),
@@ -395,9 +395,10 @@ class _StatsScreenState extends State<StatsScreen> {
     
     // Offset for grid (Monday start)
     final offset = firstWeekday - 1;
-    final theme = Theme.of(context);
+    // offset logic
     final settings = Provider.of<SettingsProvider>(context, listen: false);
-    final bool isWeeklyMode = false;
+    // unused locals removed
+    
 
     return GridView.builder(
       shrinkWrap: true,
@@ -669,7 +670,7 @@ class _StatsScreenState extends State<StatsScreen> {
           children: [
             Icon(Icons.edit_note, color: Theme.of(context).colorScheme.primary),
             const SizedBox(width: 10),
-            Text(settings.translate('editNote') ?? "Günün Notu"), 
+            Text(settings.translate('editNote')), 
           ],
         ),
         content: TextField(
@@ -679,7 +680,7 @@ class _StatsScreenState extends State<StatsScreen> {
           decoration: InputDecoration(
             hintText: "Bugün hakkında ne düşünüyorsun?",
             filled: true,
-            fillColor: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
+            fillColor: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
               borderSide: BorderSide.none,

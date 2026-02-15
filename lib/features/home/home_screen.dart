@@ -11,7 +11,7 @@ import '../tasks/task_provider.dart';
 import '../stats/history_provider.dart';
 import '../../core/widgets/glass_box.dart';
 import '../../core/widgets/background_animator.dart';
-import '../../core/theme/app_theme.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -90,8 +90,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Theme.of(context).colorScheme.surface.withOpacity(0.9),
-                        Theme.of(context).primaryColor.withOpacity(0.1),
+                        Theme.of(context).colorScheme.surface.withValues(alpha: 0.9),
+                        Theme.of(context).primaryColor.withValues(alpha: 0.1),
                       ],
                     ),
                   ),
@@ -121,8 +121,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Theme.of(context).scaffoldBackgroundColor.withOpacity(0.0),
-                        Theme.of(context).scaffoldBackgroundColor.withOpacity(0.8),
+                        Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.0),
+                        Theme.of(context).scaffoldBackgroundColor.withValues(alpha: 0.8),
                         Theme.of(context).scaffoldBackgroundColor,
                       ],
                     ),
@@ -163,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final isSelected = _currentIndex == index;
     final color = isSelected 
         ? Theme.of(context).colorScheme.secondary 
-        : Theme.of(context).iconTheme.color?.withOpacity(0.5) ?? Colors.grey;
+        : Theme.of(context).iconTheme.color?.withValues(alpha: 0.5) ?? Colors.grey;
 
     return GestureDetector(
       onTap: () => setState(() => _currentIndex = index),
@@ -187,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: color,
                   shape: BoxShape.circle,
                   boxShadow: [
-                    BoxShadow(color: color.withOpacity(0.5), blurRadius: 5, spreadRadius: 1)
+                    BoxShadow(color: color.withValues(alpha: 0.5), blurRadius: 5, spreadRadius: 1)
                   ]
                 ),
               ),

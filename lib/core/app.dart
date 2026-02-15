@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../features/home/home_screen.dart';
+import '../../features/splash/splash_screen.dart';
 import '../../features/settings/settings_provider.dart';
 
 class FocusFlowApp extends StatelessWidget {
@@ -14,7 +14,7 @@ class FocusFlowApp extends StatelessWidget {
       title: 'Pomodoro Master',
       debugShowCheckedModeBanner: false,
       theme: settings.themeData,
-      home: const HomeScreen(),
+      home: const SplashScreen(),
     );
   }
 }

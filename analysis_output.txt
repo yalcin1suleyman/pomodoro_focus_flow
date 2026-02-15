@@ -1,0 +1,40 @@
+Analyzing pomodoro_focus_flow1...                               
+
+   info - The imported package 'flutter_local_notifications' isn't a dependency of the importing package - lib\core\services\notification_service.dart:1:8 - depend_on_referenced_packages
+   info - The imported package 'timezone' isn't a dependency of the importing package - lib\core\services\notification_service.dart:2:8 - depend_on_referenced_packages
+   info - The imported package 'timezone' isn't a dependency of the importing package - lib\core\services\notification_service.dart:3:8 - depend_on_referenced_packages
+warning - This default clause is covered by the previous cases - lib\core\theme\app_theme.dart:79:7 - unreachable_switch_default
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\core\theme\app_theme.dart:108:43 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\home\home_screen.dart:190:44 - deprecated_member_use
+  error - The argument type 'GlassBox' can't be assigned to the parameter type 'double?'.  - lib\features\stats\stats_screen.dart:148:15 - argument_type_not_assignable
+   info - Unnecessary 'const' keyword - lib\features\stats\stats_screen.dart:150:28 - unnecessary_const
+  error - Methods can't be invoked in constant expressions - lib\features\stats\stats_screen.dart:161:33 - const_eval_method_invocation
+   info - Unnecessary 'const' keyword - lib\features\stats\stats_screen.dart:180:23 - unnecessary_const
+   info - Unnecessary 'const' keyword - lib\features\stats\stats_screen.dart:205:39 - unnecessary_const
+   info - Unnecessary 'const' keyword - lib\features\stats\stats_screen.dart:213:39 - unnecessary_const
+   info - Unnecessary 'const' keyword - lib\features\stats\stats_screen.dart:228:27 - unnecessary_const
+  error - The constructor being called isn't a const constructor - lib\features\stats\stats_screen.dart:229:27 - const_with_non_const
+   info - Unnecessary 'const' keyword - lib\features\stats\stats_screen.dart:238:42 - unnecessary_const
+   info - Unnecessary 'const' keyword - lib\features\stats\stats_screen.dart:250:23 - unnecessary_const
+  error - The constructor being called isn't a const constructor - lib\features\stats\stats_screen.dart:254:25 - const_with_non_const
+  error - The constructor being called isn't a const constructor - lib\features\stats\stats_screen.dart:256:34 - const_with_non_const
+   info - Unnecessary 'const' keyword - lib\features\stats\stats_screen.dart:258:38 - unnecessary_const
+  error - The constructor being called isn't a const constructor - lib\features\stats\stats_screen.dart:261:45 - const_with_non_const
+  error - The constructor being called isn't a const constructor - lib\features\stats\stats_screen.dart:262:39 - const_with_non_const
+   info - Unnecessary 'const' keyword - lib\features\stats\stats_screen.dart:272:37 - unnecessary_const
+   info - Unnecessary 'const' keyword - lib\features\stats\stats_screen.dart:283:33 - unnecessary_const
+  error - The constructor being called isn't a const constructor - lib\features\stats\stats_screen.dart:296:25 - const_with_non_const
+  error - The constructor being called isn't a const constructor - lib\features\stats\stats_screen.dart:298:35 - const_with_non_const
+   info - Unnecessary 'const' keyword - lib\features\stats\stats_screen.dart:300:38 - unnecessary_const
+  error - The constructor being called isn't a const constructor - lib\features\stats\stats_screen.dart:302:39 - const_with_non_const
+  error - The constructor being called isn't a const constructor - lib\features\stats\stats_screen.dart:306:45 - const_with_non_const
+   info - Unnecessary 'const' keyword - lib\features\stats\stats_screen.dart:324:15 - unnecessary_const
+  error - Too many positional arguments: 0 expected, but 3 found - lib\features\stats\stats_screen.dart:324:15 - extra_positional_arguments_could_be_named
+   info - Unnecessary 'const' keyword - lib\features\stats\stats_screen.dart:329:28 - unnecessary_const
+   info - Unnecessary 'const' keyword - lib\features\stats\stats_screen.dart:337:23 - unnecessary_const
+   info - Unnecessary 'const' keyword - lib\features\stats\stats_screen.dart:378:15 - unnecessary_const
+  error - Expected to find ')' - lib\features\stats\stats_screen.dart:379:13 - expected_token
+   info - Unnecessary use of string interpolation - lib\features\stats\widgets\story_stats_card.dart:320:27 - unnecessary_string_interpolations
+warning - The value of the local variable 'weekIndex' isn't used - lib\features\stats\widgets\story_stats_card.dart:482:40 - unused_local_variable
+warning - The value of the local variable 'dayInfo' isn't used - lib\features\stats\widgets\story_stats_card.dart:483:40 - unused_local_variable
+

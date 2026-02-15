@@ -1,0 +1,7 @@
+Analyzing pomodoro_focus_flow1...                               
+
+warning - This default clause is covered by the previous cases - lib\core\theme\app_theme.dart:79:7 - unreachable_switch_default
+  error - Undefined name 'settings' - lib\features\stats\stats_screen.dart:438:58 - undefined_identifier
+warning - Unused import: 'package:percent_indicator/circular_percent_indicator.dart' - lib\features\stats\widgets\story_stats_card.dart:3:8 - unused_import
+   info - Unnecessary use of string interpolation - lib\features\stats\widgets\story_stats_card.dart:320:27 - unnecessary_string_interpolations
+

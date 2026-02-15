@@ -1,0 +1,9 @@
+Analyzing pomodoro_focus_flow1...                               
+
+   info - The imported package 'flutter_local_notifications' isn't a dependency of the importing package - lib\core\services\notification_service.dart:1:8 - depend_on_referenced_packages
+   info - The imported package 'timezone' isn't a dependency of the importing package - lib\core\services\notification_service.dart:2:8 - depend_on_referenced_packages
+   info - The imported package 'timezone' isn't a dependency of the importing package - lib\core\services\notification_service.dart:3:8 - depend_on_referenced_packages
+   info - Unnecessary use of string interpolation - lib\features\stats\widgets\story_stats_card.dart:320:27 - unnecessary_string_interpolations
+warning - The value of the local variable 'weekIndex' isn't used - lib\features\stats\widgets\story_stats_card.dart:482:40 - unused_local_variable
+warning - The value of the local variable 'dayInfo' isn't used - lib\features\stats\widgets\story_stats_card.dart:483:40 - unused_local_variable
+
