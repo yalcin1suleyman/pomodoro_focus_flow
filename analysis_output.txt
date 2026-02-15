@@ -1,0 +1,4 @@
+Analyzing pomodoro_focus_flow1...                               
+
+  error - Missing concrete implementations of 'getter abstract class Language.tasksHelpStep5Content' and 'getter abstract class Language.tasksHelpStep5Title' - lib\core\localization\languages\chinese_language.dart:3:7 - non_abstract_class_inherits_abstract_member
+

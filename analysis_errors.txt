@@ -1,0 +1,6 @@
+Analyzing pomodoro_focus_flow1...                               
+
+warning - The getter doesn't override an inherited getter - lib\core\localization\languages\german_language.dart:83:24 - override_on_non_overriding_member
+warning - The getter doesn't override an inherited getter - lib\core\localization\languages\german_language.dart:84:24 - override_on_non_overriding_member
+  error - Missing concrete implementation of 'getter abstract class Language.tasksHelpTitle' - lib\core\localization\languages\polish_language.dart:3:7 - non_abstract_class_inherits_abstract_member
+
