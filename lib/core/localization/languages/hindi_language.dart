@@ -1,0 +1,137 @@
+import 'language.dart';
+
+class HindiLanguage implements Language {
+  @override String get code => 'hi';
+  @override String get name => 'हिन्दी';
+
+  @override String get settings => 'सेटिंग्स';
+  @override String get appearance => 'दिखावट';
+  @override String get darkMode => 'डार्क मोड';
+  @override String get theme => 'थीम';
+  @override String get language => 'भाषा';
+  @override String get focusSounds => 'फोकस ध्वनियाँ';
+  @override String get tasks => 'कार्य';
+  @override String get stats => 'सांख्यिकी';
+  @override String get focus => 'फोकस';
+  @override String get shortBreak => 'छोटा ब्रेक';
+  @override String get longBreak => 'लंबा ब्रेक';
+  @override String get version => 'संस्करण';
+
+  @override String get weeklyActivity => 'साप्ताहिक गतिविधि';
+  @override String get focusTime => 'फोकस समय';
+  @override String get dailyGoal => 'दैनिक लक्ष्य';
+  @override String get remaining => 'शेष';
+  @override String get completed => 'पूरा हुआ';
+  @override String get setGoal => 'लक्ष्य निर्धारित करें';
+  @override String get hours => 'घंटे';
+  
+  @override String get timerSettings => 'टाइमर सेटिंग्स';
+  @override String get pomodoroDuration => 'पोमोडोरो अवधि';
+  @override String get shortBreakDuration => 'छोटा ब्रेक अवधि';
+  @override String get longBreakDuration => 'लंबा ब्रेक अवधि';
+  @override String get minutes => 'मिनट';
+  @override String get timeIsUp => 'समय समाप्त!';
+  @override String get sessionCompleted => 'सत्र पूरा हुआ';
+  @override String get breakOver => 'ब्रेक समाप्त';
+
+  @override String get themeClassic => 'क्लासिक';
+  @override String get themeSakura => 'साकुरा';
+  @override String get themeOcean => 'महासागर';
+  @override String get themeForest => 'वन';
+  @override String get themeSilver => 'चांदी';
+
+  @override String get cancel => 'रद्द करें';
+  @override String get save => 'सहेजें';
+  @override String get close => 'बंद करें';
+  @override String get delete => 'हटाएं';
+  @override String get saveNote => 'नोट सहेजें';
+  @override String get editNote => 'नोट संपादित करें';
+
+  @override String get today => 'आज';
+  @override String get empty => 'खाली';
+  @override String get newTask => 'नया कार्य';
+  @override String get taskHint => 'आप किस पर काम कर रहे हैं?';
+  @override String get estPomodoros => 'अनुमानित पोमोडोरो:';
+  @override String get createTask => 'कार्य बनाएं';
+  @override String get updateTask => 'अपडेट करें';
+  @override String get noTasks => 'कोई कार्य नहीं। एक जोड़ें!';
+  @override String get pomodoroCount => 'पोमोडोरो';
+  @override String get inProgress => 'प्रगति पर';
+  @override String get focusedTime => 'फोकस्ड समय';
+  @override String get tasksWorkedOn => 'गतिविधियाँ:';
+  @override String get completedTasksLabel => 'पूरे किए गए कार्य';
+  @override String get noTasksRecorded => 'कोई कार्य रिकॉर्ड नहीं।';
+  @override String get dailyNote => 'दैनिक नोट:';
+  @override String get noteHint => 'आज का फोकस कैसा था?';
+  @override String get generalFocus => 'सामान्य फोकस';
+  @override String get goalMet => 'लक्ष्य पूरा हुआ';
+  @override String get goalMissed => 'लक्ष्य से कम';
+  @override String get tasksHelpTitle => 'कार्य प्रबंधन';
+  @override String get tasksHelpContent => '1. बनाएं (+)\n2. अनुमान लगाएं\n3. शुरू करें (▶)\n4. संपादित करें (बाएं स्वाइप)';
+
+  @override String get navFocus => 'फोकस';
+  @override String get navTasks => 'कार्य';
+  @override String get navStats => 'सांख्यिकी';
+  @override String get navSettings => 'सेटिंग्स';
+
+  @override String get monthJan => 'जनवरी';
+  @override String get monthFeb => 'फरवरी';
+  @override String get monthMar => 'मार्च';
+  @override String get monthApr => 'अप्रैल';
+  @override String get monthMay => 'मई';
+  @override String get monthJun => 'जून';
+  @override String get monthJul => 'जुलाई';
+  @override String get monthAug => 'अगस्त';
+  @override String get monthSep => 'सितंबर';
+  @override String get monthOct => 'अक्टूबर';
+  @override String get monthNov => 'नवंबर';
+  @override String get monthDec => 'दिसंबर';
+  
+  @override String get share => 'साझा करें';
+  @override String get shareStatsTitle => 'मेरे आँकड़े';
+  @override String get shareMessage => 'मेरी प्रगति देखें!';
+  @override String get statsDaily => 'दैनिक';
+  @override String get statsMonthly => 'मासिक';
+  @override String get stats6Months => '6 महीने';
+  @override String get statsYearly => 'वार्षिक';
+  @override String get average => 'औसत';
+  @override String get sessions => 'सत्र';
+  @override String get heatmapLegend => 'कम • अधिक';
+
+  @override String get soundType => 'ध्वनियाँ';
+  @override String get soundTypeBell => 'घंटी';
+  @override String get soundTypeNotification => 'अधिसूचना';
+
+  @override String get shareFooterQuote => 'Pomodoro Master के साथ फोकस करें';
+  @override String get shareGoalCompleted => 'लक्ष्य पूरा हुआ';
+  @override String get shareTopFocus => 'शीर्ष फोकस';
+  @override String get shareLegendStart => 'शुरू';
+  @override String get shareLegendGoal => 'लक्ष्य';
+  @override String get shareWeeklyFocus => 'साप्ताहिक फोकस';
+  @override String get shareYearlyJourney => 'यात्रा';
+
+  @override String get quoteMotivation1 => "फोकस सफलता की कुंजी है।";
+  @override String get quoteMotivation2 => "एक बार में एक पोमोडोरो।";
+  @override String get quoteMotivation3 => "छोटे कदम, बड़े परिणाम।";
+  @override String get quoteMotivation4 => "आगे बढ़ते रहो!";
+  @override String get quoteMotivation5 => "आपका भविष्य आज बनता है।";
+  @override String get quoteMotivation6 => "निरंतर रहें।";
+  @override String get quoteMotivation7 => "गहरा काम मायने रखता है।";
+
+  @override String get shareRange => 'रेंज';
+  @override String get shareRangeDaily => 'दैनिक';
+  @override String get shareRangeWeekly => 'साप्ताहिक';
+  @override String get shareRangeMonthly => 'मासिक';
+  @override String get shareRangeYearly => 'वार्षिक';
+  @override String get shareButton => 'साझा करें';
+  @override String get monthlyOverview => 'मासिक अवलोकन';
+
+  @override String get languageEnglish => 'अंग्रेज़ी';
+  @override String get languageTurkish => 'तुर्की';
+
+  @override String get focusShort => 'फोकस';
+  @override String get shortBreakShort => 'छोटा';
+  @override String get longBreakShort => 'लंबा';
+
+  @override String get addNote => 'नोट जोड़ें';
+}

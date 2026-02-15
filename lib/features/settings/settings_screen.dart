@@ -4,6 +4,7 @@ import 'settings_provider.dart';
 import '../stats/history_provider.dart';
 import '../../core/widgets/glass_box.dart';
 import '../../core/theme/app_theme.dart';
+import 'language_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -37,18 +38,23 @@ class SettingsScreen extends StatelessWidget {
                      ListTile(
                       title: Text(settings.translate('language')),
                       leading: const Icon(Icons.language),
-                      trailing: DropdownButton<String>(
-                        value: settings.language,
-                        underline: const SizedBox(),
-                        dropdownColor: Theme.of(context).cardColor,
-                        onChanged: (String? newValue) {
-                          if (newValue != null) settings.setLanguage(newValue);
-                        },
-                        items: [
-                          DropdownMenuItem(value: 'en', child: Text(settings.translate('languageEnglish'))),
-                          DropdownMenuItem(value: 'tr', child: Text(settings.translate('languageTurkish'))),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            settings.currentLanguageObj.name,
+                            style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
+                          ),
+                          const SizedBox(width: 8),
+                          const Icon(Icons.arrow_forward_ios, size: 16),
                         ],
                       ),
+                      onTap: () {
+                         Navigator.push(
+                           context, 
+                           MaterialPageRoute(builder: (context) => const LanguageScreen())
+                         );
+                      },
                     ),
                   ],
                 ),

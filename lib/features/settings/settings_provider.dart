@@ -4,18 +4,38 @@ import '../../core/theme/app_theme.dart';
 import '../../core/localization/languages/language.dart';
 import '../../core/localization/languages/english_language.dart';
 import '../../core/localization/languages/turkish_language.dart';
+import '../../core/localization/languages/spanish_language.dart';
+import '../../core/localization/languages/portuguese_language.dart';
+import '../../core/localization/languages/german_language.dart';
+import '../../core/localization/languages/french_language.dart';
+import '../../core/localization/languages/italian_language.dart';
+import '../../core/localization/languages/russian_language.dart';
+import '../../core/localization/languages/japanese_language.dart';
+import '../../core/localization/languages/korean_language.dart';
+import '../../core/localization/languages/chinese_language.dart';
+import '../../core/localization/languages/hindi_language.dart';
+import '../../core/localization/languages/arabic_language.dart';
+import '../../core/localization/languages/indonesian_language.dart';
+import '../../core/localization/languages/vietnamese_language.dart';
+import '../../core/localization/languages/bengali_language.dart';
+import '../../core/localization/languages/urdu_language.dart';
+import '../../core/localization/languages/polish_language.dart';
+import '../../core/localization/languages/thai_language.dart';
+import '../../core/localization/languages/dutch_language.dart';
+import '../../core/localization/languages/ukrainian_language.dart';
+import '../../core/localization/languages/greek_language.dart';
+import '../../core/localization/languages/swedish_language.dart';
 
 class SettingsProvider extends ChangeNotifier {
   bool _isDarkMode = true;
   AppThemeType _currentTheme = AppThemeType.silver;
-  String _language = 'en'; // 'tr' or 'en'
+  String _language = 'en'; // Default
   Language _currentLanguage = EnglishLanguage(); // Default
   
   String _soundType = "bell"; // 'bell' or 'notification'
   String _selectedSound = "Lofi Beats";
   int _dailyGoalMinutes = 240; // Default 4 hours
 
-  
   // Custom Durations (in minutes)
   int _pomodoroMinutes = 25;
   int _shortBreakMinutes = 5;
@@ -25,7 +45,7 @@ class SettingsProvider extends ChangeNotifier {
   bool get isDarkMode => _isDarkMode;
   AppThemeType get currentTheme => _currentTheme;
   String get language => _language;
-  Language get currentLanguageObj => _currentLanguage; // Expose object if needed
+  Language get currentLanguageObj => _currentLanguage;
   
   String get soundType => _soundType;
   String get selectedSound => _selectedSound;
@@ -37,6 +57,39 @@ class SettingsProvider extends ChangeNotifier {
 
   ThemeData get themeData => AppTheme.getTheme(_currentTheme, _isDarkMode);
 
+  // Supported Languages List (Alphabetical by Name)
+  List<Language> get supportedLanguages {
+    final List<Language> langs = [
+      EnglishLanguage(),
+      TurkishLanguage(),
+      SpanishLanguage(),
+      PortugueseLanguage(),
+      GermanLanguage(),
+      FrenchLanguage(),
+      ItalianLanguage(),
+      RussianLanguage(),
+      JapaneseLanguage(),
+      KoreanLanguage(),
+      ChineseLanguage(),
+      HindiLanguage(),
+      ArabicLanguage(),
+      IndonesianLanguage(),
+      VietnameseLanguage(),
+      BengaliLanguage(),
+      UrduLanguage(),
+      PolishLanguage(),
+      ThaiLanguage(),
+      DutchLanguage(),
+      UkrainianLanguage(),
+      GreekLanguage(),
+      SwedishLanguage(),
+    ];
+    // Sort alphabetically by English name (or native name if preferred)
+    // Asking for alphabetical order.
+    langs.sort((a, b) => a.name.compareTo(b.name));
+    return langs;
+  }
+
   SettingsProvider() {
     _loadSettings();
   }
@@ -47,11 +100,7 @@ class SettingsProvider extends ChangeNotifier {
     _language = prefs.getString('language') ?? 'en';
     
     // Set Language Object
-    if (_language == 'tr') {
-      _currentLanguage = TurkishLanguage();
-    } else {
-      _currentLanguage = EnglishLanguage();
-    }
+    _setLanguageObject(_language);
 
     final themeIndex = prefs.getInt('themeIndex') ?? 0;
     if (themeIndex >= 0 && themeIndex < AppThemeType.values.length) {
@@ -62,7 +111,6 @@ class SettingsProvider extends ChangeNotifier {
     _selectedSound = prefs.getString('selectedSound') ?? "Lofi Beats";
     _dailyGoalMinutes = prefs.getInt('dailyGoalMinutes') ?? 240;
 
-    
     _pomodoroMinutes = prefs.getInt('pomodoroMinutes') ?? 25;
     _shortBreakMinutes = prefs.getInt('shortBreakMinutes') ?? 5;
     _longBreakMinutes = prefs.getInt('longBreakMinutes') ?? 15;
@@ -79,7 +127,6 @@ class SettingsProvider extends ChangeNotifier {
 
   Future<void> setTheme(AppThemeType theme) async {
     _currentTheme = theme;
-    // Force dark mode for Silver (if desired), else restore user pref or default logic
     if (theme == AppThemeType.silver) {
       _isDarkMode = true;
     }
@@ -88,13 +135,20 @@ class SettingsProvider extends ChangeNotifier {
     await prefs.setInt('themeIndex', theme.index);
   }
 
-  Future<void> setLanguage(String lang) async {
-    _language = lang;
-    if (_language == 'tr') {
-      _currentLanguage = TurkishLanguage();
-    } else {
+  void _setLanguageObject(String langCode) {
+    try {
+      _currentLanguage = supportedLanguages.firstWhere(
+        (l) => l.code == langCode,
+        orElse: () => EnglishLanguage(),
+      );
+    } catch (e) {
       _currentLanguage = EnglishLanguage();
     }
+  }
+
+  Future<void> setLanguage(String lang) async {
+    _language = lang;
+    _setLanguageObject(lang);
     
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
