@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'core/app.dart';
 import 'features/settings/settings_provider.dart';
@@ -14,6 +15,7 @@ void main() async {
   } catch (e) {
     debugPrint("Failed to initialize notifications: $e");
   }
+
   runApp(
     MultiProvider(
       providers: [

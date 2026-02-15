@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -57,14 +58,33 @@ class TimerScreen extends StatelessWidget {
             if (constraints.maxWidth > constraints.maxHeight) {
               return _buildLandscapeLayout(context, timer, theme, progressColor, statusText, settings);
             }
-            return _buildPortraitLayout(context, timer, theme, progressColor, statusText, settings);
+            return _buildPortraitLayout(context, constraints, timer, theme, progressColor, statusText, settings);
           },
         ),
       ),
     );
   }
 
-  Widget _buildPortraitLayout(BuildContext context, TimerService timer, ThemeData theme, Color progressColor, String statusText, SettingsProvider settings) {
+  Widget _buildPortraitLayout(BuildContext context, BoxConstraints constraints, TimerService timer, ThemeData theme, Color progressColor, String statusText, SettingsProvider settings) {
+    // Calculate adaptive radius based on the parent constraints (SafeArea size)
+    // We want the timer to take up available space but not exceed a max size
+    // Total static vertical occupancy approx 320-350 logical pixels
+    
+    double availableHeight = constraints.maxHeight - 320; 
+    if (availableHeight < 150) availableHeight = 150;
+
+    double availableWidth = constraints.maxWidth;
+    
+    // Calculate radius
+    double maxRadiusHeight = availableHeight / 2;
+    double maxRadiusWidth = availableWidth * 0.45; // 90% of width / 2
+    
+    double radius = min(maxRadiusWidth, maxRadiusHeight);
+    
+    // Bounds check
+    radius = max(120.0, radius); // Minimum size
+    radius = min(radius, 300.0); // Maximum size cap
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0),
       child: Column(
@@ -74,8 +94,8 @@ class TimerScreen extends StatelessWidget {
           _buildModeSwitcher(context, timer, settings),
           const Spacer(),
           _buildCircularTimer(context, timer, theme, progressColor, statusText, 
-            MediaQuery.of(context).size.shortestSide >= 600 ? 280.0 : 165.0,
-            lineWidth: MediaQuery.of(context).size.shortestSide >= 600 ? 30.0 : 18.0,
+            radius,
+            lineWidth: radius > 180 ? 25.0 : 18.0,
           ),
           const Spacer(),
           _buildControls(context, timer, theme, progressColor),
@@ -102,45 +122,48 @@ class TimerScreen extends StatelessWidget {
   }
 
   Widget _buildLandscapeLayout(BuildContext context, TimerService timer, ThemeData theme, Color progressColor, String statusText, SettingsProvider settings) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 48.0, vertical: 16.0),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                 _buildModeSwitcher(context, timer, settings),
-                 const SizedBox(height: 30),
-                 _buildCircularTimer(context, timer, theme, progressColor, statusText, 
-                   MediaQuery.of(context).size.shortestSide >= 600 ? 220.0 : 120.0,
-                   lineWidth: MediaQuery.of(context).size.shortestSide >= 600 ? 25.0 : 18.0,
-                 ),
-              ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 48.0, vertical: 16.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center, // Align to center
+          children: [
+            Expanded(
+              flex: 1,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                   _buildModeSwitcher(context, timer, settings),
+                   const SizedBox(height: 30),
+                   _buildCircularTimer(context, timer, theme, progressColor, statusText, 
+                     MediaQuery.of(context).size.shortestSide >= 600 ? 220.0 : 120.0,
+                     lineWidth: MediaQuery.of(context).size.shortestSide >= 600 ? 25.0 : 18.0,
+                   ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: 40),
-          Expanded(
-            flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildControls(context, timer, theme, progressColor),
-                const SizedBox(height: 20),
-                Text(
-                  _getMotivationQuote(settings),
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    fontStyle: FontStyle.italic,
-                    color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+            const SizedBox(width: 40),
+            Expanded(
+              flex: 1,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildControls(context, timer, theme, progressColor),
+                  const SizedBox(height: 20),
+                  Text(
+                    _getMotivationQuote(settings),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontStyle: FontStyle.italic,
+                      color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 80), // Prevent overlap with bottom nav in landscape
-              ],
+                  const SizedBox(height: 80), // Prevent overlap with bottom nav in landscape
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

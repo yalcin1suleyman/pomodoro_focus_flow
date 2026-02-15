@@ -29,8 +29,8 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
   String? _activeTaskId;
   String? _activeTaskTitle;
   
-  // Backgound handling
-  DateTime? _backgroundTime;
+  // Target time for robust background handling
+  DateTime? _targetEndTime;
 
   // Callbacks
   Function(String? taskId)? onPomodoroComplete;
@@ -97,9 +97,7 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
     _activeTaskTitle = title;
     
     // Switch to Pomodoro Mode and RESET timer
-    // This prevents "instant finish" if timer was at 00:00
     setMode(TimerMode.pomodoro); 
-    
     notifyListeners();
   }
 
@@ -112,7 +110,7 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
   void setMode(TimerMode mode) {
     _mode = mode;
     stop();
-    _updateDurationForMode(mode); // Use dynamic durations
+    _updateDurationForMode(mode); 
     _remainingSeconds = _initialSeconds;
     notifyListeners();
   }
@@ -120,75 +118,78 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
   void start() {
     if (_status == TimerStatus.running) return;
     
-    // Ensure we start with correct duration if somehow not set
-    if (_initialSeconds == 1500 && _pomodoroMinutes != 25) {
+    // Ensure we start with correct duration
+    if (_initialSeconds <= 0) {
        _updateDurationForMode(_mode);
     }
+    
+    // Calculate target end time based on current remaining seconds
+    _targetEndTime = DateTime.now().add(Duration(seconds: _remainingSeconds));
 
     _status = TimerStatus.running;
     
-    // Clear any existing alarm notifications to prevent "Double Notification" issues on restart
     NotificationService().cancelNotification(1); 
-    
     notifyListeners();
 
-      // DEMO MODE: 10ms (100Hz)
-    _timer = Timer.periodic(const Duration(milliseconds: 10), (timer) {
-      if (_remainingSeconds > 0) {
-        _remainingSeconds--;
-        
-        // Throttled UI Updates: 
-        // 10ms * 3 = 30ms (~33 FPS) - Sufficient for UI, saves CPU
-        // _initialSeconds is large in demo mode?? No, duration is normal but tick is fast.
-        // Actually, if we tick 100 times a second, we don't need to rebuild UI 100 times.
-        // Let's update UI every 5 ticks (50ms = 20 FPS) -> sufficient for text timer
-        if (_remainingSeconds % 5 == 0) {
-           notifyListeners();
-        }
-        
-        // Notification Updates:
-        // Update every 100 ticks (100 * 10ms = 1000ms = 1 second)
-        if (_remainingSeconds % 100 == 0) {
-          final title = _mode == TimerMode.pomodoro 
-              ? "${_currentLanguage?.focus ?? 'Focus'} - ${_currentLanguage?.inProgress ?? 'In Progress'}"
-              : (_currentLanguage?.shortBreak ?? 'Break');
-              
-          NotificationService().showOngoingNotification(
-             progress: _initialSeconds - _remainingSeconds, 
-             maxProgress: _initialSeconds, 
-             title: title, 
-             body: timeString
-          );
-        }
-        
-      } else {
-        _complete();
-      }
+    // Standard 1-second tick
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      _tick();
     });
+  }
+
+  void _tick() {
+    if (_targetEndTime == null) return;
+    
+    final now = DateTime.now();
+    final remaining = _targetEndTime!.difference(now).inSeconds;
+
+    if (remaining > 0) {
+      _remainingSeconds = remaining;
+      notifyListeners();
+      
+      // Update Notification every second
+      final title = _mode == TimerMode.pomodoro 
+          ? "${_currentLanguage?.focus ?? 'Focus'} - ${_currentLanguage?.inProgress ?? 'In Progress'}"
+          : (_currentLanguage?.shortBreak ?? 'Break');
+          
+      NotificationService().showOngoingNotification(
+         progress: _initialSeconds - _remainingSeconds, 
+         maxProgress: _initialSeconds, 
+         title: title, 
+         body: timeString
+      );
+
+    } else {
+      _remainingSeconds = 0;
+      _complete();
+    }
   }
 
   void pause() {
     if (_status != TimerStatus.running) return;
     _timer?.cancel();
     _status = TimerStatus.paused;
-    NotificationService().cancelNotification(0); // Clear progress bar
+    _targetEndTime = null; // Clear target text since we are paused
+    NotificationService().cancelNotification(0); 
     notifyListeners();
   }
 
   void stop() {
     _timer?.cancel();
     _status = TimerStatus.initial;
-    _updateDurationForMode(_mode); // Reset to full duration
+    _targetEndTime = null;
+    _updateDurationForMode(_mode); 
     _remainingSeconds = _initialSeconds;
-    NotificationService().cancelNotification(0); // Clear progress bar
+    NotificationService().cancelNotification(0); 
     notifyListeners();
   }
 
   void _complete() {
     _timer?.cancel();
     _status = TimerStatus.completed;
+    _targetEndTime = null;
     
-    // Trigger alarm immediately (important for Demo Mode speed or if app is open)
+    // Trigger alarm
     NotificationService().showAlarmNow(
       useAppBell: _soundType == 'bell',
       title: _currentLanguage?.timeIsUp ?? 'Time is up!',
@@ -197,15 +198,10 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
           : (_currentLanguage?.breakOver ?? 'Break Over'),
     );
     
-    // Cancel the ongoing progress notification (ID 0)
     NotificationService().cancelNotification(0); 
 
     if (_mode == TimerMode.pomodoro) {
-      // Notify completion, even if no task is active (passed as null)
       onPomodoroComplete?.call(_activeTaskId);
-      
-      // Auto-switch to Short Break
-      // This resets the timer to break duration and prevents "spamming" the finish
       setMode(TimerMode.shortBreak);
     }
 
@@ -217,29 +213,28 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (_status != TimerStatus.running) return;
 
-    if (state == AppLifecycleState.paused) {
-      _backgroundTime = DateTime.now();
-      _timer?.cancel(); // Stop actual timer to save resources
-    } else if (state == AppLifecycleState.resumed) {
-      if (_backgroundTime != null) {
-        final elapsed = DateTime.now().difference(_backgroundTime!).inSeconds;
-        _remainingSeconds -= elapsed;
-        if (_remainingSeconds <= 0) {
-          _remainingSeconds = 0;
-          _complete();
-        } else {
-          // Restart timer loop
-          _timer = Timer.periodic(const Duration(milliseconds: 10), (timer) {
-             if (_remainingSeconds > 0) {
-              _remainingSeconds--;
-              notifyListeners();
-            } else {
-              _complete();
-            }
-          });
-        }
-        _backgroundTime = null;
-        notifyListeners();
+    // We do NOT cancel the timer on pause anymore. 
+    // We let it run to support background updates.
+    
+    if (state == AppLifecycleState.resumed) {
+      // When resuming, we verify the time just in case the timer was killed/throttled.
+      if (_targetEndTime != null) {
+         final now = DateTime.now();
+         final remaining = _targetEndTime!.difference(now).inSeconds;
+         if (remaining <= 0) {
+           _remainingSeconds = 0;
+           _complete();
+         } else {
+           _remainingSeconds = remaining;
+           notifyListeners();
+           
+           // Ensure timer is actually running (if OS killed it)
+           if (_timer == null || !_timer!.isActive) {
+             _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+               _tick();
+             });
+           }
+         }
       }
     }
   }
