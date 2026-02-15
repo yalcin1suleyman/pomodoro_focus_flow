@@ -82,6 +82,16 @@ abstract class Language {
   String get goalMissed;
   String get tasksHelpTitle;
   String get tasksHelpContent;
+  String get tasksHelpStep1Title;
+  String get tasksHelpStep1Content;
+  String get tasksHelpStep2Title;
+  String get tasksHelpStep2Content;
+  String get tasksHelpStep3Title;
+  String get tasksHelpStep3Content;
+  String get tasksHelpStep4Title;
+  String get tasksHelpStep4Content;
+  String get tasksHelpStep5Title;
+  String get tasksHelpStep5Content;
 
   // Navigation
   String get navFocus;
@@ -134,6 +144,16 @@ abstract class Language {
   String get shareRangeYearly;
   String get shareButton;
   String get monthlyOverview;
+  
+  // Share & Ad
+  String get shareAdUnlockContent;
+  String get shareAdUnlockButton;
+  
+  // Share Card
+  String get shareSummary;
+  String get shareFocused;
+  String get shareSessions;
+  String get shareStreak;
 
   // Language Names (for Settings dropdown)
   String get languageEnglish;

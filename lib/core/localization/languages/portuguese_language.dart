@@ -67,7 +67,22 @@ class PortugueseLanguage implements Language {
   @override String get goalMet => 'Meta Atingida';
   @override String get goalMissed => 'Abaixo da Meta';
   @override String get tasksHelpTitle => 'Gestão de Tarefas';
-  @override String get tasksHelpContent => '1. Criar Tarefa (+)\n2. Estimar\n3. Iniciar (▶)\n4. Editar (Deslizar esq.)';
+  @override String get tasksHelpContent => 'Gerencie suas tarefas de forma eficaz para aumentar a produtividade:\n\n1. Criar Tarefa\nToque no botão (+) para adicionar uma nova tarefa.\n\n2. Estimativa\nEstime quantos Pomodoros você precisa. (A duração é ajustável nas Configurações).\n\n3. Começar a Focar\nToque no botão Play (▶) em uma tarefa para iniciar o cronômetro.\n\n4. Editar e Excluir\nDeslize o cartão da tarefa para a ESQUERDA para ver as opções de edição e exclusão.\n\n5. Acompanhar Progresso\nO progresso é registrado nas Estatísticas quando o cronômetro termina. Sessões sem tarefa são registradas como "Foco Geral".';
+
+  @override String get tasksHelpStep1Title => 'Criar Tarefa';
+  @override String get tasksHelpStep1Content => 'Toque no botão (+) para adicionar uma nova tarefa.';
+  
+  @override String get tasksHelpStep2Title => 'Estimativa';
+  @override String get tasksHelpStep2Content => 'Estime quantos Pomodoros você precisa para a tarefa. (A duração é ajustável nas Configurações).';
+  
+  @override String get tasksHelpStep3Title => 'Começar a Focar';
+  @override String get tasksHelpStep3Content => 'Toque no botão Play (▶) em uma tarefa para iniciar o cronômetro de foco.';
+  
+  @override String get tasksHelpStep4Title => 'Editar e Excluir';
+  @override String get tasksHelpStep4Content => 'Desliza o cartão da tarefa para a ESQUERDA para revelar as opções de edição e exclusão.';
+  
+  @override String get tasksHelpStep5Title => 'Acompanhar Progresso';
+  @override String get tasksHelpStep5Content => 'O progresso é registrado nas Estatísticas quando o cronômetro termina. Sessões sem tarefa são registradas como "Foco Geral".';
 
   @override String get navFocus => 'Foco';
   @override String get navTasks => 'Tarefas';
@@ -125,6 +140,14 @@ class PortugueseLanguage implements Language {
   @override String get shareRangeYearly => 'Anual';
   @override String get shareButton => 'Compartilhar';
   @override String get monthlyOverview => 'VISÃO GERAL MENSAL';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => 'Inglês';
   @override String get languageTurkish => 'Turco';

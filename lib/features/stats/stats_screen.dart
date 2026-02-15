@@ -10,6 +10,7 @@ import '../../core/widgets/glass_box.dart';
 import '../settings/settings_provider.dart';
 import 'history_provider.dart';
 import 'widgets/story_stats_card.dart';
+import '../../core/services/ad_service.dart';
 
 class StatsScreen extends StatefulWidget {
   const StatsScreen({super.key});
@@ -61,7 +62,7 @@ class _StatsScreenState extends State<StatsScreen> {
                     ),
                   ),
                   IconButton(
-                    onPressed: () => _showShareDialog(context, settings, selectedRecord, focusedMinutes),
+                    onPressed: () => _handleShareAction(context, settings, selectedRecord, focusedMinutes),
                     icon: Icon(Icons.share, color: Theme.of(context).colorScheme.primary),
                   ),
                 ],
@@ -678,7 +679,7 @@ class _StatsScreenState extends State<StatsScreen> {
           maxLines: 5,
           minLines: 3,
           decoration: InputDecoration(
-            hintText: "Bugün hakkında ne düşünüyorsun?",
+            hintText: settings.translate('noteHint'),
             filled: true,
             fillColor: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
             border: OutlineInputBorder(
@@ -723,5 +724,51 @@ class _StatsScreenState extends State<StatsScreen> {
        return _focusedMonth; 
     }
     return _selectedDate;
+  }
+
+  void _handleShareAction(BuildContext context, SettingsProvider settings, DailyRecord record, int focusedMinutes) {
+    final String content = settings.translate('shareAdUnlockContent');
+    final String buttonText = settings.translate('shareAdUnlockButton');
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Theme.of(context).cardColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            Icon(Icons.lock_outline, color: Theme.of(context).colorScheme.primary),
+            const SizedBox(width: 10),
+            Text(settings.translate('share')), 
+          ],
+        ),
+        content: Text(content),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(settings.translate('cancel'), style: TextStyle(color: Colors.grey)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            onPressed: () {
+              Navigator.pop(ctx);
+              AdService().showRewardedAd(
+                onRewardEarned: () {
+                   _showShareDialog(context, settings, record, focusedMinutes);
+                },
+                onAdDismissed: () {
+                  // Optional: Show message if dismissed without reward
+                }
+              );
+            },
+            child: Text(buttonText),
+          )
+        ],
+      )
+    );
   }
 }

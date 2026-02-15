@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../settings/settings_provider.dart';
 
 class ShareSummaryCard extends StatelessWidget {
   final String rangeLabel;
@@ -41,7 +43,7 @@ class ShareSummaryCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            "$rangeLabel Summary",
+            "$rangeLabel ${Provider.of<SettingsProvider>(context).translate('shareSummary')}",
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -49,33 +51,33 @@ class ShareSummaryCard extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           Text(
-            "$hours h",
+            "$hours ${Provider.of<SettingsProvider>(context).translate('hours').substring(0, 1).toLowerCase()}",
             style: const TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: 4),
-          const Text(
-            "focused",
-            style: TextStyle(
+          Text(
+            Provider.of<SettingsProvider>(context).translate('shareFocused'),
+            style: const TextStyle(
               fontSize: 12,
               color: Colors.white70,
             ),
           ),
           const SizedBox(height: 10),
           Text(
-            "$totalSessions sessions",
+            "$totalSessions ${Provider.of<SettingsProvider>(context).translate('shareSessions')}",
             style: const TextStyle(
               fontSize: 13,
               color: Colors.white70,
             ),
           ),
           const SizedBox(height: 14),
-          const Text(
-            "Share your streak and keep yourself accountable 🚀",
+          Text(
+            Provider.of<SettingsProvider>(context).translate('shareStreak'),
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 11,
               color: Colors.white60,
             ),

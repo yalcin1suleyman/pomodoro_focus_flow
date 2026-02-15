@@ -67,8 +67,22 @@ class PolishLanguage implements Language {
   @override String get goalMet => 'Cel Osiągnięty';
   @override String get goalMissed => 'Poniżej Celu';
   @override String get tasksHelpTitle => 'Zarządzanie Zadaniami';
-  @override String get tasksHelpContent => '1. Utwórz Zadanie (+)\n2. Oszacuj\n3. Start (▶)\n4. Edytuj (Przesuń w lewo)';
+  @override String get tasksHelpContent => 'Zarządzaj zadaniami efektywnie, aby zwiększyć produktywność:\n\n1. Utwórz Zadanie\nDotknij przycisku (+), aby dodać nowe zadanie.\n\n2. Szacowanie\nOszacuj, ile Pomodoro potrzebujesz. (Czas trwania można dostosować w Ustawieniach).\n\n3. Rozpocznij Skupienie\nDotknij przycisku Odtwórz (▶) na zadaniu, aby uruchomić licznik.\n\n4. Edytuj i Usuń\nPrzesuń kartę zadania w LEWO, aby zobaczyć opcje edycji i usuwania.\n\n5. Śledź Postępy\nPostęp jest zapisywany w Statystykach po zakończeniu licznika. Sesje bez zadania są rejestrowane jako "Ogólne Skupienie".';
 
+  @override String get tasksHelpStep1Title => 'Utwórz Zadanie';
+  @override String get tasksHelpStep1Content => 'Dotknij przycisku (+), aby dodać nowe zadanie.';
+  
+  @override String get tasksHelpStep2Title => 'Szacowanie';
+  @override String get tasksHelpStep2Content => 'Oszacuj, ile Pomodoro potrzebujesz do zadania. (Czas trwania można dostosować w Ustawieniach).';
+  
+  @override String get tasksHelpStep3Title => 'Rozpocznij Skupienie';
+  @override String get tasksHelpStep3Content => 'Dotknij przycisku Odtwórz (▶) na zadaniu, aby uruchomić licznik skupienia.';
+  
+  @override String get tasksHelpStep4Title => 'Edytuj i Usuń';
+  @override String get tasksHelpStep4Content => 'Przesuń kartę zadania w LEWO, aby odkryć opcje edycji i usuwania.';
+  
+  @override String get tasksHelpStep5Title => 'Śledź Postępy';
+  @override String get tasksHelpStep5Content => 'Postęp jest zapisywany w Statystykach po zakończeniu licznika. Sesje bez zadania są rejestrowane jako "Ogólne Skupienie".';
   @override String get navFocus => 'Skupienie';
   @override String get navTasks => 'Zadania';
   @override String get navStats => 'Statystyki';
@@ -125,6 +139,14 @@ class PolishLanguage implements Language {
   @override String get shareRangeYearly => 'Roczny';
   @override String get shareButton => 'Udostępnij';
   @override String get monthlyOverview => 'PRZEGLĄD MIESIĘCZNY';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => 'Angielski';
   @override String get languageTurkish => 'Turecki';

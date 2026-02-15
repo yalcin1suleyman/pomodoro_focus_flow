@@ -67,8 +67,22 @@ class KoreanLanguage implements Language {
   @override String get goalMet => '목표 달성';
   @override String get goalMissed => '목표 미달';
   @override String get tasksHelpTitle => '할 일 관리';
-  @override String get tasksHelpContent => '1. 생성 (+)\n2. 예측\n3. 시작 (▶)\n4. 수정 (왼쪽 스와이프)';
+  @override String get tasksHelpContent => '생산성을 높이기 위해 작업을 효과적으로 관리하세요:\n\n1. 작업 생성\n(+) 버튼을 탭하여 새 작업을 추가하세요.\n\n2. 견적 설정\n필요한 뽀모도로 수를 예상하세요. (시간은 설정에서 조정 가능).\n\n3. 집중 시작\n작업의 재생(▶) 버튼을 탭하여 타이머를 시작하세요.\n\n4. 편집 및 삭제\n편집 및 삭제 옵션을 보려면 작업 카드를 왼쪽으로 스와이프하세요.\n\n5. 진행 상황 추적\n타이머가 종료되면 진행 상황이 통계에 기록됩니다. 작업 없는 세션은 "일반 집중"으로 기록됩니다.';
 
+  @override String get tasksHelpStep1Title => '작업 생성';
+  @override String get tasksHelpStep1Content => '(+) 버튼을 탭하여 새 작업을 추가하세요.';
+  
+  @override String get tasksHelpStep2Title => '견적 설정';
+  @override String get tasksHelpStep2Content => '작업에 필요한 뽀모도로 수를 예상하세요. (시간은 설정에서 조정 가능).';
+  
+  @override String get tasksHelpStep3Title => '집중 시작';
+  @override String get tasksHelpStep3Content => '작업의 재생(▶) 버튼을 탭하여 집중 타이머를 시작하세요.';
+  
+  @override String get tasksHelpStep4Title => '편집 및 삭제';
+  @override String get tasksHelpStep4Content => '작업 카드를 왼쪽으로 스와이프하여 편집 및 삭제 옵션을 확인하세요.';
+  
+  @override String get tasksHelpStep5Title => '진행 상황 추적';
+  @override String get tasksHelpStep5Content => '타이머가 종료되면 진행 상황이 통계에 기록됩니다. 작업 없는 세션은 "일반 집중"으로 기록됩니다.';
   @override String get navFocus => '집중';
   @override String get navTasks => '할 일';
   @override String get navStats => '통계';
@@ -125,6 +139,14 @@ class KoreanLanguage implements Language {
   @override String get shareRangeYearly => '연간';
   @override String get shareButton => '공유';
   @override String get monthlyOverview => '월간 개요';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => '영어';
   @override String get languageTurkish => '터키어';

@@ -67,8 +67,22 @@ class SwedishLanguage implements Language {
   @override String get goalMet => 'Mål Uppnått';
   @override String get goalMissed => 'Under Målet';
   @override String get tasksHelpTitle => 'Uppgiftshantering';
-  @override String get tasksHelpContent => '1. Skapa Uppgift (+)\n2. Uppskatta\n3. Starta (▶)\n4. Redigera (Svep vänster)';
+  @override String get tasksHelpContent => 'Hantera uppgifter effektivt för att öka produktiviteten:\n\n1. Skapa Uppgift\nTryck på knappen (+) för att lägga till en ny uppgift.\n\n2. Uppskattning\nUppskatta hur många Pomodoros du behöver. (Längden kan justeras i Inställningar).\n\n3. Börja Fokusera\nTryck på Spela-knappen (▶) på en uppgift för att starta timern.\n\n4. Redigera & Ta Bort\nSvep uppgiftskortet till VÄNSTER för att se alternativ för redigering och borttagning.\n\n5. Följ Framsteg\nFramsteg loggas i Statistik när timern är klar. Sessioner utan uppgift loggas som "Allmänt Fokus".';
 
+  @override String get tasksHelpStep1Title => 'Skapa Uppgift';
+  @override String get tasksHelpStep1Content => 'Tryck på knappen (+) för att lägga till en ny uppgift.';
+  
+  @override String get tasksHelpStep2Title => 'Uppskattning';
+  @override String get tasksHelpStep2Content => 'Uppskatta hur många Pomodoros du behöver för uppgiften. (Längden kan justeras i Inställningar).';
+  
+  @override String get tasksHelpStep3Title => 'Börja Fokusera';
+  @override String get tasksHelpStep3Content => 'Tryck på Spela-knappen (▶) på en uppgift för att starta fokustimern.';
+  
+  @override String get tasksHelpStep4Title => 'Redigera & Ta Bort';
+  @override String get tasksHelpStep4Content => 'Svep uppgiftskortet till VÄNSTER för att visa alternativ för redigering och borttagning.';
+  
+  @override String get tasksHelpStep5Title => 'Följ Framsteg';
+  @override String get tasksHelpStep5Content => 'Framsteg loggas i Statistik när timern är klar. Sessioner utan uppgift loggas som "Allmänt Fokus".';
   @override String get navFocus => 'Fokus';
   @override String get navTasks => 'Uppgifter';
   @override String get navStats => 'Stats';
@@ -125,6 +139,14 @@ class SwedishLanguage implements Language {
   @override String get shareRangeYearly => 'År';
   @override String get shareButton => 'Dela';
   @override String get monthlyOverview => 'MÅNADSÖVERSIKT';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => 'Engelska';
   @override String get languageTurkish => 'Turkiska';

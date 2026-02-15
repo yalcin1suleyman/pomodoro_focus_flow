@@ -67,7 +67,22 @@ class TurkishLanguage implements Language {
   @override String get goalMet => 'Hedef Tamamlandı';
   @override String get goalMissed => 'Hedef Altında';
   @override String get tasksHelpTitle => 'Görev Yönetim Sistemi';
-  @override String get tasksHelpContent => 'Görevlerinizi etkili bir şekilde yöneterek verimliliğinizi artırın:\n\n1. Görev Oluşturma\n(+) butonuna tıklayarak yeni bir görev ekleyin.\n\n2. Hedef Belirleme\nGörevi tamamlamak için kaç Pomodoro (25 dk) gerektiğini öngörün.\n\n3. Odaklanma\nÇalışacağınız görevin üzerindeki Oynat (▶) butonuna basarak süreyi başlatın.\n\n4. Düzenleme ve Silme\nSeçenekleri görmek için görev kartını sola kaydırın.\n\n5. İlerleme Takibi\nZamanlayıcı bittiğinde, ilerlemeniz otomatik olarak istatistiklere kaydedilir.';
+  @override String get tasksHelpContent => 'Görevleri yöneterek üretkenliğinizi artırın:\n\n1. Görev Oluştur\nYeni bir görev eklemek için (+) düğmesine dokunun.\n\n2. Tahmin Belirle\nGörevi tamamlamak için kaç Pomodoro\'ya ihtiyacınız olduğunu tahmin edin. (Pomodoro süresi Ayarlar\'dan değiştirilebilir.)\n\n3. Odaklanmaya Başla\nOdaklanma sayacını başlatmak için görevdeki Oynat (▶) düğmesine dokunun.\n\n4. Düzenle & Sil\nDüzenleme ve silme seçeneklerini görmek için görev kartını SOLA kaydırın.\n\n5. İlerlemeyi Takip Et\nSayaç bittiğinde ilerleme otomatik olarak İstatistikler kısmına kaydedilir. Görev seçmeden başlatılan sayaçlar "Genel Odak" olarak kaydedilir.';
+
+  @override String get tasksHelpStep1Title => 'Görev Oluştur';
+  @override String get tasksHelpStep1Content => 'Yeni bir görev eklemek için (+) düğmesine dokunun.';
+  
+  @override String get tasksHelpStep2Title => 'Tahmin Belirle';
+  @override String get tasksHelpStep2Content => 'Görevi tamamlamak için kaç Pomodoro\'ya ihtiyacınız olduğunu tahmin edin. (Pomodoro süresi Ayarlar\'dan değiştirilebilir.)';
+  
+  @override String get tasksHelpStep3Title => 'Odaklanmaya Başla';
+  @override String get tasksHelpStep3Content => 'Odaklanma sayacını başlatmak için görevdeki Oynat (▶) düğmesine dokunun.';
+  
+  @override String get tasksHelpStep4Title => 'Düzenle & Sil';
+  @override String get tasksHelpStep4Content => 'Düzenleme ve silme seçeneklerini görmek için görev kartını SOLA kaydırın.';
+  
+  @override String get tasksHelpStep5Title => 'İlerlemeyi Takip Et';
+  @override String get tasksHelpStep5Content => 'Sayaç bittiğinde ilerleme otomatik olarak İstatistikler kısmına kaydedilir. Görev seçmeden başlatılan sayaçlar "Genel Odak" olarak kaydedilir.';
 
   @override String get navFocus => 'Odak';
   @override String get navTasks => 'Görevler';
@@ -128,6 +143,14 @@ class TurkishLanguage implements Language {
   @override String get shareRangeYearly => 'Yıllık';
   @override String get shareButton => 'Paylaş';
   @override String get monthlyOverview => 'AYLIK GENEL BAKIŞ';
+
+  @override String get shareAdUnlockContent => 'Bu özelliği kullanmak için reklam izlemelisiniz.';
+  @override String get shareAdUnlockButton => 'Reklam İzle';
+  
+  @override String get shareSummary => 'Özeti';
+  @override String get shareFocused => 'odaklanma';
+  @override String get shareSessions => 'oturum';
+  @override String get shareStreak => 'Serini paylaş ve kendini motive et 🚀';
 
   // Language Names
   @override String get languageEnglish => 'English';

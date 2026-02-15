@@ -67,7 +67,22 @@ class ItalianLanguage implements Language {
   @override String get goalMet => 'Obiettivo Raggiunto';
   @override String get goalMissed => 'Sotto Obiettivo';
   @override String get tasksHelpTitle => 'Gestione Attività';
-  @override String get tasksHelpContent => '1. Crea (+)\n2. Stima\n3. Avvia (▶)\n4. Modifica (Swipe a sx)';
+  @override String get tasksHelpContent => 'Gestisci le tue attività in modo efficace per aumentare la produttività:\n\n1. Crea Attività\nTocca il pulsante (+) per aggiungere una nuova attività.\n\n2. Stima\nStima quanti Pomodoro ti servono. (La durata è regolabile nelle Impostazioni).\n\n3. Inizia a Concentrarti\nTocca il pulsante Play (▶) su un\'attività per avviare il timer.\n\n4. Modifica ed Elimina\nScorri la scheda dell\'attività a SINISTRA per vedere le opzioni di modifica ed eliminazione.\n\n5. Traccia i Progressi\nI progressi vengono registrati nelle Statistiche al termine del timer. Le sessioni senza attività vengono registrate come "Focus Generale".';
+
+  @override String get tasksHelpStep1Title => 'Crea Attività';
+  @override String get tasksHelpStep1Content => 'Tocca il pulsante (+) per aggiungere una nuova attività.';
+  
+  @override String get tasksHelpStep2Title => 'Stima';
+  @override String get tasksHelpStep2Content => 'Stima quanti Pomodoro ti servono per l\'attività. (La durata è regolabile nelle Impostazioni).';
+  
+  @override String get tasksHelpStep3Title => 'Inizia a Concentrarti';
+  @override String get tasksHelpStep3Content => 'Tocca il pulsante Play (▶) su un\'attività per avviare il timer di concentrazione.';
+  
+  @override String get tasksHelpStep4Title => 'Modifica ed Elimina';
+  @override String get tasksHelpStep4Content => 'Scorri la scheda dell\'attività a SINISTRA per rivelare le opzioni di modifica ed eliminazione.';
+  
+  @override String get tasksHelpStep5Title => 'Traccia i Progressi';
+  @override String get tasksHelpStep5Content => 'I progressi vengono registrati nelle Statistiche al termine del timer. Le sessioni senza attività vengono registrate come "Focus Generale".';
 
   @override String get navFocus => 'Focus';
   @override String get navTasks => 'Attività';
@@ -125,6 +140,14 @@ class ItalianLanguage implements Language {
   @override String get shareRangeYearly => 'Annuale';
   @override String get shareButton => 'Condividi';
   @override String get monthlyOverview => 'PANORAMICA MENSILE';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => 'Inglese';
   @override String get languageTurkish => 'Turco';

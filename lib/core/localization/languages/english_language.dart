@@ -67,7 +67,22 @@ class EnglishLanguage implements Language {
   @override String get goalMet => 'Goal Met';
   @override String get goalMissed => 'Below Goal';
   @override String get tasksHelpTitle => 'Task Management System';
-  @override String get tasksHelpContent => 'Manage tasks effectively to boost productivity:\n\n1. Create Task\nTap the (+) button to add a new task.\n\n2. Set Estimation\nEstimate how many Pomodoros (25 min) you need.\n\n3. Start Focusing\nTap the Play (▶) button on a task to start the timer.\n\n4. Edit & Delete\nSwipe the task card to the LEFT to reveal options.\n\n5. Track Progress\nProgress is automatically logged when the timer finishes.';
+  @override String get tasksHelpContent => 'Manage tasks effectively to boost productivity:\n\n1. Create Task\nTap the (+) button to add a new task.\n\n2. Set Estimation\nEstimate how many Pomodoros you need. (Duration is adjustable in Settings.)\n\n3. Start Focusing\nTap the Play (▶) button on a task to start the focus timer.\n\n4. Edit & Delete\nSwipe the task card to the LEFT to reveal editing and deleting options.\n\n5. Track Progress\nProgress is logged in Statistics when timer ends. Sessions started without a task are logged as "General Focus".';
+
+  @override String get tasksHelpStep1Title => 'Create Task';
+  @override String get tasksHelpStep1Content => 'Tap the (+) button to add a new task.';
+  
+  @override String get tasksHelpStep2Title => 'Set Estimation';
+  @override String get tasksHelpStep2Content => 'Estimate how many Pomodoros you need for the task. (Duration is adjustable in Settings.)';
+  
+  @override String get tasksHelpStep3Title => 'Start Focusing';
+  @override String get tasksHelpStep3Content => 'Tap the Play (▶) button on a task to start the focus timer.';
+  
+  @override String get tasksHelpStep4Title => 'Edit & Delete';
+  @override String get tasksHelpStep4Content => 'Swipe the task card to the LEFT to reveal edit and delete options.';
+  
+  @override String get tasksHelpStep5Title => 'Track Progress';
+  @override String get tasksHelpStep5Content => 'Progress is logged in Statistics when timer ends. Sessions started without a task are logged as "General Focus".';
 
   @override String get navFocus => 'Focus';
   @override String get navTasks => 'Tasks';
@@ -128,6 +143,14 @@ class EnglishLanguage implements Language {
   @override String get shareRangeYearly => 'Yearly';
   @override String get shareButton => 'Share';
   @override String get monthlyOverview => 'MONTHLY OVERVIEW';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   // Language Names
   @override String get languageEnglish => 'English';

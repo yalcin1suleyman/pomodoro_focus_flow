@@ -67,7 +67,22 @@ class JapaneseLanguage implements Language {
   @override String get goalMet => '目標達成';
   @override String get goalMissed => '目標未達';
   @override String get tasksHelpTitle => 'タスク管理';
-  @override String get tasksHelpContent => '1. 作成 (+)\n2. 見積もり\n3. 開始 (▶)\n4. 編集 (左スワイプ)';
+  @override String get tasksHelpContent => 'タスクを効果的に管理して生産性を向上させましょう：\n\n1. タスク作成\n(+) ボタンをタップして新しいタスクを追加します。\n\n2. 見積もり\n必要なポモドーロ数を見積もります。（期間は設定で調整可能）。\n\n3. 集中開始\nタスクの再生（▶）ボタンをタップしてタイマーを開始します。\n\n4. 編集と削除\nタスクカードを左にスワイプして編集および削除のオプションを表示します。\n\n5. 進捗追跡\nタイマーが終了すると、進捗が統計に記録されます。タスクなしのセッションは「一般的な集中」として記録されます。';
+
+  @override String get tasksHelpStep1Title => 'タスク作成';
+  @override String get tasksHelpStep1Content => '(+) ボタンをタップして新しいタスクを追加します。';
+  
+  @override String get tasksHelpStep2Title => '見積もり';
+  @override String get tasksHelpStep2Content => 'タスクに必要なポモドーロ数を見積もります。（期間は設定で調整可能）。';
+  
+  @override String get tasksHelpStep3Title => '集中開始';
+  @override String get tasksHelpStep3Content => 'タスクの再生（▶）ボタンをタップして集中タイマーを開始します。';
+  
+  @override String get tasksHelpStep4Title => '編集と削除';
+  @override String get tasksHelpStep4Content => 'タスクカードを左にスワイプして、編集および削除のオプションを表示します。';
+  
+  @override String get tasksHelpStep5Title => '進捗追跡';
+  @override String get tasksHelpStep5Content => 'タイマーが終了すると、進捗が統計に記録されます。タスクなしのセッションは「一般的な集中」として記録されます。';
 
   @override String get navFocus => '集中';
   @override String get navTasks => 'タスク';
@@ -125,6 +140,14 @@ class JapaneseLanguage implements Language {
   @override String get shareRangeYearly => '年';
   @override String get shareButton => '共有';
   @override String get monthlyOverview => '月間概要';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => '英語';
   @override String get languageTurkish => 'トルコ語';

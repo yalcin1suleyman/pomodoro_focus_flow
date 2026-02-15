@@ -67,7 +67,22 @@ class SpanishLanguage implements Language {
   @override String get goalMet => 'Meta Alcanzada';
   @override String get goalMissed => 'Por debajo de la meta';
   @override String get tasksHelpTitle => 'Gestión de Tareas';
-  @override String get tasksHelpContent => '1. Crear Tarea (+)\n2. Estimar Pomodoros\n3. Iniciar (▶)\n4. Editar (Deslizar izq.)';
+  @override String get tasksHelpContent => 'Administra tus tareas eficazmente para aumentar la productividad:\n\n1. Crear Tarea\nToca el botón (+) para añadir una nueva tarea.\n\n2. Estimación\nEstima cuántos Pomodoros necesitas. (La duración es ajustable en Ajustes).\n\n3. Empezar a Enfocarse\nToca el botón Play (▶) en una tarea para iniciar el temporizador.\n\n4. Editar y Eliminar\nDesliza la tarjeta de la tarea a la IZQUIERDA para ver opciones de edición y eliminación.\n\n5. Seguir Progreso\nEl progreso se registra en Estadísticas cuando termina el temporizador. Las sesiones sin tarea se registran como "Enfoque General".';
+
+  @override String get tasksHelpStep1Title => 'Crear Tarea';
+  @override String get tasksHelpStep1Content => 'Toca el botón (+) para añadir una nueva tarea.';
+  
+  @override String get tasksHelpStep2Title => 'Estimación';
+  @override String get tasksHelpStep2Content => 'Estima cuántos Pomodoros necesitas para la tarea. (La duración es ajustable en Ajustes).';
+  
+  @override String get tasksHelpStep3Title => 'Empezar a Enfocarse';
+  @override String get tasksHelpStep3Content => 'Toca el botón Play (▶) en una tarea para iniciar el temporizador de enfoque.';
+  
+  @override String get tasksHelpStep4Title => 'Editar y Eliminar';
+  @override String get tasksHelpStep4Content => 'Desliza la tarjeta de la tarea a la IZQUIERDA para ver las opciones de editar y eliminar.';
+  
+  @override String get tasksHelpStep5Title => 'Seguir Progreso';
+  @override String get tasksHelpStep5Content => 'El progreso se registra en Estadísticas cuando termina el temporizador. Las sesiones sin tarea se registran como "Enfoque General".';
 
   @override String get navFocus => 'Enfoque';
   @override String get navTasks => 'Tareas';
@@ -125,6 +140,14 @@ class SpanishLanguage implements Language {
   @override String get shareRangeYearly => 'Anual';
   @override String get shareButton => 'Compartir';
   @override String get monthlyOverview => 'RESUMEN MENSUAL';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => 'Inglés';
   @override String get languageTurkish => 'Turco';

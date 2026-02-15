@@ -67,7 +67,23 @@ class GermanLanguage implements Language {
   @override String get goalMet => 'Ziel erreicht';
   @override String get goalMissed => 'Ziel verfehlt';
   @override String get tasksHelpTitle => 'Aufgabenverwaltung';
-  @override String get tasksHelpContent => '1. Aufgabe erstellen (+)\n2. Schätzen\n3. Starten (▶)\n4. Bearbeiten (Links wischen)';
+  @override String get tasksHelpContent => 'Verwalten Sie Aufgaben effektiv, um die Produktivität zu steigern:\n\n1. Aufgabe Erstellen\nTippen Sie auf die Taste (+), um eine neue Aufgabe hinzuzufügen.\n\n2. Schätzung\nSchätzen Sie, wie viele Pomodoros Sie benötigen. (Dauer ist in den Einstellungen anpassbar).\n\n3. Fokus Starten\nTippen Sie auf die Play-Taste (▶) bei einer Aufgabe, um den Fokus-Timer zu starten.\n\n4. Bearbeiten & Löschen\nWischen Sie die Aufgabenkarte nach LINKS, um Optionen zum Bearbeiten und Löschen anzuzeigen.\n\n5. Fortschritt Verfolgen\nDer Fortschritt wird in den Statistiken protokolliert, wenn der Timer endet. Sitzungen ohne Aufgabe werden als "Allgemeiner Fokus" protokolliert.';
+
+  @override String get tasksHelpStep1Title => 'Aufgabe Erstellen';
+  @override String get tasksHelpStep1Content => 'Tippen Sie auf die Taste (+), um eine neue Aufgabe hinzuzufügen.';
+  
+  @override String get tasksHelpStep2Title => 'Schätzung';
+  @override String get tasksHelpStep2Content => 'Schätzen Sie, wie viele Pomodoros Sie für die Aufgabe benötigen. (Dauer ist in den Einstellungen anpassbar).';
+  
+  @override String get tasksHelpStep3Title => 'Fokus Starten';
+  @override String get tasksHelpStep3Content => 'Tippen Sie auf die Play-Taste (▶) bei einer Aufgabe, um den Fokus-Timer zu starten.';
+  
+  @override String get tasksHelpStep4Title => 'Bearbeiten & Löschen';
+  @override String get tasksHelpStep4Content => 'Wischen Sie die Aufgabenkarte nach LINKS, um Optionen zum Bearbeiten und Löschen anzuzeigen.';
+  
+  @override String get tasksHelpStep5Title => 'Fortschritt Verfolgen';
+  @override String get tasksHelpStep5Content => 'Der Fortschritt wird in den Statistiken protokolliert, wenn der Timer endet. Sitzungen ohne Aufgabe werden als "Allgemeiner Fokus" protokolliert.';
+
 
   @override String get navFocus => 'Fokus';
   @override String get navTasks => 'Aufgaben';
@@ -125,6 +141,14 @@ class GermanLanguage implements Language {
   @override String get shareRangeYearly => 'Jährlich';
   @override String get shareButton => 'Teilen';
   @override String get monthlyOverview => 'MONATSÜBERSICHT';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => 'Englisch';
   @override String get languageTurkish => 'Türkisch';

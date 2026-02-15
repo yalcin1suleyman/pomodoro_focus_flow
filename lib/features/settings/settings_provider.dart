@@ -302,6 +302,25 @@ class SettingsProvider extends ChangeNotifier {
       case 'shareYearlyJourney': return _currentLanguage.shareYearlyJourney;
       case 'tasksHelpTitle': return _currentLanguage.tasksHelpTitle;
       case 'tasksHelpContent': return _currentLanguage.tasksHelpContent;
+      
+      case 'tasksHelpStep1Title': return _currentLanguage.tasksHelpStep1Title;
+      case 'tasksHelpStep1Content': return _currentLanguage.tasksHelpStep1Content;
+      case 'tasksHelpStep2Title': return _currentLanguage.tasksHelpStep2Title;
+      case 'tasksHelpStep2Content': return _currentLanguage.tasksHelpStep2Content;
+      case 'tasksHelpStep3Title': return _currentLanguage.tasksHelpStep3Title;
+      case 'tasksHelpStep3Content': return _currentLanguage.tasksHelpStep3Content;
+      case 'tasksHelpStep4Title': return _currentLanguage.tasksHelpStep4Title;
+      case 'tasksHelpStep4Content': return _currentLanguage.tasksHelpStep4Content;
+      
+      case 'tasksHelpStep5Title': return _currentLanguage.tasksHelpStep5Title;
+      case 'tasksHelpStep5Content': return _currentLanguage.tasksHelpStep5Content;
+      
+      case 'shareAdUnlockContent': return _currentLanguage.shareAdUnlockContent;
+      case 'shareAdUnlockButton': return _currentLanguage.shareAdUnlockButton;
+      case 'shareSummary': return _currentLanguage.shareSummary;
+      case 'shareFocused': return _currentLanguage.shareFocused;
+      case 'shareSessions': return _currentLanguage.shareSessions;
+      case 'shareStreak': return _currentLanguage.shareStreak;
       // Motivational Quotes
       case 'quoteMotivation1': return _currentLanguage.quoteMotivation1;
       case 'quoteMotivation2': return _currentLanguage.quoteMotivation2;

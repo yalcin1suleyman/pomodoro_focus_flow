@@ -67,7 +67,22 @@ class ChineseLanguage implements Language {
   @override String get goalMet => '目标达成';
   @override String get goalMissed => '未达标';
   @override String get tasksHelpTitle => '任务管理';
-  @override String get tasksHelpContent => '1. 创建 (+)\n2. 预估\n3. 开始 (▶)\n4. 编辑 (左滑)';
+  @override String get tasksHelpContent => '高效管理任务：\n\n1. 创建任务\n点击 (+) 按钮添加新任务。\n\n2. 估算\n估算您需要多少个番茄钟（25分钟）。\n\n3. 开始专注\n点击任务上的播放 (▶) 按钮开始计时。\n\n4. 编辑和删除\n向左滑动任务卡片以查看选项。\n\n5. 追踪进度\n计时结束时，进度会自动记录。';
+
+  @override String get tasksHelpStep1Title => '创建任务';
+  @override String get tasksHelpStep1Content => '点击 (+) 按钮添加新任务。';
+  
+  @override String get tasksHelpStep2Title => '估算';
+  @override String get tasksHelpStep2Content => '估算完成任务需要多少个番茄钟（25分钟）。';
+  
+  @override String get tasksHelpStep3Title => '开始专注';
+  @override String get tasksHelpStep3Content => '点击任务上的播放 (▶) 按钮开始专注计时。';
+  
+  @override String get tasksHelpStep4Title => '编辑和删除';
+  @override String get tasksHelpStep4Content => '向左滑动任务卡片以显示编辑和删除选项。';
+
+  @override String get tasksHelpStep5Title => '追踪进度';
+  @override String get tasksHelpStep5Content => '计时器结束时，进度会记录在统计数据中。没有任务的会话将记录为“一般专注”。';
 
   @override String get navFocus => '专注';
   @override String get navTasks => '任务';
@@ -125,6 +140,14 @@ class ChineseLanguage implements Language {
   @override String get shareRangeYearly => '年';
   @override String get shareButton => '分享';
   @override String get monthlyOverview => '月度概览';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => '英语';
   @override String get languageTurkish => '土耳其语';

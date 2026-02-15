@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'settings_provider.dart';
 import '../../core/widgets/glass_box.dart';
-import '../../core/localization/languages/language.dart';
 
 class LanguageScreen extends StatelessWidget {
   const LanguageScreen({super.key});

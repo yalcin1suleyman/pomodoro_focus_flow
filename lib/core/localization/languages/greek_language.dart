@@ -67,8 +67,22 @@ class GreekLanguage implements Language {
   @override String get goalMet => 'Στόχος Επετεύχθη';
   @override String get goalMissed => 'Κάτω από Στόχο';
   @override String get tasksHelpTitle => 'Διαχείριση Εργασιών';
-  @override String get tasksHelpContent => '1. Δημιουργία (+)\n2. Εκτίμηση\n3. Έναρξη (▶)\n4. Επεξεργασία (Σύρε αριστερά)';
+  @override String get tasksHelpContent => 'Διαχειριστείτε τις εργασίες αποτελεσματικά για να αυξήσετε την παραγωγικότητα:\n\n1. Δημιουργία Εργασίας\nΠατήστε το κουμπί (+) για να προσθέσετε μια νέα εργασία.\n\n2. Εκτίμηση\nΕκτιμήστε πόσα Pomodoro χρειάζεστε. (Η διάρκεια μπορεί να προσαρμοστεί στις Ρυθμίσεις).\n\n3. Έναρξη Εστίασης\nΠατήστε το κουμπί Αναπαραγωγής (▶) σε μια εργασία για να ξεκινήσει το χρονόμετρο.\n\n4. Επεξεργασία & Διαγραφή\nΣύρετε την κάρτα εργασίας προς τα ΑΡΙΣΤΕΡΑ για επιλογές επεξεργασίας και διαγραφής.\n\n5. Παρακολούθηση Προόδου\nΗ πρόοδος καταγράφεται στα Στατιστικά όταν τελειώσει το χρονόμετρο. Συνεδρίες χωρίς εργασία καταγράφονται ως "Γενική Εστίαση".';
 
+  @override String get tasksHelpStep1Title => 'Δημιουργία Εργασίας';
+  @override String get tasksHelpStep1Content => 'Πατήστε το κουμπί (+) για να προσθέσετε μια νέα εργασία.';
+  
+  @override String get tasksHelpStep2Title => 'Εκτίμηση';
+  @override String get tasksHelpStep2Content => 'Εκτιμήστε πόσα Pomodoro χρειάζεστε για την εργασία. (Η διάρκεια μπορεί να προσαρμοστεί στις Ρυθμίσεις).';
+  
+  @override String get tasksHelpStep3Title => 'Έναρξη Εστίασης';
+  @override String get tasksHelpStep3Content => 'Πατήστε το κουμπί Αναπαραγωγής (▶) σε μια εργασία για να ξεκινήσει το χρονόμετρο εστίασης.';
+  
+  @override String get tasksHelpStep4Title => 'Επεξεργασία & Διαγραφή';
+  @override String get tasksHelpStep4Content => 'Σύρετε την κάρτα εργασίας προς τα ΑΡΙΣΤΕΡΑ για να εμφανίσετε επιλογές επεξεργασίας και διαγραφής.';
+  
+  @override String get tasksHelpStep5Title => 'Παρακολούθηση Προόδου';
+  @override String get tasksHelpStep5Content => 'Η πρόοδος καταγράφεται στα Στατιστικά όταν τελειώσει το χρονόμετρο. Συνεδρίες χωρίς εργασία καταγράφονται ως "Γενική Εστίαση".';
   @override String get navFocus => 'Εστίαση';
   @override String get navTasks => 'Εργασίες';
   @override String get navStats => 'Στατιστικά';
@@ -125,6 +139,14 @@ class GreekLanguage implements Language {
   @override String get shareRangeYearly => 'Ετήσιο';
   @override String get shareButton => 'Κοινοποίηση';
   @override String get monthlyOverview => 'ΜΗΝΙΑΙΑ ΕΠΙΣΚΟΠΗΣΗ';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => 'Αγγλικά';
   @override String get languageTurkish => 'Τουρκικά';

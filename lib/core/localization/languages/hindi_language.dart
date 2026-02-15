@@ -67,8 +67,22 @@ class HindiLanguage implements Language {
   @override String get goalMet => 'लक्ष्य पूरा हुआ';
   @override String get goalMissed => 'लक्ष्य से कम';
   @override String get tasksHelpTitle => 'कार्य प्रबंधन';
-  @override String get tasksHelpContent => '1. बनाएं (+)\n2. अनुमान लगाएं\n3. शुरू करें (▶)\n4. संपादित करें (बाएं स्वाइप)';
+  @override String get tasksHelpContent => 'उत्पादकता बढ़ाने के लिए कार्यों को प्रभावी ढंग से प्रबंधित करें:\n\n1. कार्य बनाएं\nनया कार्य जोड़ने के लिए (+) बटन पर टैप करें।\n\n2. अनुमान\nअनुमान लगाएं कि आपको कितने पोमोडोरो की आवश्यकता है। (अवधि सेटिंग्स में समायोज्य है)।\n\n3. ध्यान केंद्रित करना शुरू करें\nटाइमर शुरू करने के लिए कार्य पर प्ले (▶) बटन पर टैप करें।\n\n4. संपादित करें और हटाएं\nसंपादन और हटाने के विकल्पों को देखने के लिए टास्क कार्ड को बाईं ओर स्वाइप करें।\n\n5. प्रगति ट्रैक करें\nटाइमर समाप्त होने पर प्रगति आंकड़ों में लॉग की जाती है। कार्य के बिना सत्र "सामान्य फोकस" के रूप में लॉग किए जाते हैं।';
 
+  @override String get tasksHelpStep1Title => 'कार्य बनाएं';
+  @override String get tasksHelpStep1Content => 'नया कार्य जोड़ने के लिए (+) बटन पर टैप करें।';
+  
+  @override String get tasksHelpStep2Title => 'अनुमान';
+  @override String get tasksHelpStep2Content => 'अनुमान लगाएं कि कार्य के लिए आपको कितने पोमोडोरो की आवश्यकता है। (अवधि सेटिंग्स में समायोज्य है)।';
+  
+  @override String get tasksHelpStep3Title => 'ध्यान केंद्रित करना शुरू करें';
+  @override String get tasksHelpStep3Content => 'फोकस टाइमर शुरू करने के लिए कार्य पर प्ले (▶) बटन पर टैप करें।';
+  
+  @override String get tasksHelpStep4Title => 'संपादित करें और हटाएं';
+  @override String get tasksHelpStep4Content => 'संपादन और हटाने के विकल्पों को प्रकट करने के लिए टास्क कार्ड को बाईं ओर स्वाइप करें।';
+  
+  @override String get tasksHelpStep5Title => 'प्रगति ट्रैक करें';
+  @override String get tasksHelpStep5Content => 'टाइमर समाप्त होने पर प्रगति आंकड़ों में लॉग की जाती है। कार्य के बिना सत्र "सामान्य फोकस" के रूप में लॉग किए जाते हैं।';
   @override String get navFocus => 'फोकस';
   @override String get navTasks => 'कार्य';
   @override String get navStats => 'सांख्यिकी';
@@ -125,6 +139,14 @@ class HindiLanguage implements Language {
   @override String get shareRangeYearly => 'वार्षिक';
   @override String get shareButton => 'साझा करें';
   @override String get monthlyOverview => 'मासिक अवलोकन';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => 'अंग्रेज़ी';
   @override String get languageTurkish => 'तुर्की';

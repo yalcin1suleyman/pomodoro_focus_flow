@@ -67,8 +67,22 @@ class ThaiLanguage implements Language {
   @override String get goalMet => 'บรรลุเป้าหมาย';
   @override String get goalMissed => 'ต่ำกว่าเป้าหมาย';
   @override String get tasksHelpTitle => 'การจัดการงาน';
-  @override String get tasksHelpContent => '1. สร้าง (+)\n2. ประมาณการ\n3. เริ่ม (▶)\n4. แก้ไข (ปัดซ้าย)';
+  @override String get tasksHelpContent => 'จัดการงานอย่างมีประสิทธิภาพเพื่อเพิ่มผลผลิต:\n\n1. สร้างงาน\nแตะปุ่ม (+) เพื่อเพิ่มงานใหม่\n\n2. ประมาณการ\nประมาณการว่าคุณต้องการ Pomodoro กี่รอบ (ระยะเวลาปรับได้ในการตั้งค่า)\n\n3. เริ่มโฟกัส\nแตะปุ่มเล่น (▶) บนงานเพื่อเริ่มจับเวลา\n\n4. แก้ไขและลบ\nปัดการ์ดงานไปทางซ้ายเพื่อดูตัวเลือกการแก้ไขและลบ\n\n5. ติดตามความคืบหน้า\nความคืบหน้าจะถูกบันทึกในสถิติเมื่อตัวจับเวลาสิ้นสุดลง เซสชันที่ไม่มีงานจะถูกบันทึกเป็น "โฟกัสทั่วไป"';
 
+  @override String get tasksHelpStep1Title => 'สร้างงาน';
+  @override String get tasksHelpStep1Content => 'แตะปุ่ม (+) เพื่อเพิ่มงานใหม่';
+  
+  @override String get tasksHelpStep2Title => 'ประมาณการ';
+  @override String get tasksHelpStep2Content => 'ประมาณการว่าคุณต้องการ Pomodoro กี่รอบสำหรับงาน (ระยะเวลาปรับได้ในการตั้งค่า)';
+  
+  @override String get tasksHelpStep3Title => 'เริ่มโฟกัส';
+  @override String get tasksHelpStep3Content => 'แตะปุ่มเล่น (▶) บนงานเพื่อเริ่มจับเวลาโฟกัส';
+  
+  @override String get tasksHelpStep4Title => 'แก้ไขและลบ';
+  @override String get tasksHelpStep4Content => 'ปัดการ์ดงานไปทางซ้ายเพื่อแสดงตัวเลือกการแก้ไขและลบ';
+  
+  @override String get tasksHelpStep5Title => 'ติดตามความคืบหน้า';
+  @override String get tasksHelpStep5Content => 'ความคืบหน้าจะถูกบันทึกในสถิติเมื่อตัวจับเวลาสิ้นสุดลง เซสชันที่ไม่มีงานจะถูกบันทึกเป็น "โฟกัสทั่วไป"';
   @override String get navFocus => 'โฟกัส';
   @override String get navTasks => 'งาน';
   @override String get navStats => 'สถิติ';
@@ -125,6 +139,14 @@ class ThaiLanguage implements Language {
   @override String get shareRangeYearly => 'รายปี';
   @override String get shareButton => 'แชร์';
   @override String get monthlyOverview => 'ภาพรวมรายเดือน';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => 'อังกฤษ';
   @override String get languageTurkish => 'ตุรกี';

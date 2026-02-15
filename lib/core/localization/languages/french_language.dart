@@ -67,8 +67,22 @@ class FrenchLanguage implements Language {
   @override String get goalMet => 'Objectif Atteint';
   @override String get goalMissed => 'Sous l\'objectif';
   @override String get tasksHelpTitle => 'Gestion des Tâches';
-  @override String get tasksHelpContent => '1. Créer Tâche (+)\n2. Estimer\n3. Démarrer (▶)\n4. Éditer (Glisser gauche)';
+  @override String get tasksHelpContent => 'Gérez efficacement vos tâches pour booster votre productivité :\n\n1. Créer une Tâche\nAppuyez sur le bouton (+) pour ajouter une nouvelle tâche.\n\n2. Estimation\nEstimez le nombre de Pomodoros nécessaires. (Durée modifiable dans les paramètres).\n\n3. Commencer à se Concentrer\nAppuyez sur le bouton Lecture (▶) sur une tâche pour démarrer le minuteur.\n\n4. Modifier et Supprimer\nFaites glisser la carte de la tâche vers la GAUCHE pour voir les options.\n\n5. Suivre les Progrès\nLes progrès sont enregistrés dans les Statistiques à la fin du minuteur. Les sessions sans tâche sont notées comme "Focus Général".';
 
+  @override String get tasksHelpStep1Title => 'Créer une Tâche';
+  @override String get tasksHelpStep1Content => 'Appuyez sur le bouton (+) pour ajouter une nouvelle tâche.';
+  
+  @override String get tasksHelpStep2Title => 'Estimation';
+  @override String get tasksHelpStep2Content => 'Estimez le nombre de Pomodoros nécessaires pour la tâche. (Durée modifiable dans les paramètres).';
+  
+  @override String get tasksHelpStep3Title => 'Commencer à se Concentrer';
+  @override String get tasksHelpStep3Content => 'Appuyez sur le bouton Lecture (▶) sur une tâche pour démarrer le minuteur de concentration.';
+  
+  @override String get tasksHelpStep4Title => 'Modifier et Supprimer';
+  @override String get tasksHelpStep4Content => 'Faites glisser la carte de la tâche vers la GAUCHE pour révéler les options de modification et de suppression.';
+  
+  @override String get tasksHelpStep5Title => 'Suivre les Progrès';
+  @override String get tasksHelpStep5Content => 'Les progrès sont enregistrés dans les Statistiques à la fin du minuteur. Les sessions sans tâche sont notées comme "Focus Général".';
   @override String get navFocus => 'Focus';
   @override String get navTasks => 'Tâches';
   @override String get navStats => 'Stats';
@@ -125,6 +139,14 @@ class FrenchLanguage implements Language {
   @override String get shareRangeYearly => 'Année';
   @override String get shareButton => 'Partager';
   @override String get monthlyOverview => 'APERÇU MENSUEL';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => 'Anglais';
   @override String get languageTurkish => 'Turc';

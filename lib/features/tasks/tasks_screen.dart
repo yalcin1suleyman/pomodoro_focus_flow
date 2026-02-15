@@ -28,27 +28,117 @@ class _TasksScreenState extends State<TasksScreen> {
     super.dispose();
   }
 
-  void _showHelpDialog(BuildContext context, SettingsProvider settings) {
-    showDialog(
+  void _showHelpSheet(BuildContext context, SettingsProvider settings) {
+    showModalBottomSheet(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: Theme.of(context).cardColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Row(
-          children: [
-            Icon(Icons.help_outline, color: Theme.of(context).colorScheme.primary),
-            const SizedBox(width: 10),
-            Expanded(child: Text(settings.translate('tasksHelpTitle'), style: const TextStyle(fontSize: 18))),
-          ],
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (ctx) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        minChildSize: 0.5,
+        maxChildSize: 0.9,
+        builder: (_, controller) => GlassBox(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+          child: Column(
+            children: [
+              // Handle Bar
+              Center(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 10, bottom: 20),
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              // Title
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Row(
+                  children: [
+                    Icon(Icons.help_outline, color: Theme.of(context).colorScheme.primary, size: 28),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        settings.translate('tasksHelpTitle'),
+                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              // Content
+              Expanded(
+                child: ListView(
+                  controller: controller,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                  children: [
+                    _buildHelpStep(context, "1", settings.translate('tasksHelpStep1Title'), settings.translate('tasksHelpStep1Content')),
+                    _buildHelpStep(context, "2", settings.translate('tasksHelpStep2Title'), settings.translate('tasksHelpStep2Content')),
+                    _buildHelpStep(context, "3", settings.translate('tasksHelpStep3Title'), settings.translate('tasksHelpStep3Content')),
+                    _buildHelpStep(context, "4", settings.translate('tasksHelpStep4Title'), settings.translate('tasksHelpStep4Content')),
+                    _buildHelpStep(context, "5", settings.translate('tasksHelpStep5Title'), settings.translate('tasksHelpStep5Content')),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
-        content: Text(
-          settings.translate('tasksHelpContent'),
-          style: const TextStyle(fontSize: 15, height: 1.5),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(settings.translate('close')),
+      ),
+    );
+  }
+
+  Widget _buildHelpStep(BuildContext context, String number, String title, String content) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 32,
+            height: 32,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Text(
+              number,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  content,
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                    height: 1.5,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -183,7 +273,7 @@ class _TasksScreenState extends State<TasksScreen> {
                     ),
                     const Spacer(),
                     IconButton(
-                      onPressed: () => _showHelpDialog(context, settings),
+                      onPressed: () => _showHelpSheet(context, settings),
                       icon: Icon(Icons.help_outline, color: theme.colorScheme.primary),
                       tooltip: settings.translate('tasksHelpTitle'),
                     ),

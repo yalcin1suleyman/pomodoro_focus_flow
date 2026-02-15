@@ -67,8 +67,22 @@ class BengaliLanguage implements Language {
   @override String get goalMet => 'লক্ষ্য অর্জিত';
   @override String get goalMissed => 'লক্ষ্যের নিচে';
   @override String get tasksHelpTitle => 'টাস্ক ম্যানেজমেন্ট';
-  @override String get tasksHelpContent => '1. তৈরি করুন (+)\n2. আনুমানিক\n3. শুরু (▶)\n4. সম্পাদনা (বামে সোয়াইপ)';
+  @override String get tasksHelpContent => 'উৎপাদনশীলতা বাড়াতে কার্যগুলি কার্যকরভাবে পরিচালনা করুন:\n\n1. কার্য তৈরি করুন\nনতুন কার্য যোগ করতে (+) বোতাম টিপুন।\n\n2. অনুমান\nঅনুমান করুন আপনার কতটি পোমোডোরো প্রয়োজন। (সময়কাল সেটিংসে সামঞ্জস্যযোগ্য)।\n\n3. ফোকাস শুরু করুন\nটাইমার শুরু করতে কার্যে প্লে (▶) বোতাম টিপুন।\n\n4. সম্পাদনা এবং মুছুন\nসম্পাদনা এবং মুছে ফেলার বিকল্পগুলি দেখতে কার্য কার্ডটি বামে সোয়াইপ করুন।\n\n5. অগ্রগতি ট্র্যাক করুন\nটাইমার শেষ হলে অগ্রগতি পরিসংখ্যানে লগ করা হয়। কার্য ছাড়া সেশনগুলি "সাধারণ ফোকাস" হিসাবে লগ করা হয়।';
 
+  @override String get tasksHelpStep1Title => 'কার্য তৈরি করুন';
+  @override String get tasksHelpStep1Content => 'নতুন কার্য যোগ করতে (+) বোতাম টিপুন।';
+  
+  @override String get tasksHelpStep2Title => 'অনুমান';
+  @override String get tasksHelpStep2Content => 'অনুমান করুন কাজটির জন্য আপনার কতটি পোমোডোরো প্রয়োজন। (সময়কাল সেটিংসে সামঞ্জস্যযোগ্য)।';
+  
+  @override String get tasksHelpStep3Title => 'ফোকাস শুরু করুন';
+  @override String get tasksHelpStep3Content => 'ফোকাস টাইমার শুরু করতে কার্যে প্লে (▶) বোতাম টিপুন।';
+  
+  @override String get tasksHelpStep4Title => 'সম্পাদনা এবং মুছুন';
+  @override String get tasksHelpStep4Content => 'সম্পাদনা এবং মুছে ফেলার বিকল্পগুলি প্রকাশ করতে কার্য কার্ডটি বামে সোয়াইপ করুন।';
+  
+  @override String get tasksHelpStep5Title => 'অগ্রগতি ট্র্যাক করুন';
+  @override String get tasksHelpStep5Content => 'টাইমার শেষ হলে অগ্রগতি পরিসংখ্যানে লগ করা হয়। কার্য ছাড়া সেশনগুলি "সাধারণ ফোকাস" হিসাবে লগ করা হয়।';
   @override String get navFocus => 'ফোকাস';
   @override String get navTasks => 'কাজ';
   @override String get navStats => 'পরিসংখ্যান';
@@ -125,6 +139,14 @@ class BengaliLanguage implements Language {
   @override String get shareRangeYearly => 'বার্ষিক';
   @override String get shareButton => 'শেয়ার';
   @override String get monthlyOverview => 'মাসিক ওভারভিউ';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => 'ইংরেজি';
   @override String get languageTurkish => 'তুর্কি';

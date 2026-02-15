@@ -67,7 +67,22 @@ class RussianLanguage implements Language {
   @override String get goalMet => 'Цель достигнута';
   @override String get goalMissed => 'Ниже цели';
   @override String get tasksHelpTitle => 'Управление задачами';
-  @override String get tasksHelpContent => '1. Создать (+)\n2. Оценить\n3. Начать (▶)\n4. Редактировать (Свайп влево)';
+  @override String get tasksHelpContent => 'Управляйте задачами эффективно для повышения продуктивности:\n\n1. Создать Задачу\nНажмите кнопку (+) чтобы добавить новую задачу.\n\n2. Оценка\nОцените, сколько Pomodoro вам нужно. (Длительность настраивается в Настройках).\n\n3. Начать Фокусировку\nНажмите кнопку Воспроизведения (▶) на задаче, чтобы запустить таймер.\n\n4. Редактировать и Удалить\nПроведите карточку задачи ВЛЕВО, чтобы увидеть опции редактирования и удаления.\n\n5. Отслеживать Прогресс\nПрогресс сохраняется в Статистике, когда таймер заканчивается. Сессии без задачи записываются как "Общий фокус".';
+
+  @override String get tasksHelpStep1Title => 'Создать Задачу';
+  @override String get tasksHelpStep1Content => 'Нажмите кнопку (+) чтобы добавить новую задачу.';
+  
+  @override String get tasksHelpStep2Title => 'Оценка';
+  @override String get tasksHelpStep2Content => 'Оцените, сколько Pomodoro вам нужно для задачи. (Длительность настраивается в Настройках).';
+  
+  @override String get tasksHelpStep3Title => 'Начать Фокусировку';
+  @override String get tasksHelpStep3Content => 'Нажмите кнопку Воспроизведения (▶) на задаче, чтобы запустить таймер фокусировки.';
+  
+  @override String get tasksHelpStep4Title => 'Редактировать и Удалить';
+  @override String get tasksHelpStep4Content => 'Проведите карточку задачи ВЛЕВО, чтобы открыть опции редактирования и удаления.';
+  
+  @override String get tasksHelpStep5Title => 'Отслеживать Прогресс';
+  @override String get tasksHelpStep5Content => 'Прогресс сохраняется в Статистике, когда таймер заканчивается. Сессии без задачи записываются как "Общий фокус".';
 
   @override String get navFocus => 'Фокус';
   @override String get navTasks => 'Задачи';
@@ -125,6 +140,14 @@ class RussianLanguage implements Language {
   @override String get shareRangeYearly => 'Год';
   @override String get shareButton => 'Поделиться';
   @override String get monthlyOverview => 'МЕСЯЧНЫЙ ОБЗОР';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => 'Английский';
   @override String get languageTurkish => 'Турецкий';

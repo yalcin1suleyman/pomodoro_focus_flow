@@ -67,7 +67,22 @@ class VietnameseLanguage implements Language {
   @override String get goalMet => 'Đạt mục tiêu';
   @override String get goalMissed => 'Chưa đạt';
   @override String get tasksHelpTitle => 'Quản lý nhiệm vụ';
-  @override String get tasksHelpContent => '1. Tạo (+)\n2. Dự kiến\n3. Bắt đầu (▶)\n4. Sửa (Vuốt trái)';
+  @override String get tasksHelpContent => 'Quản lý công việc hiệu quả để tăng năng suất:\n\n1. Tạo công việc\nNhấn nút (+) để thêm công việc mới.\n\n2. Ước tính\nƯớc tính bạn cần bao nhiêu Pomodoro. (Thời lượng có thể điều chỉnh trong Cài đặt).\n\n3. Bắt đầu tập trung\nNhấn nút Phát (▶) trên công việc để bắt đầu hẹn giờ.\n\n4. Chỉnh sửa & Xóa\nVuốt thẻ công việc sang TRÁI để xem các tùy chọn chỉnh sửa và xóa.\n\n5. Theo dõi tiến độ\nTiến độ được ghi lại trong Thống kê khi hẹn giờ kết thúc. Các phiên không có công việc được ghi lại là "Tập trung chung".';
+
+  @override String get tasksHelpStep1Title => 'Tạo công việc';
+  @override String get tasksHelpStep1Content => 'Nhấn nút (+) để thêm công việc mới.';
+  
+  @override String get tasksHelpStep2Title => 'Ước tính';
+  @override String get tasksHelpStep2Content => 'Ước tính bạn cần bao nhiêu Pomodoro cho công việc. (Thời lượng có thể điều chỉnh trong Cài đặt).';
+  
+  @override String get tasksHelpStep3Title => 'Bắt đầu tập trung';
+  @override String get tasksHelpStep3Content => 'Nhấn nút Phát (▶) trên công việc để bắt đầu hẹn giờ tập trung.';
+  
+  @override String get tasksHelpStep4Title => 'Chỉnh sửa & Xóa';
+  @override String get tasksHelpStep4Content => 'Vuốt thẻ công việc sang TRÁI để hiển thị các tùy chọn chỉnh sửa và xóa.';
+  
+  @override String get tasksHelpStep5Title => 'Theo dõi tiến độ';
+  @override String get tasksHelpStep5Content => 'Tiến độ được ghi lại trong Thống kê khi hẹn giờ kết thúc. Các phiên không có công việc được ghi lại là "Tập trung chung".';
 
   @override String get navFocus => 'Tập trung';
   @override String get navTasks => 'Nhiệm vụ';
@@ -125,6 +140,14 @@ class VietnameseLanguage implements Language {
   @override String get shareRangeYearly => 'Năm';
   @override String get shareButton => 'Chia sẻ';
   @override String get monthlyOverview => 'TỔNG QUAN THÁNG';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => 'Tiếng Anh';
   @override String get languageTurkish => 'Tiếng Thổ Nhĩ Kỳ';

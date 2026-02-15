@@ -5,9 +5,40 @@ import '../stats/history_provider.dart';
 import '../../core/widgets/glass_box.dart';
 import '../../core/theme/app_theme.dart';
 import 'language_screen.dart';
+import '../../core/services/ad_service.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  BannerAd? _bannerAd;
+  bool _isBannerAdReady = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBannerAd();
+  }
+
+  void _loadBannerAd() {
+    _bannerAd = AdService().createBannerAd()
+      ..load().then((_) {
+        setState(() {
+          _isBannerAdReady = true;
+        });
+      });
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,6 +220,18 @@ class SettingsScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(height: 20),
+              
+              // Banner Ad
+              if (_isBannerAdReady)
+                Center(
+                  child: SizedBox(
+                    width: _bannerAd!.size.width.toDouble(),
+                    height: _bannerAd!.size.height.toDouble(),
+                    child: AdWidget(ad: _bannerAd!),
+                  ),
+                ),
+
               const SizedBox(height: 80), // Space for bottom nav
             ],
           ),

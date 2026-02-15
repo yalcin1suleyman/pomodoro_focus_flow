@@ -67,7 +67,22 @@ class DutchLanguage implements Language {
   @override String get goalMet => 'Doel Bereikt';
   @override String get goalMissed => 'Onder Doel';
   @override String get tasksHelpTitle => 'Taakbeheer';
-  @override String get tasksHelpContent => '1. Maak Taak (+)\n2. Schatten\n3. Starten (▶)\n4. Bewerken (Veeg links)';
+  @override String get tasksHelpContent => 'Beheer je taken effectief om de productiviteit te verhogen:\n\n1. Taak Maken\nTik op de knop (+) om een nieuwe taak toe te voegen.\n\n2. Inschatting\nSchat in hoeveel Pomodoro\'s je nodig hebt. (Duur is instelbaar in Instellingen).\n\n3. Begin met Focussen\nTik op de Afspeelknop (▶) op een taak om de timer te starten.\n\n4. Bewerken & Verwijderen\nVeeg de taakkaart naar LINKS om opties voor bewerken en verwijderen te zien.\n\n5. Voortgang Volgen\nVoortgang wordt vastgelegd in Statistieken wanneer de timer eindigt. Sessies zonder taak worden vastgelegd als "Algemene Focus".';
+
+  @override String get tasksHelpStep1Title => 'Taak Maken';
+  @override String get tasksHelpStep1Content => 'Tik op de knop (+) om een nieuwe taak toe te voegen.';
+  
+  @override String get tasksHelpStep2Title => 'Inschatting';
+  @override String get tasksHelpStep2Content => 'Schat in hoeveel Pomodoro\'s je nodig hebt voor de taak. (Duur is instelbaar in Instellingen).';
+  
+  @override String get tasksHelpStep3Title => 'Begin met Focussen';
+  @override String get tasksHelpStep3Content => 'Tik op de Afspeelknop (▶) op een taak om de focustimer te starten.';
+  
+  @override String get tasksHelpStep4Title => 'Bewerken & Verwijderen';
+  @override String get tasksHelpStep4Content => 'Veeg de taakkaart naar LINKS om opties voor bewerken en verwijderen te tonen.';
+  
+  @override String get tasksHelpStep5Title => 'Voortgang Volgen';
+  @override String get tasksHelpStep5Content => 'Voortgang wordt vastgelegd in Statistieken wanneer de timer eindigt. Sessies zonder taak worden vastgelegd als "Algemene Focus".';
 
   @override String get navFocus => 'Focus';
   @override String get navTasks => 'Taken';
@@ -124,7 +139,15 @@ class DutchLanguage implements Language {
   @override String get shareRangeMonthly => 'Maandelijks';
   @override String get shareRangeYearly => 'Jaarlijks';
   @override String get shareButton => 'Delen';
-  @override String get monthlyOverview => 'MAANDOVERZICHT';
+  @override String get monthlyOverview => 'MAANDELIJKS OVERZICHT';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => 'Engels';
   @override String get languageTurkish => 'Turks';

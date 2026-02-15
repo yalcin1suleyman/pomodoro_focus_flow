@@ -67,7 +67,22 @@ class UkrainianLanguage implements Language {
   @override String get goalMet => 'Ціль досягнуто';
   @override String get goalMissed => 'Менше цілі';
   @override String get tasksHelpTitle => 'Керування завданнями';
-  @override String get tasksHelpContent => '1. Створити (+)\n2. Оцінити\n3. Почати (▶)\n4. Редагувати (Свайп вліво)';
+  @override String get tasksHelpContent => 'Ефективно керуйте завданнями для підвищення продуктивності:\n\n1. Створити Завдання\nНатисніть кнопку (+) щоб додати нове завдання.\n\n2. Оцінка\nОцініть скільки Pomodoro вам потрібно. (Тривалість можна налаштувати в Налаштуваннях).\n\n3. Почати Фокусуватися\nНатисніть кнопку Відтворення (▶) на завданні, щоб запустити таймер.\n\n4. Редагувати та Видалити\nПроведіть картку завдання ВЛІВО, щоб побачити параметри редагування та видалення.\n\n5. Відстежувати Прогрес\nПрогрес зберігається в Статистиці, коли таймер закінчується. Сесії без завдання записуються як "Загальний фокус".';
+
+  @override String get tasksHelpStep1Title => 'Створити Завдання';
+  @override String get tasksHelpStep1Content => 'Натисніть кнопку (+) щоб додати нове завдання.';
+  
+  @override String get tasksHelpStep2Title => 'Оцінка';
+  @override String get tasksHelpStep2Content => 'Оцініть скільки Pomodoro вам потрібно для завдання. (Тривалість можна налаштувати в Налаштуваннях).';
+  
+  @override String get tasksHelpStep3Title => 'Почати Фокусуватися';
+  @override String get tasksHelpStep3Content => 'Натисніть кнопку Відтворення (▶) на завданні, щоб запустити таймер фокусування.';
+  
+  @override String get tasksHelpStep4Title => 'Редагувати та Видалити';
+  @override String get tasksHelpStep4Content => 'Проведіть картку завдання ВЛІВО, щоб відкрити параметри редагування та видалення.';
+  
+  @override String get tasksHelpStep5Title => 'Відстежувати Прогрес';
+  @override String get tasksHelpStep5Content => 'Прогрес зберігається в Статистиці, коли таймер закінчується. Сесії без завдання записуються як "Загальний фокус".';
 
   @override String get navFocus => 'Фокус';
   @override String get navTasks => 'Завдання';
@@ -125,6 +140,14 @@ class UkrainianLanguage implements Language {
   @override String get shareRangeYearly => 'Рік';
   @override String get shareButton => 'Поділитися';
   @override String get monthlyOverview => 'МІСЯЧНИЙ ОГЛЯД';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => 'Англійська';
   @override String get languageTurkish => 'Турецька';

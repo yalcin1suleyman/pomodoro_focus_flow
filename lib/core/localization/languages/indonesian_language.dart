@@ -67,7 +67,22 @@ class IndonesianLanguage implements Language {
   @override String get goalMet => 'Target Tercapai';
   @override String get goalMissed => 'Di Bawah Target';
   @override String get tasksHelpTitle => 'Manajemen Tugas';
-  @override String get tasksHelpContent => '1. Buat (+)\n2. Perkirakan\n3. Mulai (▶)\n4. Edit (Geser kiri)';
+  @override String get tasksHelpContent => 'Kelola tugas secara efektif untuk meningkatkan produktivitas:\n\n1. Buat Tugas\nKetuk tombol (+) untuk menambahkan tugas baru.\n\n2. Estimasi\nPerkirakan berapa banyak Pomodoro yang Anda butuhkan. (Durasi dapat disesuaikan di Pengaturan).\n\n3. Mulai Fokus\nKetuk tombol Putar (▶) pada tugas untuk memulai pengatur waktu.\n\n4. Edit & Hapus\nGeser kartu tugas ke KIRI untuk melihat opsi edit dan hapus.\n\n5. Lacak Kemajuan\nKemajuan dicatat dalam Statistik saat pengatur waktu selesai. Sesi tanpa tugas dicatat sebagai "Fokus Umum".';
+
+  @override String get tasksHelpStep1Title => 'Buat Tugas';
+  @override String get tasksHelpStep1Content => 'Ketuk tombol (+) untuk menambahkan tugas baru.';
+  
+  @override String get tasksHelpStep2Title => 'Estimasi';
+  @override String get tasksHelpStep2Content => 'Perkirakan berapa banyak Pomodoro yang Anda butuhkan untuk tugas tersebut. (Durasi dapat disesuaikan di Pengaturan).';
+  
+  @override String get tasksHelpStep3Title => 'Mulai Fokus';
+  @override String get tasksHelpStep3Content => 'Ketuk tombol Putar (▶) pada tugas untuk memulai pengatur waktu fokus.';
+  
+  @override String get tasksHelpStep4Title => 'Edit & Hapus';
+  @override String get tasksHelpStep4Content => 'Geser kartu tugas ke KIRI untuk menampilkan opsi edit dan hapus.';
+  
+  @override String get tasksHelpStep5Title => 'Lacak Kemajuan';
+  @override String get tasksHelpStep5Content => 'Kemajuan dicatat dalam Statistik saat pengatur waktu selesai. Sesi tanpa tugas dicatat sebagai "Fokus Umum".';
 
   @override String get navFocus => 'Fokus';
   @override String get navTasks => 'Tugas';
@@ -125,6 +140,14 @@ class IndonesianLanguage implements Language {
   @override String get shareRangeYearly => 'Tahunan';
   @override String get shareButton => 'Bagikan';
   @override String get monthlyOverview => 'IKHTISAR BULANAN';
+
+  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
+  @override String get shareAdUnlockButton => 'Watch Ad';
+  
+  @override String get shareSummary => 'Summary';
+  @override String get shareFocused => 'focused';
+  @override String get shareSessions => 'sessions';
+  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
 
   @override String get languageEnglish => 'Inggris';
   @override String get languageTurkish => 'Turki';
