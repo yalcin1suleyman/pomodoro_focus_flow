@@ -43,3 +43,4 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+analysis_2.txt analysis_errors.txt analysis_final.txt analysis_final_v2.txt analysis_log.txt analysis_output.txt analysis_output_final.txt analysis_results.txt analysis_results_final.txt analysis_results_final_2.txt analysis_results_final_splash.txt
