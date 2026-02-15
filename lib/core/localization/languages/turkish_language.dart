@@ -34,11 +34,11 @@ class TurkishLanguage implements Language {
   @override String get sessionCompleted => 'Oturum Tamamlandı';
   @override String get breakOver => 'Mola Bitti';
 
-  @override String get themeDefault => 'Varsayılan';
+  @override String get themeClassic => 'Klasik'; 
   @override String get themeSakura => 'Sakura';
   @override String get themeOcean => 'Okyanus';
   @override String get themeForest => 'Orman';
-  @override String get themeLuxury => 'Gümüş Lüks';
+  @override String get themeSilver => 'Gümüş';
 
   @override String get cancel => 'İptal';
   @override String get save => 'Kaydet';
@@ -66,8 +66,8 @@ class TurkishLanguage implements Language {
   @override String get generalFocus => 'Genel Odak';
   @override String get goalMet => 'Hedef Tamamlandı';
   @override String get goalMissed => 'Hedef Altında';
-  @override String get tasksHelpTitle => 'Görevler Nasıl Kullanılır?';
-  @override String get tasksHelpContent => '1. Yeni bir görev eklemek için + butonuna tıkla.\n2. Kaç Pomodoro süreceğini tahmin et.\n3. Göreve odaklanmak için üzerindeki Oynat (Play) butonuna bas.\n4. Düzenleme ve Silme seçeneklerini görmek için görevi SOLA kaydır.\n5. Süre bittiğinde ilerlemen kaydedilir!';
+  @override String get tasksHelpTitle => 'Görev Yönetim Sistemi';
+  @override String get tasksHelpContent => 'Görevlerinizi etkili bir şekilde yöneterek verimliliğinizi artırın:\n\n1. Görev Oluşturma\n(+) butonuna tıklayarak yeni bir görev ekleyin.\n\n2. Hedef Belirleme\nGörevi tamamlamak için kaç Pomodoro (25 dk) gerektiğini öngörün.\n\n3. Odaklanma\nÇalışacağınız görevin üzerindeki Oynat (▶) butonuna basarak süreyi başlatın.\n\n4. Düzenleme ve Silme\nSeçenekleri görmek için görev kartını sola kaydırın.\n\n5. İlerleme Takibi\nZamanlayıcı bittiğinde, ilerlemeniz otomatik olarak istatistiklere kaydedilir.';
 
   @override String get navFocus => 'Odak';
   @override String get navTasks => 'Görevler';

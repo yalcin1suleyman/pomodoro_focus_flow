@@ -7,7 +7,7 @@ import '../../core/localization/languages/turkish_language.dart';
 
 class SettingsProvider extends ChangeNotifier {
   bool _isDarkMode = true;
-  AppThemeType _currentTheme = AppThemeType.defaultTheme;
+  AppThemeType _currentTheme = AppThemeType.silver;
   String _language = 'en'; // 'tr' or 'en'
   Language _currentLanguage = EnglishLanguage(); // Default
   
@@ -79,8 +79,8 @@ class SettingsProvider extends ChangeNotifier {
 
   Future<void> setTheme(AppThemeType theme) async {
     _currentTheme = theme;
-    // Force dark mode for Luxury (if desired), else restore user pref or default logic
-    if (theme == AppThemeType.luxury) {
+    // Force dark mode for Silver (if desired), else restore user pref or default logic
+    if (theme == AppThemeType.silver) {
       _isDarkMode = true;
     }
     notifyListeners();
@@ -180,11 +180,11 @@ class SettingsProvider extends ChangeNotifier {
       case 'shortBreakDuration': return _currentLanguage.shortBreakDuration;
       case 'longBreakDuration': return _currentLanguage.longBreakDuration;
       case 'minutes': return _currentLanguage.minutes;
-      case 'themeDefault': return _currentLanguage.themeDefault;
+      case 'themeClassic': return _currentLanguage.themeClassic;
       case 'themeSakura': return _currentLanguage.themeSakura;
       case 'themeOcean': return _currentLanguage.themeOcean;
       case 'themeForest': return _currentLanguage.themeForest;
-      case 'themeLuxury': return _currentLanguage.themeLuxury;
+      case 'themeSilver': return _currentLanguage.themeSilver;
       case 'cancel': return _currentLanguage.cancel;
       case 'save': return _currentLanguage.save;
       case 'close': return _currentLanguage.close;

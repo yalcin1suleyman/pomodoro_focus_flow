@@ -171,7 +171,7 @@ class _ParticlePainter extends CustomPainter {
         paint.style = PaintingStyle.stroke;
         paint.strokeWidth = 1.5;
         canvas.drawCircle(Offset.zero, particle.size * 0.4, paint);
-      } else if (theme == AppThemeType.luxury) {
+      } else if (theme == AppThemeType.silver) {
         // Draw Silver Sparkle 
         paint.color = const Color(0xFFE0E0E0).withValues(alpha: isActive ? 0.9 : 0.5); 
         
@@ -215,7 +215,7 @@ class _ParticlePainter extends CustomPainter {
         return Colors.white;
       case AppThemeType.forest:
         return const Color(0xFFD8F3DC);
-      case AppThemeType.luxury:
+      case AppThemeType.silver:
         return const Color(0xFFE0E0E0); // Silver
       default:
         // Default Blue or Others

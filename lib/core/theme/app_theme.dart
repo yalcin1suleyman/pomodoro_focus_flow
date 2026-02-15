@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-enum AppThemeType { defaultTheme, sakura, ocean, forest, luxury }
+enum AppThemeType { silver, ocean, forest, classic, sakura }
 
 class AppColors {
-  // Default (Classic Harmonious Blue) - RESTORED
+  // Classic (Harmonious Blue) - Was Default
   static const Color primaryLight = Color(0xFF2196F3); // Material Blue
   static const Color primaryDark = Color(0xFF1565C0);
   static const Color accent = Color(0xFF64B5F6); // Soft Blue Accent 
@@ -24,11 +24,11 @@ class AppColors {
   static const Color forestAccent = Color(0xFF95D5B2);
   static const Color forestBg = Color(0xFFD8F3DC);
 
-  // Luxury / Silver
-  static const Color luxuryPrimary = Color(0xFFE0E0E0); 
-  static const Color luxuryAccent = Color(0xFFBDBDBD); // Darker Silver for visibility
-  static const Color luxuryBg = Color(0xFF121212); 
-  static const Color luxurySurface = Color(0xFF1E1E1E);
+  // Silver (Was Luxury)
+  static const Color silverPrimary = Color(0xFFE0E0E0); 
+  static const Color silverAccent = Color(0xFFBDBDBD); // Darker Silver for visibility
+  static const Color silverBg = Color(0xFF121212); 
+  static const Color silverSurface = Color(0xFF1E1E1E);
 
   // Text
   static const Color textLight = Color(0xFF2D3436);
@@ -68,14 +68,14 @@ class AppTheme {
         surface = isDark ? const Color(0xFF1B4332) : Colors.white;
         brightness = isDark ? Brightness.dark : Brightness.light;
         break;
-      case AppThemeType.luxury:
-        primary = AppColors.luxuryPrimary;
-        secondary = AppColors.luxuryAccent;
-        background = AppColors.luxuryBg;
-        surface = AppColors.luxurySurface;
+      case AppThemeType.silver: // Was Luxury
+        primary = AppColors.silverPrimary;
+        secondary = AppColors.silverAccent;
+        background = AppColors.silverBg;
+        surface = AppColors.silverSurface;
         brightness = Brightness.dark;
         break;
-      case AppThemeType.defaultTheme:
+      case AppThemeType.classic: // Was Default
 
         // Classic Harmonious Blue - RESTORED
         primary = isDark ? AppColors.primaryDark : AppColors.primaryLight;

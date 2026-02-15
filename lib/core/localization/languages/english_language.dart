@@ -34,11 +34,11 @@ class EnglishLanguage implements Language {
   @override String get sessionCompleted => 'Session Completed';
   @override String get breakOver => 'Break Over';
 
-  @override String get themeDefault => 'Default';
+  @override String get themeClassic => 'Classic Blue';
   @override String get themeSakura => 'Sakura';
   @override String get themeOcean => 'Ocean';
   @override String get themeForest => 'Forest';
-  @override String get themeLuxury => 'Silver Luxury';
+  @override String get themeSilver => 'Silver';
 
   @override String get cancel => 'Cancel';
   @override String get save => 'Save';
@@ -66,8 +66,8 @@ class EnglishLanguage implements Language {
   @override String get generalFocus => 'General Focus';
   @override String get goalMet => 'Goal Met';
   @override String get goalMissed => 'Below Goal';
-  @override String get tasksHelpTitle => 'How to Use Tasks';
-  @override String get tasksHelpContent => '1. Click the + button to add a new task.\n2. Estimate how many Pomodoros it will take.\n3. Click the Play button on a task to start focusing on it.\n4. Swipe LEFT on a task to reveal Edit and Delete options.\n5. When the timer finishes, your progress will be logged!';
+  @override String get tasksHelpTitle => 'Task Management System';
+  @override String get tasksHelpContent => 'Manage tasks effectively to boost productivity:\n\n1. Create Task\nTap the (+) button to add a new task.\n\n2. Set Estimation\nEstimate how many Pomodoros (25 min) you need.\n\n3. Start Focusing\nTap the Play (▶) button on a task to start the timer.\n\n4. Edit & Delete\nSwipe the task card to the LEFT to reveal options.\n\n5. Track Progress\nProgress is automatically logged when the timer finishes.';
 
   @override String get navFocus => 'Focus';
   @override String get navTasks => 'Tasks';

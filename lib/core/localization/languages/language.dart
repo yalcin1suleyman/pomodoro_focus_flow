@@ -46,11 +46,11 @@ abstract class Language {
   String get shareMessage;
 
   // Themes
-  String get themeDefault;
+  String get themeClassic; // Was themeDefault
   String get themeSakura;
   String get themeOcean;
   String get themeForest;
-  String get themeLuxury;
+  String get themeSilver; // Was themeLuxury
 
   // Actions
   String get cancel;

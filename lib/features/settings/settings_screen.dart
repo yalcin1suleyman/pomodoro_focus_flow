@@ -62,11 +62,11 @@ class SettingsScreen extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    _buildThemeCard(context, settings, AppThemeType.defaultTheme, settings.translate('themeDefault'), AppColors.primaryLight),
-                    _buildThemeCard(context, settings, AppThemeType.sakura, settings.translate('themeSakura'), AppColors.sakuraPrimary),
+                    _buildThemeCard(context, settings, AppThemeType.silver, settings.translate('themeSilver'), AppColors.silverPrimary),
                     _buildThemeCard(context, settings, AppThemeType.ocean, settings.translate('themeOcean'), AppColors.oceanPrimary),
                     _buildThemeCard(context, settings, AppThemeType.forest, settings.translate('themeForest'), AppColors.forestPrimary),
-                    _buildThemeCard(context, settings, AppThemeType.luxury, settings.translate('themeLuxury'), AppColors.luxuryPrimary),
+                    _buildThemeCard(context, settings, AppThemeType.classic, settings.translate('themeClassic'), AppColors.primaryLight),
+                    _buildThemeCard(context, settings, AppThemeType.sakura, settings.translate('themeSakura'), AppColors.sakuraPrimary),
                   ],
                 ),
               ),
@@ -97,7 +97,7 @@ class SettingsScreen extends StatelessWidget {
                       value: settings.dailyGoalMinutes.toDouble(),
                       min: 30,
                       max: 720, // 12 hours
-                      divisions: 46,
+                      divisions: 23,
                       label: "${(settings.dailyGoalMinutes / 60).toStringAsFixed(1)} h",
                       onChanged: (val) {
                         settings.setDailyGoal(val.toInt());
