@@ -142,13 +142,13 @@ class GermanLanguage implements Language {
   @override String get shareButton => 'Teilen';
   @override String get monthlyOverview => 'MONATSÜBERSICHT';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'Sie müssen eine kurze Werbung ansehen, um diese Funktion freizuschalten.';
+  @override String get shareAdUnlockButton => 'Werbung ansehen';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => 'Zusammenfassung';
+  @override String get shareFocused => 'fokussiert';
+  @override String get shareSessions => 'Sitzungen';
+  @override String get shareStreak => 'Teile deinen Streak und bleib am Ball 🚀';
 
   @override String get languageEnglish => 'Englisch';
   @override String get languageTurkish => 'Türkisch';

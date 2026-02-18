@@ -141,13 +141,13 @@ class UkrainianLanguage implements Language {
   @override String get shareButton => 'Поділитися';
   @override String get monthlyOverview => 'МІСЯЧНИЙ ОГЛЯД';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'Ви повинні переглянути коротку рекламу, щоб розблокувати цю функцію.';
+  @override String get shareAdUnlockButton => 'Дивитись Рекламу';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => 'Зведення';
+  @override String get shareFocused => 'у фокусі';
+  @override String get shareSessions => 'сесій';
+  @override String get shareStreak => 'Поділіться своєю серією та тримайте себе в тонусі 🚀';
 
   @override String get languageEnglish => 'Англійська';
   @override String get languageTurkish => 'Турецька';

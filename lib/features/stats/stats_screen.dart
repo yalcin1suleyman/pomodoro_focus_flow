@@ -74,8 +74,9 @@ class _StatsScreenState extends State<StatsScreen> {
                 child: Column(
                   children: [
                     // Month Header with Navigation
+                    // Month Header with Navigation
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0), // Reduced horizontal padding
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -87,9 +88,14 @@ class _StatsScreenState extends State<StatsScreen> {
                               });
                             },
                           ),
-                          Text(
-                            _formatMonth(_focusedMonth, settings), 
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)
+                          Expanded( // Added Expanded to constrain text width
+                            child: FittedBox( // Added FittedBox to scale down long month names
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                _formatMonth(_focusedMonth, settings), 
+                                style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)
+                              ),
+                            ),
                           ),
                           IconButton(
                             icon: const Icon(Icons.chevron_right),
@@ -102,7 +108,7 @@ class _StatsScreenState extends State<StatsScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8), 
                     // Days Header
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -110,18 +116,23 @@ class _StatsScreenState extends State<StatsScreen> {
                           .map((e) => Text(e, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)))
                           .toList(),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                             // Calendar Grid
                     _buildCalendarGrid(context, historyProvider),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    const SizedBox(height: 12),
+                    
+                    // Legend - Switched to Wrap for safety on small screens/long languages
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 12,
+                      runSpacing: 8,
                       children: [
                         // Goal Met (Solid)
                         _buildLegendItem(Theme.of(context).colorScheme.primary, settings.translate('goalMet')), 
-                        const SizedBox(width: 15),
+                        
                         // Goal Missed (Hollow/Ring)
                         Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Container(
                               width: 8, 
@@ -136,7 +147,7 @@ class _StatsScreenState extends State<StatsScreen> {
                             Text(settings.translate('goalMissed'), style: const TextStyle(fontSize: 12, color: Colors.grey)),
                           ],
                         ),
-                        const SizedBox(width: 15),
+                        
                         // Empty
                         _buildLegendItem(Colors.grey.withValues(alpha: 0.3), settings.translate('empty')), 
                       ],
@@ -406,8 +417,9 @@ class _StatsScreenState extends State<StatsScreen> {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 7,
-        mainAxisSpacing: 8,
+        mainAxisSpacing: 6, // Reduced from 8
         crossAxisSpacing: 8,
+        childAspectRatio: 1.1, // Added to make cells slightly shorter than wide
       ),
       itemCount: daysInMonth + offset, 
       itemBuilder: (context, index) {

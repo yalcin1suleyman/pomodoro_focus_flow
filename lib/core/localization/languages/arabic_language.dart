@@ -140,13 +140,13 @@ class ArabicLanguage implements Language {
   @override String get shareButton => 'مشاركة';
   @override String get monthlyOverview => 'نظرة عامة شهرية';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'يجب عليك مشاهدة إعلان قصير لفتح هذه الميزة.';
+  @override String get shareAdUnlockButton => 'مشاهدة الإعلان';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => 'ملخص';
+  @override String get shareFocused => 'تركيز';
+  @override String get shareSessions => 'جلسات';
+  @override String get shareStreak => 'شارك خطك وحافظ على مسؤوليتك 🚀';
 
   @override String get languageEnglish => 'الإنجليزية';
   @override String get languageTurkish => 'التركية';

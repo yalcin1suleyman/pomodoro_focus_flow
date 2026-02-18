@@ -140,13 +140,13 @@ class KoreanLanguage implements Language {
   @override String get shareButton => '공유';
   @override String get monthlyOverview => '월간 개요';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => '이 기능을 잠금 해제하려면 짧은 광고를 시청해야 합니다.';
+  @override String get shareAdUnlockButton => '광고 시청';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => '요약';
+  @override String get shareFocused => '집중';
+  @override String get shareSessions => '세션';
+  @override String get shareStreak => '연속 기록을 공유하고 책임감을 유지하세요 🚀';
 
   @override String get languageEnglish => '영어';
   @override String get languageTurkish => '터키어';

@@ -311,7 +311,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 1.5),
               ),
-              suffixText: settings.translate("minutes").substring(0, 2), // "mi" or "da" (assuming 'min'/'dk' roughly)
+              suffixText: settings.translate("minutes"),
               suffixStyle: TextStyle(fontSize: 12, color: Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.5)),
             ),
             onChanged: (val) {

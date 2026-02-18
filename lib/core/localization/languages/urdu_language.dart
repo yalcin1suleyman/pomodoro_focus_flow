@@ -140,13 +140,13 @@ class UrduLanguage implements Language {
   @override String get shareButton => 'شیئر کریں';
   @override String get monthlyOverview => 'ماہانہ جائزہ';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'اس خصوصیت کو غیر مقفل کرنے کے لیے آپ کو ایک مختصر اشتہار دیکھنا ہوگا۔';
+  @override String get shareAdUnlockButton => 'اشتہار دیکھیں';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => 'خلاصہ';
+  @override String get shareFocused => 'مرکوز';
+  @override String get shareSessions => 'سیشنز';
+  @override String get shareStreak => 'اپنی اسٹریک شی어 کریں اور خود کو جوابدہ رکھیں 🚀';
 
   @override String get languageEnglish => 'انگریزی';
   @override String get languageTurkish => 'ترکی';

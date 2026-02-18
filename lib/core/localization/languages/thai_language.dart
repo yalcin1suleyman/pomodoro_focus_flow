@@ -140,13 +140,13 @@ class ThaiLanguage implements Language {
   @override String get shareButton => 'แชร์';
   @override String get monthlyOverview => 'ภาพรวมรายเดือน';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'คุณต้องดูโฆษณาสั้น ๆ เพื่อปลดล็อกคุณสมบัตินี้';
+  @override String get shareAdUnlockButton => 'ดูโฆษณา';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => 'สรุป';
+  @override String get shareFocused => 'มีสมาธิ';
+  @override String get shareSessions => 'เซสชัน';
+  @override String get shareStreak => 'แบ่งปันสถิติต่อเนื่องของคุณและรักษาความรับผิดชอบ 🚀';
 
   @override String get languageEnglish => 'อังกฤษ';
   @override String get languageTurkish => 'ตุรกี';

@@ -141,13 +141,13 @@ class PortugueseLanguage implements Language {
   @override String get shareButton => 'Compartilhar';
   @override String get monthlyOverview => 'VISÃO GERAL MENSAL';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'Você deve assistir a um anúncio curto para desbloquear este recurso.';
+  @override String get shareAdUnlockButton => 'Assistir Anúncio';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => 'Resumo';
+  @override String get shareFocused => 'focado';
+  @override String get shareSessions => 'sessões';
+  @override String get shareStreak => 'Compartilhe sua sequência e mantenha-se responsável 🚀';
 
   @override String get languageEnglish => 'Inglês';
   @override String get languageTurkish => 'Turco';

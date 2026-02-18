@@ -141,13 +141,13 @@ class JapaneseLanguage implements Language {
   @override String get shareButton => '共有';
   @override String get monthlyOverview => '月間概要';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'この機能のロックを解除するには、短い広告を視聴する必要があります。';
+  @override String get shareAdUnlockButton => '広告を見る';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => '概要';
+  @override String get shareFocused => '集中';
+  @override String get shareSessions => 'セッション';
+  @override String get shareStreak => 'ストリークを共有して、責任を持ち続けましょう 🚀';
 
   @override String get languageEnglish => '英語';
   @override String get languageTurkish => 'トルコ語';

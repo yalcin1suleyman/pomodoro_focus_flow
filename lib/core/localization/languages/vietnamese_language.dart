@@ -141,13 +141,13 @@ class VietnameseLanguage implements Language {
   @override String get shareButton => 'Chia sẻ';
   @override String get monthlyOverview => 'TỔNG QUAN THÁNG';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'Bạn phải xem một quảng cáo ngắn để mở khóa tính năng này.';
+  @override String get shareAdUnlockButton => 'Xem Quảng cáo';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => 'Tóm tắt';
+  @override String get shareFocused => 'tập trung';
+  @override String get shareSessions => 'phiên';
+  @override String get shareStreak => 'Chia sẻ chuỗi của bạn và giữ trách nhiệm 🚀';
 
   @override String get languageEnglish => 'Tiếng Anh';
   @override String get languageTurkish => 'Tiếng Thổ Nhĩ Kỳ';

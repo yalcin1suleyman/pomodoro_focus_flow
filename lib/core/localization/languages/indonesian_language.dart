@@ -141,13 +141,13 @@ class IndonesianLanguage implements Language {
   @override String get shareButton => 'Bagikan';
   @override String get monthlyOverview => 'IKHTISAR BULANAN';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'Anda harus menonton iklan singkat untuk membuka fitur ini.';
+  @override String get shareAdUnlockButton => 'Tonton Iklan';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => 'Ringkasan';
+  @override String get shareFocused => 'fokus';
+  @override String get shareSessions => 'sesi';
+  @override String get shareStreak => 'Bagikan rekor Anda dan tetap bertanggung jawab 🚀';
 
   @override String get languageEnglish => 'Inggris';
   @override String get languageTurkish => 'Turki';

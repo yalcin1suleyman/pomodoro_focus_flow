@@ -140,13 +140,13 @@ class BengaliLanguage implements Language {
   @override String get shareButton => 'শেয়ার';
   @override String get monthlyOverview => 'মাসিক ওভারভিউ';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'এই বৈশিষ্ট্যটি আনলক করতে আপনাকে একটি ছোট বিজ্ঞাপন দেখতে হবে।';
+  @override String get shareAdUnlockButton => 'বিজ্ঞাপন দেখুন';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => 'সারাংশ';
+  @override String get shareFocused => 'মনোযোগী';
+  @override String get shareSessions => 'সেশন';
+  @override String get shareStreak => 'আপনার স্ট্রিক শেয়ার করুন এবং নিজেকে জবাবদিহি করুন 🚀';
 
   @override String get languageEnglish => 'ইংরেজি';
   @override String get languageTurkish => 'তুর্কি';

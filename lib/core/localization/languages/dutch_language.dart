@@ -141,13 +141,13 @@ class DutchLanguage implements Language {
   @override String get shareButton => 'Delen';
   @override String get monthlyOverview => 'MAANDELIJKS OVERZICHT';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'Je moet een korte advertentie bekijken om deze functie te ontgrendelen.';
+  @override String get shareAdUnlockButton => 'Bekijk Advertentie';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => 'Samenvatting';
+  @override String get shareFocused => 'gefocust';
+  @override String get shareSessions => 'sessies';
+  @override String get shareStreak => 'Deel je streak en blijf verantwoordelijk 🚀';
 
   @override String get languageEnglish => 'Engels';
   @override String get languageTurkish => 'Turks';

@@ -141,13 +141,13 @@ class SpanishLanguage implements Language {
   @override String get shareButton => 'Compartir';
   @override String get monthlyOverview => 'RESUMEN MENSUAL';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'Debes ver un anuncio corto para desbloquear esta función.';
+  @override String get shareAdUnlockButton => 'Ver Anuncio';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => 'Resumen';
+  @override String get shareFocused => 'enfocado';
+  @override String get shareSessions => 'sesiones';
+  @override String get shareStreak => 'Comparte tu racha y mantente responsable 🚀';
 
   @override String get languageEnglish => 'Inglés';
   @override String get languageTurkish => 'Turco';

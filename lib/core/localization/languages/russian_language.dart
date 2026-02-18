@@ -141,13 +141,13 @@ class RussianLanguage implements Language {
   @override String get shareButton => 'Поделиться';
   @override String get monthlyOverview => 'МЕСЯЧНЫЙ ОБЗОР';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'Вы должны посмотреть короткую рекламу, чтобы разблокировать эту функцию.';
+  @override String get shareAdUnlockButton => 'Смотреть рекламу';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => 'Сводка';
+  @override String get shareFocused => 'в фокусе';
+  @override String get shareSessions => 'сессий';
+  @override String get shareStreak => 'Поделитесь своим сериями и держите себя в тонусе 🚀';
 
   @override String get languageEnglish => 'Английский';
   @override String get languageTurkish => 'Турецкий';

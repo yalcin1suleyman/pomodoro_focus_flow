@@ -141,13 +141,13 @@ class ItalianLanguage implements Language {
   @override String get shareButton => 'Condividi';
   @override String get monthlyOverview => 'PANORAMICA MENSILE';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'Devi guardare una breve pubblicità per sbloccare questa funzione.';
+  @override String get shareAdUnlockButton => 'Guarda Pubblicità';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => 'Riepilogo';
+  @override String get shareFocused => 'concentrato';
+  @override String get shareSessions => 'sessioni';
+  @override String get shareStreak => 'Condividi la tua serie e rimani responsabile 🚀';
 
   @override String get languageEnglish => 'Inglese';
   @override String get languageTurkish => 'Turco';

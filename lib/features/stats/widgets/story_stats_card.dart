@@ -198,29 +198,32 @@ class StoryStatsCard extends StatelessWidget {
       children: [
          const Spacer(),
          // Big Time
-         Text(
-           (focusedMinutes / 60).toStringAsFixed(1),
-           style: const TextStyle(
-             color: Colors.white,
-             fontSize: 120, 
-             fontWeight: FontWeight.w900,
-             height: 0.9
+         FittedBox(
+           fit: BoxFit.scaleDown,
+           child: Text(
+             (focusedMinutes / 60).toStringAsFixed(1),
+             style: const TextStyle(
+               color: Colors.white,
+               fontSize: 100, // Reduced from 120
+               fontWeight: FontWeight.w900,
+               height: 0.9
+             ),
            ),
          ),
          Text(
            settings.translate('hours').toUpperCase(),
            style: TextStyle(
              color: primaryColor,
-             fontSize: 24,
+             fontSize: 20, // Reduced from 24
              fontWeight: FontWeight.bold,
              letterSpacing: 4.0
            ),
          ),
-         const SizedBox(height: 40),
+         const SizedBox(height: 20), // Reduced from 40
          
          // Stats Grid
          Container(
-           padding: const EdgeInsets.all(20),
+           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16), // Reduced padding
            decoration: BoxDecoration(
              color: Colors.white.withValues(alpha: 0.05),
              borderRadius: BorderRadius.circular(20),
@@ -229,9 +232,9 @@ class StoryStatsCard extends StatelessWidget {
            child: Column(
              children: [
                _buildStatRow(context, Icons.check_circle_outline, "${(progress * 100).toInt()}%", settings.translate('shareGoalCompleted')),
-               const Divider(color: Colors.white10, height: 30),
-               _buildStatRow(context, Icons.refresh, "$sessionCount", settings.translate('sessions')),
-               const Divider(color: Colors.white10, height: 30),
+               const Divider(color: Colors.white10, height: 20), // Reduced from 30
+               _buildStatRow(context, Icons.refresh, "$sessionCount", settings.translate('sessions')), // Reverted to sessions for Title Case
+               const Divider(color: Colors.white10, height: 20), // Reduced from 30
                _buildStatRow(context, Icons.star_outline, topTask, settings.translate('shareTopFocus')),
              ],
            ),
@@ -244,14 +247,26 @@ class StoryStatsCard extends StatelessWidget {
   Widget _buildStatRow(BuildContext context, IconData icon, String value, String label) {
     return Row(
       children: [
-        Icon(icon, color: Theme.of(context).colorScheme.primary, size: 28),
-        const SizedBox(width: 16),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(value, style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-            Text(label, style: const TextStyle(color: Colors.white54, fontSize: 12)),
-          ],
+        Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24), // Reduced size
+        const SizedBox(width: 12),
+        Expanded( // Added Expanded to prevent horizontal overflow
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                value, 
+                style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+              Text(
+                label, 
+                style: const TextStyle(color: Colors.white54, fontSize: 11),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+            ],
+          ),
         )
       ],
     );

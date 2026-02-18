@@ -140,13 +140,13 @@ class FrenchLanguage implements Language {
   @override String get shareButton => 'Partager';
   @override String get monthlyOverview => 'APERÇU MENSUEL';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'Vous devez regarder une courte publicité pour débloquer cette fonctionnalité.';
+  @override String get shareAdUnlockButton => 'Regarder la Pub';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
+  @override String get shareSummary => 'Résumé';
+  @override String get shareFocused => 'concentré';
   @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareStreak => 'Partagez votre série et restez motivé 🚀';
 
   @override String get languageEnglish => 'Anglais';
   @override String get languageTurkish => 'Turc';

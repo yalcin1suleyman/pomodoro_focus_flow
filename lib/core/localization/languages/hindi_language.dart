@@ -140,13 +140,13 @@ class HindiLanguage implements Language {
   @override String get shareButton => 'साझा करें';
   @override String get monthlyOverview => 'मासिक अवलोकन';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'इस सुविधा को अनलॉक करने के लिए आपको एक छोटा विज्ञापन देखना होगा।';
+  @override String get shareAdUnlockButton => 'विज्ञापन देखें';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => 'सारांश';
+  @override String get shareFocused => 'फोकस्ड';
+  @override String get shareSessions => 'सत्र';
+  @override String get shareStreak => 'अपनी स्ट्रीक साझा करें और खुद को जवाबदेह रखें 🚀';
 
   @override String get languageEnglish => 'अंग्रेज़ी';
   @override String get languageTurkish => 'तुर्की';

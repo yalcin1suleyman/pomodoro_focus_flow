@@ -140,13 +140,13 @@ class PolishLanguage implements Language {
   @override String get shareButton => 'Udostępnij';
   @override String get monthlyOverview => 'PRZEGLĄD MIESIĘCZNY';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'Musisz obejrzeć krótką reklamę, aby odblokować tę funkcję.';
+  @override String get shareAdUnlockButton => 'Obejrzyj Reklamę';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => 'Podsumowanie';
+  @override String get shareFocused => 'skupiony';
+  @override String get shareSessions => 'sesje';
+  @override String get shareStreak => 'Udostępnij swoją serię i motywuj się 🚀';
 
   @override String get languageEnglish => 'Angielski';
   @override String get languageTurkish => 'Turecki';

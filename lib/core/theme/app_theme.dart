@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 enum AppThemeType { silver, ocean, forest, classic, sakura }
 
@@ -124,11 +123,11 @@ class AppTheme {
       primaryColor: primary,
       scaffoldBackgroundColor: background,
       cardColor: surface,
-      textTheme: GoogleFonts.manropeTextTheme(
-        brightness == Brightness.dark ? ThemeData.dark().textTheme : ThemeData.light().textTheme
-      ).apply(
+      fontFamily: 'Manrope',
+      textTheme: (brightness == Brightness.dark ? ThemeData.dark().textTheme : ThemeData.light().textTheme).apply(
         bodyColor: textPrimary,
         displayColor: textPrimary,
+        fontFamily: 'Manrope',
       ),
       colorScheme: colorScheme,
       iconTheme: IconThemeData(

@@ -141,13 +141,13 @@ class ChineseLanguage implements Language {
   @override String get shareButton => '分享';
   @override String get monthlyOverview => '月度概览';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => '您必须观看一个短广告才能解锁此功能。';
+  @override String get shareAdUnlockButton => '观看广告';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => '摘要';
+  @override String get shareFocused => '专注';
+  @override String get shareSessions => '会话';
+  @override String get shareStreak => '分享您的连续记录并由自己保持负责 🚀';
 
   @override String get languageEnglish => '英语';
   @override String get languageTurkish => '土耳其语';

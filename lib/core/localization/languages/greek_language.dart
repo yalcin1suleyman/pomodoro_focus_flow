@@ -140,13 +140,13 @@ class GreekLanguage implements Language {
   @override String get shareButton => 'Κοινοποίηση';
   @override String get monthlyOverview => 'ΜΗΝΙΑΙΑ ΕΠΙΣΚΟΠΗΣΗ';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'Πρέπει να παρακολουθήσετε μια σύντομη διαφήμιση για να ξεκλειδώσετε αυτήν τη λειτουργία.';
+  @override String get shareAdUnlockButton => 'Δες Διαφήμιση';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => 'Σύνοψη';
+  @override String get shareFocused => 'εστιασμένος';
+  @override String get shareSessions => 'συνεδρίες';
+  @override String get shareStreak => 'Μοιραστείτε το σερί σας και μείνετε συνεπείς 🚀';
 
   @override String get languageEnglish => 'Αγγλικά';
   @override String get languageTurkish => 'Τουρκικά';

@@ -140,13 +140,13 @@ class SwedishLanguage implements Language {
   @override String get shareButton => 'Dela';
   @override String get monthlyOverview => 'MÅNADSÖVERSIKT';
 
-  @override String get shareAdUnlockContent => 'You must watch a short ad to unlock this feature.';
-  @override String get shareAdUnlockButton => 'Watch Ad';
+  @override String get shareAdUnlockContent => 'Du måste titta på en kort annons för att låsa upp den här funktionen.';
+  @override String get shareAdUnlockButton => 'Titta på Annons';
   
-  @override String get shareSummary => 'Summary';
-  @override String get shareFocused => 'focused';
-  @override String get shareSessions => 'sessions';
-  @override String get shareStreak => 'Share your streak and keep yourself accountable 🚀';
+  @override String get shareSummary => 'Sammanfattning';
+  @override String get shareFocused => 'fokuserad';
+  @override String get shareSessions => 'sessioner';
+  @override String get shareStreak => 'Dela din streak och håll dig ansvarig 🚀';
 
   @override String get languageEnglish => 'Engelska';
   @override String get languageTurkish => 'Turkiska';
