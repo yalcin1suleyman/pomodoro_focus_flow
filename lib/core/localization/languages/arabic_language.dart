@@ -156,4 +156,34 @@ class ArabicLanguage implements Language {
   @override String get longBreakShort => 'طويل';
 
   @override String get addNote => 'إضافة ملاحظة';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'يرجى إيقاف المؤقت قبل تغيير الوضع.';
+  // Help Slideshow
+  @override String get helpUnknown => 'غير معروف';
+  @override String get helpSlide1Title => 'أتقن وقتك';
+  @override String get helpSlide1Desc => 'إدارة الوقت فن. حافظ على تركيزك حاداً كالليزر، وامنع الإرهاق، وعظّم إنتاجيتك مع تقنية بومودورو.';
+  
+  @override String get helpSlide2Title => 'اختر هدفك';
+  @override String get helpSlide2Desc => 'تبدأ الإنجازات العظيمة بخطوات صغيرة. اختر أهم مهمة اليوم وكن مستعداً للتركيز عليها.';
+  
+  @override String get helpSlide3Title => 'تركيز كامل';
+  @override String get helpSlide3Desc => 'أسكت العالم الخارجي لمدة 25 دقيقة. أنت وهدفك فقط. ادخل وضع العمل العميق والتقط التدفق.';
+  
+  @override String get helpSlide4Title => 'جدد عقلك';
+  @override String get helpSlide4Desc => 'أخذ استراحة ليس إضاعة للوقت؛ إنه تجديد استراتيجي. أعد تهيئة دماغك للجلسة التالية باستراحة قصيرة مدتها 5 دقائق.';
+  
+  @override String get helpSlide5Title => 'دورة النصر';
+  @override String get helpSlide5Desc => 'كل دورة مكتملة هي خطوة عملاقة نحو هدفك. احتفل بنجاحك، واسترح بعمق، واستعد بقوة أكبر للنصر القادم.';
+  
+  @override String get skip => 'تخطي';
+  @override String get start => 'ابدأ';
+  @override String get next => 'التالي';
 }

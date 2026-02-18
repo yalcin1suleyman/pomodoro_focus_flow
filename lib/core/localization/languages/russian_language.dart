@@ -157,4 +157,34 @@ class RussianLanguage implements Language {
   @override String get longBreakShort => 'Длинный';
 
   @override String get addNote => 'Добавить заметку';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'Пожалуйста, остановите таймер перед сменой режима.';
+  // Help Slideshow
+  @override String get helpUnknown => 'Неизвестно';
+  @override String get helpSlide1Title => 'Управляй Своим Временем';
+  @override String get helpSlide1Desc => 'Управление временем — это искусство. Держи фокус острым как лазер, предотвращай выгорание и максимизируй продуктивность с техникой Помодоро.';
+  
+  @override String get helpSlide2Title => 'Выбери Свою Цель';
+  @override String get helpSlide2Desc => 'Великие достижения начинаются с маленьких шагов. Выбери самую важную задачу на сегодня и подготовься сосредоточиться на ней.';
+  
+  @override String get helpSlide3Title => 'Полная Концентрация';
+  @override String get helpSlide3Desc => 'Заглуши внешний мир на 25 минут. Только ты и твоя цель. Войди в режим глубокой работы и поймай поток.';
+  
+  @override String get helpSlide4Title => 'Обнови Разум';
+  @override String get helpSlide4Desc => 'Перерыв — это не потеря времени; это стратегическое обновление. Подготовь мозг к следующей сессии коротким 5-минутным перерывом.';
+  
+  @override String get helpSlide5Title => 'Цикл Победы';
+  @override String get helpSlide5Desc => 'Каждый завершённый цикл — это гигантский шаг к твоей цели. Отпразднуй успех, хорошо отдохни и подготовься ещё сильнее к следующей победе.';
+  
+  @override String get skip => 'Пропустить';
+  @override String get start => 'Начать';
+  @override String get next => 'Далее';
 }

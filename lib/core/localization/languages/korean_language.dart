@@ -156,4 +156,34 @@ class KoreanLanguage implements Language {
   @override String get longBreakShort => '긴휴식';
 
   @override String get addNote => '메모 추가';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => '모드를 전환하기 전에 타이머를 중지하세요.';
+  // Help Slideshow
+  @override String get helpUnknown => '알 수 없음';
+  @override String get helpSlide1Title => '시간을 지배하라';
+  @override String get helpSlide1Desc => '시간 관리는 예술입니다. 포모도로 기법으로 레이저처럼 날카로운 집중력을 유지하고, 번아웃을 예방하며, 생산성을 극대화하세요.';
+  
+  @override String get helpSlide2Title => '목표를 선택하라';
+  @override String get helpSlide2Desc => '위대한 성취는 작은 발걸음에서 시작됩니다. 오늘 가장 중요한 작업을 선택하고 집중할 준비를 하세요.';
+  
+  @override String get helpSlide3Title => '완전한 집중';
+  @override String get helpSlide3Desc => '25분 동안 외부 세계를 차단하세요. 오직 당신과 목표만 있습니다. 딥 워크 모드에 진입하고 플로우를 잡으세요.';
+  
+  @override String get helpSlide4Title => '마음을 새롭게';
+  @override String get helpSlide4Desc => '휴식은 시간 낭비가 아닙니다; 전략적 재충전입니다. 5분의 짧은 휴식으로 다음 세션을 위해 뇌를 준비하세요.';
+  
+  @override String get helpSlide5Title => '승리의 사이클';
+  @override String get helpSlide5Desc => '완료된 모든 사이클은 목표를 향한 거대한 발걸음입니다. 성공을 축하하고, 깊이 쉬고, 다음 승리를 위해 더 강하게 준비하세요.';
+  
+  @override String get skip => '건너뛰기';
+  @override String get start => '시작';
+  @override String get next => '다음';
 }

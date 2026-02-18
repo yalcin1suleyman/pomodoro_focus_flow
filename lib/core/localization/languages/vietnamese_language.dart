@@ -157,4 +157,34 @@ class VietnameseLanguage implements Language {
   @override String get longBreakShort => 'Dài';
 
   @override String get addNote => 'Thêm ghi chú';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'Vui lòng dừng bộ đếm thời gian trước khi chuyển chế độ.';
+  // Help Slideshow
+  @override String get helpUnknown => 'Không rõ';
+  @override String get helpSlide1Title => 'Làm Chủ Thời Gian';
+  @override String get helpSlide1Desc => 'Quản lý thời gian là một nghệ thuật. Giữ sự tập trung sắc bén như laser, ngăn ngừa kiệt sức và tối đa hóa năng suất với kỹ thuật Pomodoro.';
+  
+  @override String get helpSlide2Title => 'Chọn Mục Tiêu';
+  @override String get helpSlide2Desc => 'Những thành tựu vĩ đại bắt đầu từ những bước nhỏ. Chọn nhiệm vụ quan trọng nhất hôm nay và chuẩn bị tập trung vào nó.';
+  
+  @override String get helpSlide3Title => 'Tập Trung Hoàn Toàn';
+  @override String get helpSlide3Desc => 'Tắt tiếng thế giới bên ngoài trong 25 phút. Chỉ có bạn và mục tiêu. Bước vào chế độ làm việc sâu và nắm bắt dòng chảy.';
+  
+  @override String get helpSlide4Title => 'Làm Mới Tâm Trí';
+  @override String get helpSlide4Desc => 'Nghỉ ngơi không phải lãng phí thời gian; đó là sự đổi mới chiến lược. Chuẩn bị não bộ cho phiên tiếp theo với khoảng nghỉ ngắn 5 phút.';
+  
+  @override String get helpSlide5Title => 'Vòng Chiến Thắng';
+  @override String get helpSlide5Desc => 'Mỗi chu kỳ hoàn thành là một bước khổng lồ hướng tới mục tiêu. Hãy ăn mừng thành công, nghỉ ngơi sâu và chuẩn bị mạnh mẽ hơn cho chiến thắng tiếp theo.';
+  
+  @override String get skip => 'Bỏ qua';
+  @override String get start => 'Bắt đầu';
+  @override String get next => 'Tiếp theo';
 }

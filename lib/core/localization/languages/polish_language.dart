@@ -156,4 +156,34 @@ class PolishLanguage implements Language {
   @override String get longBreakShort => 'Długa';
 
   @override String get addNote => 'Dodaj notatkę';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'Proszę zatrzymać timer przed zmianą trybu.';
+  // Help Slideshow
+  @override String get helpUnknown => 'Nieznany';
+  @override String get helpSlide1Title => 'Opanuj Swój Czas';
+  @override String get helpSlide1Desc => 'Zarządzanie czasem to sztuka. Utrzymuj skupienie ostre jak laser, zapobiegaj wypaleniu i maksymalizuj produktywność dzięki technice Pomodoro.';
+  
+  @override String get helpSlide2Title => 'Wybierz Swój Cel';
+  @override String get helpSlide2Desc => 'Wielkie osiągnięcia zaczynają się od małych kroków. Wybierz najważniejsze zadanie na dziś i przygotuj się na skupienie się na nim.';
+  
+  @override String get helpSlide3Title => 'Pełna Koncentracja';
+  @override String get helpSlide3Desc => 'Wycisz zewnętrzny świat na 25 minut. Tylko ty i twój cel. Wejdź w tryb głębokiej pracy i złap przepływ.';
+  
+  @override String get helpSlide4Title => 'Odśwież Umysł';
+  @override String get helpSlide4Desc => 'Przerwa to nie strata czasu; to strategiczne odnowienie. Przygotuj mózg do następnej sesji krótką 5-minutową przerwą.';
+  
+  @override String get helpSlide5Title => 'Cykl Zwycięstwa';
+  @override String get helpSlide5Desc => 'Każdy ukończony cykl to gigantyczny krok w kierunku twojego celu. Świętuj sukces, głęboko odpoczywaj i przygotuj się silniej na kolejne zwycięstwo.';
+  
+  @override String get skip => 'Pomiń';
+  @override String get start => 'Zacznij';
+  @override String get next => 'Dalej';
 }

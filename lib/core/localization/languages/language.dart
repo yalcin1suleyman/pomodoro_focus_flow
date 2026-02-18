@@ -166,4 +166,25 @@ abstract class Language {
 
   // Misc
   String get addNote;
+  
+  // Help & Warnings
+  String get helpTitle;
+  String get helpContent;
+  String get timerRunningWarning;
+  
+  // Help Slideshow
+  String get helpUnknown;
+  String get helpSlide1Title;
+  String get helpSlide1Desc;
+  String get helpSlide2Title;
+  String get helpSlide2Desc;
+  String get helpSlide3Title;
+  String get helpSlide3Desc;
+  String get helpSlide4Title;
+  String get helpSlide4Desc;
+  String get helpSlide5Title;
+  String get helpSlide5Desc;
+  String get skip;
+  String get start;
+  String get next;
 }

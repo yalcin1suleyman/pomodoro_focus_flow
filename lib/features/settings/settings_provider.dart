@@ -346,6 +346,28 @@ class SettingsProvider extends ChangeNotifier {
       case 'longBreakShort': return _currentLanguage.longBreakShort;
       // Misc
       case 'addNote': return _currentLanguage.addNote;
+      
+      // Help & Warnings
+      case 'helpTitle': return _currentLanguage.helpTitle;
+      case 'helpContent': return _currentLanguage.helpContent;
+      case 'timerRunningWarning': return _currentLanguage.timerRunningWarning;
+
+      // Help Slideshow
+      case 'helpUnknown': return _currentLanguage.helpUnknown;
+      case 'helpSlide1Title': return _currentLanguage.helpSlide1Title;
+      case 'helpSlide1Desc': return _currentLanguage.helpSlide1Desc;
+      case 'helpSlide2Title': return _currentLanguage.helpSlide2Title;
+      case 'helpSlide2Desc': return _currentLanguage.helpSlide2Desc;
+      case 'helpSlide3Title': return _currentLanguage.helpSlide3Title;
+      case 'helpSlide3Desc': return _currentLanguage.helpSlide3Desc;
+      case 'helpSlide4Title': return _currentLanguage.helpSlide4Title;
+      case 'helpSlide4Desc': return _currentLanguage.helpSlide4Desc;
+      case 'helpSlide5Title': return _currentLanguage.helpSlide5Title;
+      case 'helpSlide5Desc': return _currentLanguage.helpSlide5Desc;
+      case 'skip': return _currentLanguage.skip;
+      case 'start': return _currentLanguage.start;
+      case 'next': return _currentLanguage.next;
+
       default: return key;
     }
   }

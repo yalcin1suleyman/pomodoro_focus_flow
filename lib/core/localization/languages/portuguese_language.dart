@@ -157,4 +157,34 @@ class PortugueseLanguage implements Language {
   @override String get longBreakShort => 'Longo';
 
   @override String get addNote => 'Adicionar nota';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'Por favor, pare o temporizador antes de mudar de modo.';
+  // Help Slideshow
+  @override String get helpUnknown => 'Desconhecido';
+  @override String get helpSlide1Title => 'Domine Seu Tempo';
+  @override String get helpSlide1Desc => 'Gerenciar o tempo é uma arte. Mantenha seu foco com precisão de laser, previna o esgotamento e maximize sua produtividade com a técnica Pomodoro.';
+  
+  @override String get helpSlide2Title => 'Escolha Sua Meta';
+  @override String get helpSlide2Desc => 'Grandes conquistas começam com pequenos passos. Escolha a tarefa mais importante do dia e prepare-se para se concentrar nela.';
+  
+  @override String get helpSlide3Title => 'Foco Total';
+  @override String get helpSlide3Desc => 'Silencie o mundo exterior por 25 minutos. Só você e seu objetivo. Entre no modo de trabalho profundo e alcance o fluxo.';
+  
+  @override String get helpSlide4Title => 'Renove Sua Mente';
+  @override String get helpSlide4Desc => 'Fazer uma pausa não é perda de tempo; é renovação estratégica. Prepare seu cérebro para a próxima sessão com uma breve pausa de 5 minutos.';
+  
+  @override String get helpSlide5Title => 'Ciclo de Vitória';
+  @override String get helpSlide5Desc => 'Cada ciclo completado é um passo gigante em direção à sua meta. Celebre seu sucesso, descanse profundamente e prepare-se mais forte para a próxima vitória.';
+  
+  @override String get skip => 'Pular';
+  @override String get start => 'Começar';
+  @override String get next => 'Próximo';
 }

@@ -163,4 +163,36 @@ class EnglishLanguage implements Language {
 
   // Misc
   @override String get addNote => 'Add a note';
+  
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'Please stop the timer before switching modes.';
+
+  // Help Slideshow
+  @override String get helpUnknown => 'Unknown';
+  @override String get helpSlide1Title => 'Master Your Time';
+  @override String get helpSlide1Desc => 'Time management is an art. Keep your focus laser-sharp, prevent burnout, and maximize productivity with the Pomodoro technique.';
+  
+  @override String get helpSlide2Title => 'Choose Your Goal';
+  @override String get helpSlide2Desc => 'Great achievements start with small steps. Pick the most important task for today and prepare to focus on it.';
+  
+  @override String get helpSlide3Title => 'Total Focus';
+  @override String get helpSlide3Desc => "Silence the outside world for 25 minutes. It's just you and your goal. Enter deep work mode and catch the flow.";
+  
+  @override String get helpSlide4Title => 'Refresh Your Mind';
+  @override String get helpSlide4Desc => "Taking a break isn't a waste of time; it's strategic renewal. Prepare your brain for the next session with a short 5-minute break.";
+  
+  @override String get helpSlide5Title => 'Cycle of Victory';
+  @override String get helpSlide5Desc => 'Every completed cycle is a giant step towards your goal. Celebrate your success, rest deeply, and prepare stronger for the next victory.';
+  
+  @override String get skip => 'Skip';
+  @override String get start => 'Start';
+  @override String get next => 'Next';
 }

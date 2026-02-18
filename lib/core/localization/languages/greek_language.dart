@@ -156,4 +156,34 @@ class GreekLanguage implements Language {
   @override String get longBreakShort => 'Μεγάλο';
 
   @override String get addNote => 'Προσθήκη σημείωσης';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'Παρακαλώ σταματήστε το χρονόμετρο πριν αλλάξετε λειτουργία.';
+  // Help Slideshow
+  @override String get helpUnknown => 'Άγνωστο';
+  @override String get helpSlide1Title => 'Κατακτήστε τον Χρόνο σας';
+  @override String get helpSlide1Desc => 'Η διαχείριση χρόνου είναι τέχνη. Διατηρήστε την εστίασή σας οξεία σαν λέιζερ, αποτρέψτε την εξουθένωση και μεγιστοποιήστε την παραγωγικότητά σας με την τεχνική Pomodoro.';
+  
+  @override String get helpSlide2Title => 'Επιλέξτε τον Στόχο σας';
+  @override String get helpSlide2Desc => 'Τα μεγάλα επιτεύγματα ξεκινούν με μικρά βήματα. Επιλέξτε την πιο σημαντική εργασία της ημέρας και ετοιμαστείτε να εστιάσετε σε αυτήν.';
+  
+  @override String get helpSlide3Title => 'Πλήρης Συγκέντρωση';
+  @override String get helpSlide3Desc => 'Σιγάστε τον εξωτερικό κόσμο για 25 λεπτά. Μόνο εσείς και ο στόχος σας. Μπείτε σε λειτουργία βαθιάς εργασίας και πιάστε τη ροή.';
+  
+  @override String get helpSlide4Title => 'Ανανεώστε το Μυαλό σας';
+  @override String get helpSlide4Desc => 'Το διάλειμμα δεν είναι χάσιμο χρόνου· είναι στρατηγική ανανέωση. Προετοιμάστε τον εγκέφαλό σας για την επόμενη συνεδρία με ένα σύντομο διάλειμμα 5 λεπτών.';
+  
+  @override String get helpSlide5Title => 'Κύκλος Νίκης';
+  @override String get helpSlide5Desc => 'Κάθε ολοκληρωμένος κύκλος είναι ένα γιγαντιαίο βήμα προς τον στόχο σας. Γιορτάστε την επιτυχία σας, ξεκουραστείτε βαθιά και ετοιμαστείτε πιο δυνατοί για την επόμενη νίκη.';
+  
+  @override String get skip => 'Παράλειψη';
+  @override String get start => 'Έναρξη';
+  @override String get next => 'Επόμενο';
 }

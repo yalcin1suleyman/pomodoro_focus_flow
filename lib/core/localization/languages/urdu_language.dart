@@ -156,4 +156,34 @@ class UrduLanguage implements Language {
   @override String get longBreakShort => 'لمبا';
 
   @override String get addNote => 'نوٹ شامل کریں';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'براہ کرم موڈ تبدیل کرنے سے پہلے ٹائمر روکیں۔';
+  // Help Slideshow
+  @override String get helpUnknown => 'نامعلوم';
+  @override String get helpSlide1Title => 'اپنے وقت پر قابو پائیں';
+  @override String get helpSlide1Desc => 'وقت کا انتظام ایک فن ہے۔ پوموڈورو تکنیک سے اپنی توجہ لیزر کی طرح تیز رکھیں، جلن سے بچیں اور پیداواریت کو زیادہ سے زیادہ کریں۔';
+  
+  @override String get helpSlide2Title => 'اپنا ہدف منتخب کریں';
+  @override String get helpSlide2Desc => 'عظیم کامیابیاں چھوٹے قدموں سے شروع ہوتی ہیں۔ آج کا سب سے اہم کام منتخب کریں اور اس پر توجہ دینے کے لیے تیار ہوں۔';
+  
+  @override String get helpSlide3Title => 'مکمل توجہ';
+  @override String get helpSlide3Desc => '25 منٹ کے لیے بیرونی دنیا کو خاموش کریں۔ صرف آپ اور آپ کا ہدف۔ گہرے کام کے موڈ میں داخل ہوں اور بہاؤ کو پکڑیں۔';
+  
+  @override String get helpSlide4Title => 'ذہن کو تازہ کریں';
+  @override String get helpSlide4Desc => 'وقفہ لینا وقت کا ضیاع نہیں؛ یہ حکمت عملی کی تجدید ہے۔ 5 منٹ کے مختصر وقفے سے اگلے سیشن کے لیے اپنے دماغ کو تیار کریں۔';
+  
+  @override String get helpSlide5Title => 'فتح کا چکر';
+  @override String get helpSlide5Desc => 'ہر مکمل چکر آپ کے ہدف کی طرف ایک بڑا قدم ہے۔ اپنی کامیابی کا جشن منائیں، گہرا آرام کریں اور اگلی فتح کے لیے اور مضبوط تیاری کریں۔';
+  
+  @override String get skip => 'چھوڑیں';
+  @override String get start => 'شروع کریں';
+  @override String get next => 'اگلا';
 }

@@ -7,6 +7,7 @@ import '../../core/theme/app_theme.dart';
 import 'language_screen.dart';
 import '../../core/services/ad_service.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'help_slideshow.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -52,11 +53,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                settings.translate('settings'),
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+                  Text(
+                    settings.translate('settings'),
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.help_outline),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const HelpSlideshow()),
+                      );
+                    },
+                  ),
+                ],
               ),
               const SizedBox(height: 30),
               

@@ -157,4 +157,34 @@ class IndonesianLanguage implements Language {
   @override String get longBreakShort => 'Panjang';
 
   @override String get addNote => 'Tambah catatan';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'Harap hentikan timer sebelum beralih mode.';
+  // Help Slideshow
+  @override String get helpUnknown => 'Tidak Diketahui';
+  @override String get helpSlide1Title => 'Kuasai Waktumu';
+  @override String get helpSlide1Desc => 'Manajemen waktu adalah seni. Jaga fokusmu setajam laser, cegah kelelahan, dan maksimalkan produktivitasmu dengan teknik Pomodoro.';
+  
+  @override String get helpSlide2Title => 'Pilih Tujuanmu';
+  @override String get helpSlide2Desc => 'Pencapaian besar dimulai dari langkah kecil. Pilih tugas terpenting hari ini dan bersiaplah untuk fokus padanya.';
+  
+  @override String get helpSlide3Title => 'Fokus Total';
+  @override String get helpSlide3Desc => 'Diamkan dunia luar selama 25 menit. Hanya kamu dan tujuanmu. Masuki mode kerja mendalam dan raih aliran.';
+  
+  @override String get helpSlide4Title => 'Segarkan Pikiranmu';
+  @override String get helpSlide4Desc => 'Beristirahat bukan pemborosan waktu; itu pembaruan strategis. Siapkan otakmu untuk sesi berikutnya dengan istirahat singkat 5 menit.';
+  
+  @override String get helpSlide5Title => 'Siklus Kemenangan';
+  @override String get helpSlide5Desc => 'Setiap siklus yang diselesaikan adalah langkah raksasa menuju tujuanmu. Rayakan kesuksesanmu, istirahat dengan nyenyak, dan bersiaplah lebih kuat untuk kemenangan berikutnya.';
+  
+  @override String get skip => 'Lewati';
+  @override String get start => 'Mulai';
+  @override String get next => 'Berikutnya';
 }

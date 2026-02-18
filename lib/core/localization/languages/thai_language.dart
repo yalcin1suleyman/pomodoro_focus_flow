@@ -156,4 +156,34 @@ class ThaiLanguage implements Language {
   @override String get longBreakShort => 'พักยาว';
 
   @override String get addNote => 'เพิ่มโน้ต';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'กรุณาหยุดตัวจับเวลาก่อนเปลี่ยนโหมด';
+  // Help Slideshow
+  @override String get helpUnknown => 'ไม่ทราบ';
+  @override String get helpSlide1Title => 'เป็นนายเวลาของคุณ';
+  @override String get helpSlide1Desc => 'การบริหารเวลาคือศิลปะ รักษาสมาธิของคุณให้คมดั่งเลเซอร์ ป้องกันความเหนื่อยล้า และเพิ่มประสิทธิภาพสูงสุดด้วยเทคนิคโปโมโดโร';
+  
+  @override String get helpSlide2Title => 'เลือกเป้าหมายของคุณ';
+  @override String get helpSlide2Desc => 'ความสำเร็จยิ่งใหญ่เริ่มต้นจากก้าวเล็กๆ เลือกงานที่สำคัญที่สุดของวันนี้และเตรียมพร้อมที่จะมุ่งเน้นไปที่มัน';
+  
+  @override String get helpSlide3Title => 'สมาธิเต็มที่';
+  @override String get helpSlide3Desc => 'ปิดเสียงโลกภายนอกเป็นเวลา 25 นาที มีแค่คุณและเป้าหมายของคุณ เข้าสู่โหมดทำงานเชิงลึกและจับกระแสให้ได้';
+  
+  @override String get helpSlide4Title => 'ฟื้นฟูจิตใจ';
+  @override String get helpSlide4Desc => 'การพักผ่อนไม่ใช่การเสียเวลา แต่เป็นการฟื้นฟูเชิงกลยุทธ์ เตรียมสมองสำหรับเซสชั่นถัดไปด้วยการพักสั้นๆ 5 นาที';
+  
+  @override String get helpSlide5Title => 'วงจรแห่งชัยชนะ';
+  @override String get helpSlide5Desc => 'ทุกรอบที่เสร็จสมบูรณ์คือก้าวยักษ์สู่เป้าหมายของคุณ ฉลองความสำเร็จ พักผ่อนอย่างเต็มที่ และเตรียมพร้อมให้แข็งแกร่งขึ้นสำหรับชัยชนะครั้งต่อไป';
+  
+  @override String get skip => 'ข้าม';
+  @override String get start => 'เริ่ม';
+  @override String get next => 'ถัดไป';
 }

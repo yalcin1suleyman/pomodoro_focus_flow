@@ -157,4 +157,34 @@ class DutchLanguage implements Language {
   @override String get longBreakShort => 'Lang';
 
   @override String get addNote => 'Notitie toevoegen';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'Stop de timer voordat je van modus wisselt.';
+  // Help Slideshow
+  @override String get helpUnknown => 'Onbekend';
+  @override String get helpSlide1Title => 'Beheers Je Tijd';
+  @override String get helpSlide1Desc => 'Tijdmanagement is een kunst. Houd je focus scherp als een laser, voorkom burn-out en maximaliseer je productiviteit met de Pomodoro-techniek.';
+  
+  @override String get helpSlide2Title => 'Kies Je Doel';
+  @override String get helpSlide2Desc => 'Grote prestaties beginnen met kleine stappen. Kies de belangrijkste taak van vandaag en bereid je voor om je daarop te concentreren.';
+  
+  @override String get helpSlide3Title => 'Volledige Focus';
+  @override String get helpSlide3Desc => 'Zet de buitenwereld 25 minuten op stil. Alleen jij en je doel. Ga in de diepe werkmodus en vang de flow.';
+  
+  @override String get helpSlide4Title => 'Vernieuw Je Geest';
+  @override String get helpSlide4Desc => 'Een pauze nemen is geen tijdverspilling; het is strategische vernieuwing. Bereid je hersenen voor op de volgende sessie met een korte pauze van 5 minuten.';
+  
+  @override String get helpSlide5Title => 'Cyclus van Overwinning';
+  @override String get helpSlide5Desc => 'Elke voltooide cyclus is een reuzensprong richting je doel. Vier je succes, rust diep uit en bereid je sterker voor op de volgende overwinning.';
+  
+  @override String get skip => 'Overslaan';
+  @override String get start => 'Starten';
+  @override String get next => 'Volgende';
 }

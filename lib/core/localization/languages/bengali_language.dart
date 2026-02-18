@@ -156,4 +156,34 @@ class BengaliLanguage implements Language {
   @override String get longBreakShort => 'লম্বা';
 
   @override String get addNote => 'নোট যোগ করুন';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'মোড পরিবর্তন করার আগে টাইমার বন্ধ করুন।';
+  // Help Slideshow
+  @override String get helpUnknown => 'অজানা';
+  @override String get helpSlide1Title => 'আপনার সময়ের নিয়ন্ত্রণ নিন';
+  @override String get helpSlide1Desc => 'সময় ব্যবস্থাপনা একটি শিল্প। পোমোডোরো কৌশলে আপনার মনোযোগ লেজারের মতো তীক্ষ্ণ রাখুন, বার্নআউট প্রতিরোধ করুন এবং উৎপাদনশীলতা সর্বাধিক করুন।';
+  
+  @override String get helpSlide2Title => 'আপনার লক্ষ্য বেছে নিন';
+  @override String get helpSlide2Desc => 'মহান অর্জন ছোট পদক্ষেপ থেকে শুরু হয়। আজকের সবচেয়ে গুরুত্বপূর্ণ কাজটি বেছে নিন এবং সেটিতে মনোযোগ দিতে প্রস্তুত হন।';
+  
+  @override String get helpSlide3Title => 'সম্পূর্ণ মনোযোগ';
+  @override String get helpSlide3Desc => '25 মিনিটের জন্য বাইরের জগতকে নীরব করুন। শুধু আপনি এবং আপনার লক্ষ্য। গভীর কাজের মোডে প্রবেশ করুন এবং প্রবাহ ধরুন।';
+  
+  @override String get helpSlide4Title => 'মন সতেজ করুন';
+  @override String get helpSlide4Desc => 'বিরতি নেওয়া সময়ের অপচয় নয়; এটি কৌশলগত পুনর্নবীকরণ। 5 মিনিটের ছোট বিরতিতে পরবর্তী সেশনের জন্য আপনার মস্তিষ্ককে প্রস্তুত করুন।';
+  
+  @override String get helpSlide5Title => 'বিজয়ের চক্র';
+  @override String get helpSlide5Desc => 'প্রতিটি সম্পন্ন চক্র আপনার লক্ষ্যের দিকে একটি বিশাল পদক্ষেপ। আপনার সাফল্য উদযাপন করুন, গভীরভাবে বিশ্রাম নিন এবং পরবর্তী বিজয়ের জন্য আরও শক্তিশালী হয়ে প্রস্তুত হন।';
+  
+  @override String get skip => 'এড়িয়ে যান';
+  @override String get start => 'শুরু করুন';
+  @override String get next => 'পরবর্তী';
 }

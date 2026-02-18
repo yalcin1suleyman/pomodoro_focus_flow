@@ -98,7 +98,7 @@ class TimerScreen extends StatelessWidget {
             lineWidth: radius > 180 ? 25.0 : 18.0,
           ),
           const Spacer(),
-          _buildControls(context, timer, theme, progressColor),
+          _buildControls(context, timer, theme, progressColor, settings),
           const SizedBox(height: 30),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -148,7 +148,7 @@ class TimerScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildControls(context, timer, theme, progressColor),
+                  _buildControls(context, timer, theme, progressColor, settings),
                   const SizedBox(height: 20),
                   Text(
                     _getMotivationQuote(settings),
@@ -237,7 +237,7 @@ class TimerScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildControls(BuildContext context, TimerService timer, ThemeData theme, Color? progressColor) {
+  Widget _buildControls(BuildContext context, TimerService timer, ThemeData theme, Color? progressColor, SettingsProvider settings) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -257,6 +257,12 @@ class TimerScreen extends StatelessWidget {
         _ControlButton(
           icon: Icons.skip_next,
           onTap: () {
+            if (timer.status == TimerStatus.running) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(settings.translate('timerRunningWarning'))),
+              );
+              return;
+            }
             if(timer.mode == TimerMode.pomodoro) {
               timer.setMode(TimerMode.shortBreak);
             } else if (timer.mode == TimerMode.shortBreak) {
@@ -284,7 +290,18 @@ class _ModeButton extends StatelessWidget {
     return Expanded(
       child: GestureDetector(
         behavior: HitTestBehavior.opaque, // Fix touch target ambiguity
-        onTap: () => Provider.of<TimerService>(context, listen: false).setMode(mode),
+        onTap: () {
+          final timer = Provider.of<TimerService>(context, listen: false);
+          final settings = Provider.of<SettingsProvider>(context, listen: false);
+          
+          if (timer.status == TimerStatus.running) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(settings.translate('timerRunningWarning'))),
+            );
+            return;
+          }
+          timer.setMode(mode);
+        },
         child: AnimatedContainer(
           margin: const EdgeInsets.symmetric(horizontal: 2), // Slight separation
           duration: const Duration(milliseconds: 200),

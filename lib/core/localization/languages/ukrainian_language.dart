@@ -157,4 +157,34 @@ class UkrainianLanguage implements Language {
   @override String get longBreakShort => 'Довга';
 
   @override String get addNote => 'Додати нотатку';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'Будь ласка, зупиніть таймер перед зміною режиму.';
+  // Help Slideshow
+  @override String get helpUnknown => 'Невідомо';
+  @override String get helpSlide1Title => 'Керуй Своїм Часом';
+  @override String get helpSlide1Desc => 'Управління часом — це мистецтво. Тримай фокус гострим як лазер, запобігай вигоранню та максимізуй продуктивність за допомогою техніки Помодоро.';
+  
+  @override String get helpSlide2Title => 'Обери Свою Мету';
+  @override String get helpSlide2Desc => 'Великі досягнення починаються з маленьких кроків. Обери найважливіше завдання на сьогодні та підготуйся зосередитися на ньому.';
+  
+  @override String get helpSlide3Title => 'Повна Концентрація';
+  @override String get helpSlide3Desc => 'Заглуши зовнішній світ на 25 хвилин. Тільки ти і твоя мета. Увійди в режим глибокої роботи та впіймай потік.';
+  
+  @override String get helpSlide4Title => 'Онови Розум';
+  @override String get helpSlide4Desc => 'Перерва — це не втрата часу; це стратегічне оновлення. Підготуй мозок до наступної сесії коротким 5-хвилинним відпочинком.';
+  
+  @override String get helpSlide5Title => 'Цикл Перемоги';
+  @override String get helpSlide5Desc => 'Кожен завершений цикл — це гігантський крок до твоєї мети. Відсвяткуй успіх, добре відпочинь і підготуйся ще сильнішим до наступної перемоги.';
+  
+  @override String get skip => 'Пропустити';
+  @override String get start => 'Почати';
+  @override String get next => 'Далі';
 }

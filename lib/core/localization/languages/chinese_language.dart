@@ -157,4 +157,34 @@ class ChineseLanguage implements Language {
   @override String get longBreakShort => '长休';
 
   @override String get addNote => '添加笔记';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => '请在切换模式前停止计时器。';
+  // Help Slideshow
+  @override String get helpUnknown => '未知';
+  @override String get helpSlide1Title => '掌控你的时间';
+  @override String get helpSlide1Desc => '时间管理是一门艺术。用番茄工作法保持激光般的专注，预防倦怠，最大化你的生产力。';
+  
+  @override String get helpSlide2Title => '选择你的目标';
+  @override String get helpSlide2Desc => '伟大的成就从小步骤开始。选择今天最重要的任务，准备好专注于它。';
+  
+  @override String get helpSlide3Title => '全神贯注';
+  @override String get helpSlide3Desc => '让外部世界沉默25分钟。只有你和你的目标。进入深度工作模式，抓住心流。';
+  
+  @override String get helpSlide4Title => '焕新思维';
+  @override String get helpSlide4Desc => '休息不是浪费时间，而是战略性的更新。用5分钟的短暂休息为下一个工作阶段准备好你的大脑。';
+  
+  @override String get helpSlide5Title => '胜利循环';
+  @override String get helpSlide5Desc => '每一个完成的循环都是向目标迈出的巨大一步。庆祝你的成功，深度休息，为下一次胜利做好更强的准备。';
+  
+  @override String get skip => '跳过';
+  @override String get start => '开始';
+  @override String get next => '下一步';
 }

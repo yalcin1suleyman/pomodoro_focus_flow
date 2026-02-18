@@ -157,4 +157,34 @@ class JapaneseLanguage implements Language {
   @override String get longBreakShort => '長休';
 
   @override String get addNote => 'メモを追加';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'モードを切り替える前にタイマーを停止してください。';
+  // Help Slideshow
+  @override String get helpUnknown => '不明';
+  @override String get helpSlide1Title => '時間をマスターする';
+  @override String get helpSlide1Desc => '時間管理は芸術です。ポモドーロテクニックで集中力をレーザーのように鋭く保ち、燃え尽きを防ぎ、生産性を最大化しましょう。';
+  
+  @override String get helpSlide2Title => '目標を選ぶ';
+  @override String get helpSlide2Desc => '偉大な成果は小さな一歩から始まります。今日最も重要なタスクを選び、それに集中する準備をしましょう。';
+  
+  @override String get helpSlide3Title => '完全集中';
+  @override String get helpSlide3Desc => '25分間、外の世界を遮断しましょう。あなたと目標だけです。ディープワークモードに入り、フローを掴みましょう。';
+  
+  @override String get helpSlide4Title => '心をリフレッシュ';
+  @override String get helpSlide4Desc => '休憩は時間の無駄ではなく、戦略的な刷新です。5分間の短い休憩で次のセッションに向けて脳を準備しましょう。';
+  
+  @override String get helpSlide5Title => '勝利のサイクル';
+  @override String get helpSlide5Desc => '完了したサイクルは目標への大きな一歩です。成功を祝い、深く休んで、次の勝利に向けてより強く準備しましょう。';
+  
+  @override String get skip => 'スキップ';
+  @override String get start => '開始';
+  @override String get next => '次へ';
 }

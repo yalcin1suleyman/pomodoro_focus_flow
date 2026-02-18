@@ -157,4 +157,34 @@ class ItalianLanguage implements Language {
   @override String get longBreakShort => 'Lunga';
 
   @override String get addNote => 'Aggiungi nota';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'Per favore, ferma il timer prima di cambiare modalità.';
+  // Help Slideshow
+  @override String get helpUnknown => 'Sconosciuto';
+  @override String get helpSlide1Title => 'Padroneggia il Tuo Tempo';
+  @override String get helpSlide1Desc => 'Gestire il tempo è un\'arte. Mantieni la tua concentrazione affilata come un laser, previeni il burnout e massimizza la produttività con la tecnica Pomodoro.';
+  
+  @override String get helpSlide2Title => 'Scegli il Tuo Obiettivo';
+  @override String get helpSlide2Desc => 'I grandi successi iniziano con piccoli passi. Scegli il compito più importante della giornata e preparati a concentrarti su di esso.';
+  
+  @override String get helpSlide3Title => 'Concentrazione Totale';
+  @override String get helpSlide3Desc => 'Silenzia il mondo esterno per 25 minuti. Solo tu e il tuo obiettivo. Entra in modalità lavoro profondo e raggiungi il flusso.';
+  
+  @override String get helpSlide4Title => 'Rinnova la Tua Mente';
+  @override String get helpSlide4Desc => 'Fare una pausa non è perdere tempo; è un rinnovamento strategico. Prepara il tuo cervello per la prossima sessione con una breve pausa di 5 minuti.';
+  
+  @override String get helpSlide5Title => 'Ciclo di Vittoria';
+  @override String get helpSlide5Desc => 'Ogni ciclo completato è un passo da gigante verso il tuo obiettivo. Celebra il tuo successo, riposati profondamente e preparati più forte per la prossima vittoria.';
+  
+  @override String get skip => 'Salta';
+  @override String get start => 'Inizia';
+  @override String get next => 'Avanti';
 }

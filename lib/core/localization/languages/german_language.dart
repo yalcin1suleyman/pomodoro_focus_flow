@@ -158,4 +158,34 @@ class GermanLanguage implements Language {
   @override String get longBreakShort => 'Lang';
 
   @override String get addNote => 'Notiz hinzufügen';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'Bitte stoppe den Timer, bevor du den Modus wechselst.';
+  // Help Slideshow
+  @override String get helpUnknown => 'Unbekannt';
+  @override String get helpSlide1Title => 'Meistere Deine Zeit';
+  @override String get helpSlide1Desc => 'Zeitmanagement ist eine Kunst. Halte deinen Fokus messerscharf, verhindere Burnout und maximiere deine Produktivität mit der Pomodoro-Technik.';
+  
+  @override String get helpSlide2Title => 'Wähle Dein Ziel';
+  @override String get helpSlide2Desc => 'Große Erfolge beginnen mit kleinen Schritten. Wähle die wichtigste Aufgabe des Tages und bereite dich darauf vor, dich darauf zu konzentrieren.';
+  
+  @override String get helpSlide3Title => 'Volle Konzentration';
+  @override String get helpSlide3Desc => 'Schalte die Außenwelt für 25 Minuten stumm. Nur du und dein Ziel. Tritt in den Deep-Work-Modus ein und erlebe den Flow.';
+  
+  @override String get helpSlide4Title => 'Erneuere Deinen Geist';
+  @override String get helpSlide4Desc => 'Eine Pause zu machen ist keine Zeitverschwendung; es ist strategische Erneuerung. Bereite dein Gehirn mit einer kurzen 5-Minuten-Pause auf die nächste Sitzung vor.';
+  
+  @override String get helpSlide5Title => 'Siegeszyklus';
+  @override String get helpSlide5Desc => 'Jeder abgeschlossene Zyklus ist ein riesiger Schritt in Richtung deines Ziels. Feiere deinen Erfolg, ruh dich tief aus und bereite dich stärker auf den nächsten Sieg vor.';
+  
+  @override String get skip => 'Überspringen';
+  @override String get start => 'Starten';
+  @override String get next => 'Weiter';
 }

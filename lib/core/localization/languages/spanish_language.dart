@@ -157,4 +157,34 @@ class SpanishLanguage implements Language {
   @override String get longBreakShort => 'Largo';
 
   @override String get addNote => 'Añadir nota';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'Por favor, detén el temporizador antes de cambiar de modo.';
+  // Help Slideshow
+  @override String get helpUnknown => 'Desconocido';
+  @override String get helpSlide1Title => 'Domina Tu Tiempo';
+  @override String get helpSlide1Desc => 'Gestionar el tiempo es un arte. Mantén tu enfoque con precisión láser, previene el agotamiento y maximiza tu productividad con la técnica Pomodoro.';
+  
+  @override String get helpSlide2Title => 'Elige Tu Meta';
+  @override String get helpSlide2Desc => 'Los grandes logros comienzan con pequeños pasos. Elige la tarea más importante del día y prepárate para enfocarte en ella.';
+  
+  @override String get helpSlide3Title => 'Enfoque Total';
+  @override String get helpSlide3Desc => 'Silencia el mundo exterior durante 25 minutos. Solo tú y tu objetivo. Entra en modo de trabajo profundo y alcanza el flujo.';
+  
+  @override String get helpSlide4Title => 'Renueva Tu Mente';
+  @override String get helpSlide4Desc => 'Tomar un descanso no es perder el tiempo; es una renovación estratégica. Prepara tu cerebro para la siguiente sesión con un breve descanso de 5 minutos.';
+  
+  @override String get helpSlide5Title => 'Ciclo de Victoria';
+  @override String get helpSlide5Desc => 'Cada ciclo completado es un paso gigante hacia tu meta. Celebra tu éxito, descansa profundamente y prepárate más fuerte para la próxima victoria.';
+  
+  @override String get skip => 'Omitir';
+  @override String get start => 'Comenzar';
+  @override String get next => 'Siguiente';
 }

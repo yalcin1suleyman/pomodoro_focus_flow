@@ -163,4 +163,36 @@ class TurkishLanguage implements Language {
 
   // Misc
   @override String get addNote => 'Bir not ekle';
+
+  // Help & Warnings
+  @override String get helpTitle => 'Uygulama Rehberi';
+  @override String get helpContent => 
+    "**Uygulama Nasıl Çalışır?**\n\n"
+    "**Pomodoro**: 25 dakika odaklanın, ardından kısa bir mola verin. 4 oturumdan sonra uzun bir mola verin.\n\n"
+    "**Zamanlayıcı**: Odaklanmak için başlat'a dokunun. Gerekirse duraklatın.\n\n"
+    "**Ayarlar**: Odaklanma sürelerinizi ve seslerinizi özelleştirin.\n\n"
+    "**Görevler**: Görev ekleyerek çalışmalarınızı takip edin.\n\n"
+    "**İstatistikler**: Zaman içindeki ilerlemenizi görüntüleyin.";
+  @override String get timerRunningWarning => 'Lütfen durdurmadan geçiş yapmayın.';
+
+  // Help Slideshow
+  @override String get helpUnknown => 'Bilinmeyen';
+  @override String get helpSlide1Title => 'Zamanın Efendisi Olun';
+  @override String get helpSlide1Desc => 'Zamanı yönetmek bir sanattır. Pomodoro tekniği ile dikkatinizi lazer keskinliğinde tutun, tükenmişliği önleyin ve üretkenliğinizi zirveye taşıyın.';
+  
+  @override String get helpSlide2Title => 'Hedefini Seç';
+  @override String get helpSlide2Desc => 'Büyük başarılar küçük adımlarla başlar. Bugün tamamlaman gereken en önemli görevi seç ve ona odaklanmaya hazırlan.';
+  
+  @override String get helpSlide3Title => 'Tam Odaklanma';
+  @override String get helpSlide3Desc => '25 dakika boyunca dış dünyayı sessize al. Sadece sen ve hedefin varsınız. Derin çalışma moduna geç ve akışı yakala.';
+  
+  @override String get helpSlide4Title => 'Zihnini Tazele';
+  @override String get helpSlide4Desc => 'Mola vermek zaman kaybı değil, stratejik bir yenilenmedir. 5 dakikalık kısa bir mola ile beynini bir sonraki seansa hazırla.';
+  
+  @override String get helpSlide5Title => 'Zafer Döngüsü';
+  @override String get helpSlide5Desc => 'Her tamamlanan döngü, hedefine atılan dev bir adımdır. Başarını kutla, derinlemesine dinlen ve bir sonraki zafere daha güçlü hazırlan.';
+  
+  @override String get skip => 'Atla';
+  @override String get start => 'Başla';
+  @override String get next => 'İleri';
 }

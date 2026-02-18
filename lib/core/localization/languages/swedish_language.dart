@@ -156,4 +156,34 @@ class SwedishLanguage implements Language {
   @override String get longBreakShort => 'Lång';
 
   @override String get addNote => 'Lägg till anteckning';
+  // Help & Warnings
+  @override String get helpTitle => 'App Guide';
+  @override String get helpContent => 
+    "**How does the app work?**\n\n"
+    "**Pomodoro**: Focus for 25 minutes, then take a short break. After 4 sessions, take a long break.\n\n"
+    "**Timer**: Tap start to focus. Pause if needed.\n\n"
+    "**Settings**: Customize your focus durations and sounds.\n\n"
+    "**Tasks**: Track your work by adding tasks.\n\n"
+    "**Stats**: View your progress over time.";
+  @override String get timerRunningWarning => 'Stoppa timern innan du byter läge.';
+  // Help Slideshow
+  @override String get helpUnknown => 'Okänd';
+  @override String get helpSlide1Title => 'Bemästra Din Tid';
+  @override String get helpSlide1Desc => 'Tidshantering är en konst. Håll ditt fokus vasst som en laser, förhindra utbrändhet och maximera din produktivitet med Pomodoro-tekniken.';
+  
+  @override String get helpSlide2Title => 'Välj Ditt Mål';
+  @override String get helpSlide2Desc => 'Stora prestationer börjar med små steg. Välj dagens viktigaste uppgift och förbered dig på att fokusera på den.';
+  
+  @override String get helpSlide3Title => 'Totalt Fokus';
+  @override String get helpSlide3Desc => 'Tysta omvärlden i 25 minuter. Bara du och ditt mål. Gå in i djupt arbetsläge och fånga flödet.';
+  
+  @override String get helpSlide4Title => 'Förnya Ditt Sinne';
+  @override String get helpSlide4Desc => 'Att ta en paus är inte slöseri med tid; det är strategisk förnyelse. Förbered din hjärna för nästa session med en kort 5-minuters paus.';
+  
+  @override String get helpSlide5Title => 'Segerscykel';
+  @override String get helpSlide5Desc => 'Varje avslutad cykel är ett jättesteg mot ditt mål. Fira din framgång, vila djupt och förbered dig starkare för nästa seger.';
+  
+  @override String get skip => 'Hoppa över';
+  @override String get start => 'Starta';
+  @override String get next => 'Nästa';
 }
