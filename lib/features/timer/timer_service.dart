@@ -115,6 +115,9 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
     notifyListeners();
   }
 
+  // ⚡ DEBUG: Her tick'te kaç saniye atlanacak. Test için 30, üretim için 1 yapın.
+  static const int _debugSpeedMultiplier = 60;
+
   void start() {
     if (_status == TimerStatus.running) return;
     
@@ -123,15 +126,18 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
        _updateDurationForMode(_mode);
     }
     
-    // Calculate target end time based on current remaining seconds
-    _targetEndTime = DateTime.now().add(Duration(seconds: _remainingSeconds));
+    // DEBUG: targetEndTime hızlandırılmış süreye göre hesaplanıyor
+    _targetEndTime = DateTime.now().add(
+      Duration(seconds: (_remainingSeconds / _debugSpeedMultiplier).ceil()),
+    );
+    _remainingSeconds = _remainingSeconds; // gerçek kalan saniye korunuyor
 
     _status = TimerStatus.running;
     
     NotificationService().cancelNotification(1); 
     notifyListeners();
 
-    // Standard 1-second tick
+    // Her 1 saniyede _debugSpeedMultiplier kadar saniye azalt
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _tick();
     });
@@ -140,11 +146,10 @@ class TimerService extends ChangeNotifier with WidgetsBindingObserver {
   void _tick() {
     if (_targetEndTime == null) return;
     
-    final now = DateTime.now();
-    final remaining = _targetEndTime!.difference(now).inSeconds;
+    // DEBUG: Her tick _debugSpeedMultiplier saniye düşür
+    _remainingSeconds -= _debugSpeedMultiplier;
 
-    if (remaining > 0) {
-      _remainingSeconds = remaining;
+    if (_remainingSeconds > 0) {
       notifyListeners();
       
       // Update Notification every second

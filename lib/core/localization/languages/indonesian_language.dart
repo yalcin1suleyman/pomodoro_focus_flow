@@ -187,4 +187,13 @@ class IndonesianLanguage implements Language {
   @override String get skip => 'Lewati';
   @override String get start => 'Mulai';
   @override String get next => 'Berikutnya';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'Nilai Aplikasi';
+  @override String get contactUs => 'Hubungi Kami';
+  @override String get rateAppTitle => 'Menikmati Aplikasinya?';
+  @override String get rateAppMessage => 'Ulasan Anda membantu kami berkembang. Nilai Pomodoro Master di Play Store!';
+  @override String get rateNow => 'Nilai Sekarang';
+  @override String get rateLater => 'Nanti';
+  @override String get rateAlreadyDone => 'Sudah Dinilai ✓';
 }

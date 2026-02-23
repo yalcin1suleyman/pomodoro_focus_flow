@@ -195,4 +195,13 @@ class TurkishLanguage implements Language {
   @override String get skip => 'Atla';
   @override String get start => 'Başla';
   @override String get next => 'İleri';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'Uygulamayı Değerlendir';
+  @override String get contactUs => 'Bize Ulaşın';
+  @override String get rateAppTitle => 'Uygulamayı Beğeniyor Musunuz?';
+  @override String get rateAppMessage => 'Değerlendirmeniz büyümemize yardımcı olur. Play Store\'da Pomodoro Master\'ı değerlendirin!';
+  @override String get rateNow => 'Değerlendir';
+  @override String get rateLater => 'Daha Sonra';
+  @override String get rateAlreadyDone => 'Değerlendirdim ✓';
 }

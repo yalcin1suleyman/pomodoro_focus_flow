@@ -186,4 +186,13 @@ class KoreanLanguage implements Language {
   @override String get skip => '건너뛰기';
   @override String get start => '시작';
   @override String get next => '다음';
+
+  // Rate App & Contact Us
+  @override String get rateApp => '앱 평가하기';
+  @override String get contactUs => '상담하기';
+  @override String get rateAppTitle => '앱이 마음에 드세요?';
+  @override String get rateAppMessage => '리뷰가 저희의 성장에 도움이 됩니다. Play Store에서 Pomodoro Master를 평가해 주세요!';
+  @override String get rateNow => '지금 평가';
+  @override String get rateLater => '나중에';
+  @override String get rateAlreadyDone => '이미 평가 ✓';
 }

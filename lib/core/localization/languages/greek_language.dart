@@ -186,4 +186,13 @@ class GreekLanguage implements Language {
   @override String get skip => 'Παράλειψη';
   @override String get start => 'Έναρξη';
   @override String get next => 'Επόμενο';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'Αξιολόγηση εφαρμογής';
+  @override String get contactUs => 'Επικοινωνήστε μαζί μας';
+  @override String get rateAppTitle => 'Σας αρέσει η εφαρμογή;';
+  @override String get rateAppMessage => 'Η αξιολόγησή σας μας βοηθά να αναπτυχθούμε. Αξιολογήστε το Pomodoro Master στο Play Store!';
+  @override String get rateNow => 'Αξιολόγηση τώρα';
+  @override String get rateLater => 'Αργότερα';
+  @override String get rateAlreadyDone => 'Ήδη αξιολογήθηκε ✓';
 }

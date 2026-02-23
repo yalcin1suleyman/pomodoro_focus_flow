@@ -187,4 +187,13 @@ class JapaneseLanguage implements Language {
   @override String get skip => 'スキップ';
   @override String get start => '開始';
   @override String get next => '次へ';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'アプリを評価する';
+  @override String get contactUs => 'お問い合わせ';
+  @override String get rateAppTitle => 'アプリを気に入っていますか?';
+  @override String get rateAppMessage => 'レビューが私たちの成長を助けます。Play StoreでPomodoro Masterを評価してください！';
+  @override String get rateNow => '今すぐ評価';
+  @override String get rateLater => '後で';
+  @override String get rateAlreadyDone => '評価済み ✓';
 }

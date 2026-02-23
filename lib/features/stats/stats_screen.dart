@@ -6,6 +6,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:flutter/rendering.dart' as rendering;
 import 'dart:ui' as ui;
 import 'dart:io';
+import 'dart:math' as math;
 import '../../core/widgets/glass_box.dart';
 import '../settings/settings_provider.dart';
 import 'history_provider.dart';
@@ -452,21 +453,22 @@ class _StatsScreenState extends State<StatsScreen> {
           final int recordGoal = record.targetMinutes ?? settings.dailyGoalMinutes;
           isGoalMet = record.minutesFocused >= recordGoal;
 
-          // 2. Size = EFFORT (Volume)
+          // 2. Size = EFFORT (Volume) — sqrt scale capped at 4h for dramatic differences
+          // 0h=20px(wraps number), 1h≈30px(apple), 2h≈34px(handball), 3h≈37px(football), 4h=40px(basketball)
           if (hasActivity) {
-             const double maxVolumeMinutes = 480.0; // 8 hours = max size
-             double volumeRatio = (record.minutesFocused / maxVolumeMinutes).clamp(0.0, 1.0);
+             const double maxVolumeMinutes = 240.0; // 4 hours = basketball (max)
+             final double clampedMinutes = record.minutesFocused.toDouble().clamp(0, maxVolumeMinutes);
+             final double volumeRatio = math.sqrt(clampedMinutes / maxVolumeMinutes);
              
-             // Min size 28 (visible), Max size 52 (large)
-             const double minSize = 28.0;
-             const double maxSize = 52.0;
+             const double minActivitySize = 20.0; // 1 min of activity
+             const double maxActivitySize = 40.0; // 4+ hours (basketball)
              
-             circleSize = minSize + (volumeRatio * (maxSize - minSize));
-             fontSize = 11.0 + (volumeRatio * 4.0);
+             circleSize = minActivitySize + (volumeRatio * (maxActivitySize - minActivitySize));
+             fontSize = 10.0 + (volumeRatio * 5.0);
           } else if (isResultOfSelection) {
-             circleSize = 40.0; // Empty selected
+             circleSize = 28.0; // Empty selected — slightly bigger ring
           } else {
-             circleSize = 34.0; // Empty standard
+             circleSize = 20.0; // Empty — just wraps the day number
           }
 
           // 3. Color/Style

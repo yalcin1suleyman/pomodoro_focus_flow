@@ -187,4 +187,13 @@ class VietnameseLanguage implements Language {
   @override String get skip => 'Bỏ qua';
   @override String get start => 'Bắt đầu';
   @override String get next => 'Tiếp theo';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'Đánh giá Ứng dụng';
+  @override String get contactUs => 'Liên hệ chúng tôi';
+  @override String get rateAppTitle => 'Bạn thích ứng dụng?';
+  @override String get rateAppMessage => 'Đánh giá của bạn giúp chúng tôi phát triển. Hãy đánh giá Pomodoro Master trên Play Store!';
+  @override String get rateNow => 'Đánh giá ngay';
+  @override String get rateLater => 'Sau';
+  @override String get rateAlreadyDone => 'Đã đánh giá ✓';
 }

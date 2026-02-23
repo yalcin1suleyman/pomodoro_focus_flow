@@ -55,6 +55,9 @@ class SettingsProvider extends ChangeNotifier {
   int get shortBreakMinutes => _shortBreakMinutes;
   int get longBreakMinutes => _longBreakMinutes;
 
+  bool _hasRatedApp = false;
+  bool get hasRatedApp => _hasRatedApp;
+
   ThemeData get themeData => AppTheme.getTheme(_currentTheme, _isDarkMode);
 
   // Supported Languages List (Alphabetical by Name)
@@ -114,6 +117,7 @@ class SettingsProvider extends ChangeNotifier {
     _pomodoroMinutes = prefs.getInt('pomodoroMinutes') ?? 25;
     _shortBreakMinutes = prefs.getInt('shortBreakMinutes') ?? 5;
     _longBreakMinutes = prefs.getInt('longBreakMinutes') ?? 15;
+    _hasRatedApp = prefs.getBool('hasRatedApp') ?? false;
     
     notifyListeners();
   }
@@ -367,8 +371,23 @@ class SettingsProvider extends ChangeNotifier {
       case 'skip': return _currentLanguage.skip;
       case 'start': return _currentLanguage.start;
       case 'next': return _currentLanguage.next;
+      // Rate App & Contact Us
+      case 'rateApp': return _currentLanguage.rateApp;
+      case 'contactUs': return _currentLanguage.contactUs;
+      case 'rateAppTitle': return _currentLanguage.rateAppTitle;
+      case 'rateAppMessage': return _currentLanguage.rateAppMessage;
+      case 'rateNow': return _currentLanguage.rateNow;
+      case 'rateLater': return _currentLanguage.rateLater;
+      case 'rateAlreadyDone': return _currentLanguage.rateAlreadyDone;
 
       default: return key;
     }
+  }
+
+  Future<void> setHasRated() async {
+    _hasRatedApp = true;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('hasRatedApp', true);
   }
 }

@@ -187,4 +187,13 @@ class ChineseLanguage implements Language {
   @override String get skip => '跳过';
   @override String get start => '开始';
   @override String get next => '下一步';
+
+  // Rate App & Contact Us
+  @override String get rateApp => '评价应用';
+  @override String get contactUs => '联系我们';
+  @override String get rateAppTitle => '喜欢这个应用吗?';
+  @override String get rateAppMessage => '您的评分帮助我们成长。请在 Play Store 上评价 Pomodoro Master!';
+  @override String get rateNow => '立即评价';
+  @override String get rateLater => '稍后';
+  @override String get rateAlreadyDone => '已评价 ✓';
 }

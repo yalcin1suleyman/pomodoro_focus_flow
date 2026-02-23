@@ -6,6 +6,7 @@ import '../tasks/tasks_screen.dart';
 import '../stats/stats_screen.dart';
 import '../settings/settings_screen.dart';
 import '../settings/settings_provider.dart';
+import '../settings/rate_app_dialog.dart';
 import '../timer/timer_service.dart';
 import '../tasks/task_provider.dart';
 import '../stats/history_provider.dart';
@@ -22,6 +23,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Show rating dialog after settings load on first launch
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      RateAppDialog.showIfNeeded(context);
+    });
+  }
 
   // Use a getter or build method to ensure screens rebuild when dependencies (like Lang) change
   List<Widget> get _screens => [

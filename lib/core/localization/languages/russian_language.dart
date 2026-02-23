@@ -187,4 +187,13 @@ class RussianLanguage implements Language {
   @override String get skip => 'Пропустить';
   @override String get start => 'Начать';
   @override String get next => 'Далее';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'Оценить приложение';
+  @override String get contactUs => 'Связаться с нами';
+  @override String get rateAppTitle => 'Нравится приложение?';
+  @override String get rateAppMessage => 'Ваш отзыв помогает нам расти. Оцените Pomodoro Master в Play Store!';
+  @override String get rateNow => 'Оценить';
+  @override String get rateLater => 'Позже';
+  @override String get rateAlreadyDone => 'Уже оценено ✓';
 }

@@ -187,4 +187,13 @@ class UkrainianLanguage implements Language {
   @override String get skip => 'Пропустити';
   @override String get start => 'Почати';
   @override String get next => 'Далі';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'Оцінити додаток';
+  @override String get contactUs => "Зв'яжіться з нами";
+  @override String get rateAppTitle => 'Подобається додаток?';
+  @override String get rateAppMessage => 'Ваш відгук допомагає нам рости. Оцініть Pomodoro Master в Play Store!';
+  @override String get rateNow => 'Оцінити';
+  @override String get rateLater => 'Пізніше';
+  @override String get rateAlreadyDone => 'Вже оцінено ✓';
 }

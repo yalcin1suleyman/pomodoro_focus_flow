@@ -187,4 +187,13 @@ abstract class Language {
   String get skip;
   String get start;
   String get next;
+
+  // Rate App & Contact Us
+  String get rateApp;
+  String get contactUs;
+  String get rateAppTitle;
+  String get rateAppMessage;
+  String get rateNow;
+  String get rateLater;
+  String get rateAlreadyDone;
 }

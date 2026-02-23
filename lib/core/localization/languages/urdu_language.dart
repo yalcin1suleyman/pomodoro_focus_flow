@@ -186,4 +186,13 @@ class UrduLanguage implements Language {
   @override String get skip => 'چھوڑیں';
   @override String get start => 'شروع کریں';
   @override String get next => 'اگلا';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'ایپ کی جائزہ کریں';
+  @override String get contactUs => 'ہم سے رابطہ کریں';
+  @override String get rateAppTitle => 'کیا آپ ایپ پسند کر رہے ہیں?';
+  @override String get rateAppMessage => 'آپ کی ریٹنگ ہماری ترقی میں مدد کرتی ہے۔ Play Store پر Pomodoro Master کی ریٹنگ کریں!';
+  @override String get rateNow => 'ابھی ریٹ کریں';
+  @override String get rateLater => 'بعد میں';
+  @override String get rateAlreadyDone => 'پہلے ہی ریٹ کر دی ✓';
 }

@@ -186,4 +186,13 @@ class BengaliLanguage implements Language {
   @override String get skip => 'এড়িয়ে যান';
   @override String get start => 'শুরু করুন';
   @override String get next => 'পরবর্তী';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'অ্যাপ রেট করুন';
+  @override String get contactUs => 'আমাদের সাথে যোগাযোগ করুন';
+  @override String get rateAppTitle => 'অ্যাপটি উপভোগ করছেন?';
+  @override String get rateAppMessage => 'আপনার রিভিউ আমাদের বৃদ্ধিতে সাহায্য করে। Play Store-এ Pomodoro Master রেট করুন!';
+  @override String get rateNow => 'এখনই রেট করুন';
+  @override String get rateLater => 'পরে';
+  @override String get rateAlreadyDone => 'ইতিমধ্যে রেট দেওয়া আছে ✓';
 }

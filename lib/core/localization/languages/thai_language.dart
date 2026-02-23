@@ -186,4 +186,13 @@ class ThaiLanguage implements Language {
   @override String get skip => 'ข้าม';
   @override String get start => 'เริ่ม';
   @override String get next => 'ถัดไป';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'ให้คะแนนแอป';
+  @override String get contactUs => 'ติดต่อเรา';
+  @override String get rateAppTitle => 'ชอบแอปนี้ใช่ไหม?';
+  @override String get rateAppMessage => 'การให้คะแนนช่วยให้เราเติบโต ให้คะแนน Pomodoro Master บน Play Store!';
+  @override String get rateNow => 'ให้คะแนนตอนนี้';
+  @override String get rateLater => 'ภายหลัง';
+  @override String get rateAlreadyDone => 'ให้คะแนนแล้ว ✓';
 }

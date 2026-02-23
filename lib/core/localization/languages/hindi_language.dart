@@ -186,4 +186,13 @@ class HindiLanguage implements Language {
   @override String get skip => 'छोड़ें';
   @override String get start => 'शुरू करें';
   @override String get next => 'अगला';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'एप को रेट करें';
+  @override String get contactUs => 'हमसे संपर्क करें';
+  @override String get rateAppTitle => 'क्या एप पसंद आ रही है?';
+  @override String get rateAppMessage => 'आपकी समीक्षा हमें आगे बढ़ने में मदद करती है। Play Store पर Pomodoro Master को रेट करें!';
+  @override String get rateNow => 'अभी रेट करें';
+  @override String get rateLater => 'बाद में';
+  @override String get rateAlreadyDone => 'पहले से रेट किया ✓';
 }

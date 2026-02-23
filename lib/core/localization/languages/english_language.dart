@@ -195,4 +195,13 @@ class EnglishLanguage implements Language {
   @override String get skip => 'Skip';
   @override String get start => 'Start';
   @override String get next => 'Next';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'Rate the App';
+  @override String get contactUs => 'Contact Us';
+  @override String get rateAppTitle => 'Enjoying the App?';
+  @override String get rateAppMessage => 'Your review helps us grow. Rate Pomodoro Master on the Play Store!';
+  @override String get rateNow => 'Rate Now';
+  @override String get rateLater => 'Later';
+  @override String get rateAlreadyDone => 'Already Rated ✓';
 }

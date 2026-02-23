@@ -186,4 +186,13 @@ class SwedishLanguage implements Language {
   @override String get skip => 'Hoppa över';
   @override String get start => 'Starta';
   @override String get next => 'Nästa';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'Betygsätt appen';
+  @override String get contactUs => 'Kontakta oss';
+  @override String get rateAppTitle => 'Gillar du appen?';
+  @override String get rateAppMessage => 'Din recension hjälper oss att växa. Betygsätt Pomodoro Master på Play Store!';
+  @override String get rateNow => 'Betygsätt nu';
+  @override String get rateLater => 'Senare';
+  @override String get rateAlreadyDone => 'Redan betygsatt ✓';
 }

@@ -187,4 +187,13 @@ class PortugueseLanguage implements Language {
   @override String get skip => 'Pular';
   @override String get start => 'Começar';
   @override String get next => 'Próximo';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'Avaliar o App';
+  @override String get contactUs => 'Contate-nos';
+  @override String get rateAppTitle => 'Está gostando do App?';
+  @override String get rateAppMessage => 'Sua avaliação nos ajuda a crescer. Avalie o Pomodoro Master na Play Store!';
+  @override String get rateNow => 'Avaliar Agora';
+  @override String get rateLater => 'Mais tarde';
+  @override String get rateAlreadyDone => 'Já avaliei ✓';
 }

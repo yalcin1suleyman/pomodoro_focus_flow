@@ -186,4 +186,13 @@ class ArabicLanguage implements Language {
   @override String get skip => 'تخطي';
   @override String get start => 'ابدأ';
   @override String get next => 'التالي';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'تقييم التطبيق';
+  @override String get contactUs => 'تواصل معنا';
+  @override String get rateAppTitle => 'هل تستمتع بالتطبيق?';
+  @override String get rateAppMessage => 'تقييمك يساعدنا على النمو، قيّم Pomodoro Master على Play Store!';
+  @override String get rateNow => 'قيّم الآن';
+  @override String get rateLater => 'لاحقاً';
+  @override String get rateAlreadyDone => 'تم التقييم مسبقاً ✓';
 }

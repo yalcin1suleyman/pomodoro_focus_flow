@@ -187,4 +187,13 @@ class DutchLanguage implements Language {
   @override String get skip => 'Overslaan';
   @override String get start => 'Starten';
   @override String get next => 'Volgende';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'App beoordelen';
+  @override String get contactUs => 'Neem contact op';
+  @override String get rateAppTitle => 'Geniet u van de App?';
+  @override String get rateAppMessage => 'Uw beoordeling helpt ons te groeien. Beoordeel Pomodoro Master in de Play Store!';
+  @override String get rateNow => 'Nu beoordelen';
+  @override String get rateLater => 'Later';
+  @override String get rateAlreadyDone => 'Al beoordeeld ✓';
 }

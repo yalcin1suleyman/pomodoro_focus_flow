@@ -188,4 +188,13 @@ class GermanLanguage implements Language {
   @override String get skip => 'Überspringen';
   @override String get start => 'Starten';
   @override String get next => 'Weiter';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'App bewerten';
+  @override String get contactUs => 'Kontaktieren Sie uns';
+  @override String get rateAppTitle => 'Gefällt Ihnen die App?';
+  @override String get rateAppMessage => 'Ihre Bewertung hilft uns zu wachsen. Bewerten Sie Pomodoro Master im Play Store!';
+  @override String get rateNow => 'Jetzt bewerten';
+  @override String get rateLater => 'Später';
+  @override String get rateAlreadyDone => 'Bereits bewertet ✓';
 }

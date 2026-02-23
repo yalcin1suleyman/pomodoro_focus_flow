@@ -69,7 +69,6 @@ class _HelpSlideshowState extends State<HelpSlideshow> {
   Widget build(BuildContext context) {
     final settings = Provider.of<SettingsProvider>(context);
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -88,7 +87,7 @@ class _HelpSlideshowState extends State<HelpSlideshow> {
                       child: Text(
                         settings.translate('skip'),
                         style: TextStyle(
-                          color: theme.textTheme.bodyMedium?.color?.withOpacity(0.6),
+                          color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.6),
                           fontSize: 16,
                         ),
                       ),
@@ -132,7 +131,7 @@ class _HelpSlideshowState extends State<HelpSlideshow> {
                                 return Icon(
                                   icon, 
                                   size: 100, 
-                                  color: theme.colorScheme.primary.withOpacity(0.5)
+                                  color: theme.colorScheme.primary.withValues(alpha: 0.5)
                                 );
                               },
                             ),
@@ -158,7 +157,7 @@ class _HelpSlideshowState extends State<HelpSlideshow> {
                               Text(
                                 settings.translate(slide['descKey']!),
                                 style: theme.textTheme.bodyLarge?.copyWith(
-                                  color: theme.textTheme.bodyMedium?.color?.withOpacity(0.8),
+                                  color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
                                   height: 1.5,
                                 ),
                                 textAlign: TextAlign.center,
@@ -191,7 +190,7 @@ class _HelpSlideshowState extends State<HelpSlideshow> {
                         decoration: BoxDecoration(
                           color: _currentPage == index 
                               ? theme.colorScheme.primary 
-                              : theme.colorScheme.primary.withOpacity(0.2),
+                              : theme.colorScheme.primary.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),

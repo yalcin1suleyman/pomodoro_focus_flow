@@ -186,4 +186,13 @@ class FrenchLanguage implements Language {
   @override String get skip => 'Passer';
   @override String get start => 'Commencer';
   @override String get next => 'Suivant';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'Noter l\'application';
+  @override String get contactUs => 'Nous contacter';
+  @override String get rateAppTitle => 'Vous aimez l\'application?';
+  @override String get rateAppMessage => 'Votre avis nous aide à grandir. Notez Pomodoro Master sur le Play Store!';
+  @override String get rateNow => 'Noter maintenant';
+  @override String get rateLater => 'Plus tard';
+  @override String get rateAlreadyDone => 'Déjà noté ✓';
 }

@@ -187,4 +187,13 @@ class ItalianLanguage implements Language {
   @override String get skip => 'Salta';
   @override String get start => 'Inizia';
   @override String get next => 'Avanti';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'Valuta l\'App';
+  @override String get contactUs => 'Contattaci';
+  @override String get rateAppTitle => 'Ti piace l\'App?';
+  @override String get rateAppMessage => 'La tua recensione ci aiuta a crescere. Valuta Pomodoro Master su Play Store!';
+  @override String get rateNow => 'Valuta ora';
+  @override String get rateLater => 'Più tardi';
+  @override String get rateAlreadyDone => 'Già valutato ✓';
 }

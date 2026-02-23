@@ -186,4 +186,13 @@ class PolishLanguage implements Language {
   @override String get skip => 'Pomiń';
   @override String get start => 'Zacznij';
   @override String get next => 'Dalej';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'Oceń Aplikację';
+  @override String get contactUs => 'Skontaktuj się';
+  @override String get rateAppTitle => 'Podoba Ci się aplikacja?';
+  @override String get rateAppMessage => 'Twoja ocena pomaga nam rosnąć. Oceń Pomodoro Master w Play Store!';
+  @override String get rateNow => 'Oceń teraz';
+  @override String get rateLater => 'Później';
+  @override String get rateAlreadyDone => 'Już oceniono ✓';
 }

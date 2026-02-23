@@ -187,4 +187,13 @@ class SpanishLanguage implements Language {
   @override String get skip => 'Omitir';
   @override String get start => 'Comenzar';
   @override String get next => 'Siguiente';
+
+  // Rate App & Contact Us
+  @override String get rateApp => 'Valorar la App';
+  @override String get contactUs => 'Contáctenos';
+  @override String get rateAppTitle => '¿Disfrutando la App?';
+  @override String get rateAppMessage => 'Tu valoración nos ayuda a crecer. ¡Valora Pomodoro Master en Play Store!';
+  @override String get rateNow => 'Valorar Ahora';
+  @override String get rateLater => 'Más tarde';
+  @override String get rateAlreadyDone => 'Ya valoré ✓';
 }

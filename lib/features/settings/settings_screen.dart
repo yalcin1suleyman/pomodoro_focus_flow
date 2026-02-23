@@ -8,6 +8,11 @@ import 'language_screen.dart';
 import '../../core/services/ad_service.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'help_slideshow.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'dart:io';
+
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -202,7 +207,54 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
 
-              const SizedBox(height: 40),
+              const SizedBox(height: 30),
+
+              // Rate & Contact Section
+              _buildSectionHeader(context, 'Pomodoro Master'),
+              GlassBox(
+                child: Column(
+                  children: [
+                    // Rate the App
+                    ListTile(
+                      leading: Icon(
+                        Icons.star_rate_rounded,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      title: Text(settings.translate('rateApp')),
+                      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                      onTap: () async {
+                        // Try market:// first (direct Play Store), fallback to https://
+                        final marketUri = Uri.parse(
+                          'market://details?id=com.yalcinstudio.pomodoro_master',
+                        );
+                        final webUri = Uri.parse(
+                          'https://play.google.com/store/apps/details?id=com.yalcinstudio.pomodoro_master',
+                        );
+                        try {
+                          await launchUrl(marketUri, mode: LaunchMode.externalApplication);
+                        } catch (_) {
+                          await launchUrl(webUri, mode: LaunchMode.externalApplication);
+                        }
+                      },
+                    ),
+                    const Divider(height: 1),
+                    // Contact Us
+                    ListTile(
+                      leading: Icon(
+                        Icons.email_outlined,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      title: Text(settings.translate('contactUs')),
+                      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                      onTap: () => _launchContactEmail(context, settings),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Logo & version area
               Center(
                 child: Column(
                   children: [
@@ -378,4 +430,43 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
     );
   }
+
+  Future<void> _launchContactEmail(BuildContext context, SettingsProvider settings) async {
+    String deviceModel = 'Unknown';
+    String osVersion = 'Unknown';
+    String appVersion = 'Unknown';
+
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      appVersion = '${packageInfo.version} (${packageInfo.buildNumber})';
+    } catch (_) {}
+
+    try {
+      final deviceInfo = DeviceInfoPlugin();
+      if (Platform.isAndroid) {
+        final info = await deviceInfo.androidInfo;
+        deviceModel = '${info.manufacturer} ${info.model}';
+        osVersion = 'Android ${info.version.release} (SDK ${info.version.sdkInt})';
+      } else if (Platform.isIOS) {
+        final info = await deviceInfo.iosInfo;
+        deviceModel = info.utsname.machine;
+        osVersion = '${info.systemName} ${info.systemVersion}';
+      }
+    } catch (_) {}
+
+    final subject = Uri.encodeComponent('Pomodoro Master Kullanıcı Bildirimi');
+    final body = Uri.encodeComponent(
+      'Cihaz: $deviceModel\n'
+      'İşletim Sistemi: $osVersion\n'
+      'Uygulama Sürümü: $appVersion\n\n'
+      '---\n'
+      'Mesajınızı buraya yazın:\n',
+    );
+
+    final uri = Uri.parse('mailto:yalcinstudio@gmail.com?subject=$subject&body=$body');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
+  }
 }
+
